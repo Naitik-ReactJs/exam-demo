@@ -2,6 +2,9 @@ import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../reusable/Button";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { InputForgotPass } from "../utils/Input";
 const ForgotPassword = () => {
   const min_password_length = 6;
   const emptyUserData = {
@@ -11,6 +14,7 @@ const ForgotPassword = () => {
   };
 
   const [formErrors, setFormErrors] = useState(emptyUserData);
+  const { email, password, retype_password } = formErrors;
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -53,48 +57,29 @@ const ForgotPassword = () => {
     }));
   };
 
-  const input = [
-    {
-      type: "email",
-      name: "email",
-      placeholder: "Enter your email address",
-      formErrors: formErrors.email,
-      onChange: handleInputChange,
-    },
-    {
-      type: "password",
-      name: "password",
-      placeholder: "Enter your password",
-      onChange: handleInputChange,
-      formErrors: formErrors.password,
-    },
-    {
-      type: "password",
-      name: "retype_password",
-      placeholder: "Retype your password",
-      onChange: handleInputChange,
-      formErrors: formErrors.retype_password,
-    },
-  ];
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiUrl = process.env.REACT_APP_API_URL;
-    const endpoint = "users/ForgotPassword";
-    const url = `${apiUrl}${endpoint}`;
-const emailValue = { email: formData.email };
+    const baseUrl = process.env.REACT_APP_API_URL;
+    const endPoint = "users/ForgotPassword";
+    const url = `${baseUrl}${endPoint}`;
+    const emailValue = { email: formData.email };
     try {
-      const response = await axios.post(url,emailValue );
-      console.log(response.data);
+      const response = await axios.post(url, emailValue);
+      toast.success(response.data.message);
     } catch (error) {
-      console.error("Error:", error);
+      toast.error(error);
     }
   };
-  
+  const input = InputForgotPass(
+    email,
+    password,
+    retype_password,
+    handleInputChange
+  );
   return (
-    <div className="d-flex align-items-center justify-content-center min-vh-100 ">
-      <div className="container p-5 w-25 mb-5 box-shadow">
-        <form>
+    <div className="d-flex align-items-center justify-content-center min-vh-100">
+      <div className="container p-5 w-50 mb-5 box-shadow">
+        <form onSubmit={handleSubmit}>
           {input.map((item, index) => {
             return (
               <Fragment key={index}>
@@ -122,11 +107,11 @@ const emailValue = { email: formData.email };
             <Button
               className={"btn btn-dark"}
               type="submit"
-              onClick={handleSubmit}
               buttonText={"Submit"}
               disabled={!Object.values(formErrors).every((item) => item === "")}
             ></Button>
           </div>
+          <ToastContainer autoClose={2000} theme="colored" />
         </form>
       </div>
     </div>

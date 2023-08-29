@@ -4,7 +4,7 @@ import "./App.css";
 import SignIn from "./components/SignIn";
 import ForgotPassword from "./components/ForgotPassword";
 import SignUp from "./components/SignUp";
-import NotFound from "./components/NotFound";
+import NotFound from "./reusable/NotFound";
 
 function App() {
   return (

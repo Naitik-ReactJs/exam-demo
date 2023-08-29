@@ -3,6 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../reusable/Button";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { InputSignIn } from "../utils/Input";
 const SignIn = () => {
   const min_password_length = 6;
   const emptyUserData = {
@@ -13,9 +16,8 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-
   const [formErrors, setFormErrors] = useState(emptyUserData);
-
+  const { email, password } = formErrors;
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     let error = "";
@@ -49,39 +51,22 @@ const SignIn = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiUrl = process.env.REACT_APP_API_URL;
-    const endpoint = "users/Login";
-    const url = `${apiUrl}${endpoint}`;
-console.log(url)
+    const baseUrl = process.env.REACT_APP_API_URL;
+    const endPoint = "users/Login";
+    const url = `${baseUrl}${endPoint}`;
     try {
       const response = await axios.post(url, formData);
-      console.log(response.data);
+      toast.success(response.data.message);
     } catch (error) {
-      console.error("Error:", error);
+      toast.error(error);
     }
   };
-  
-  const input = [
-    {
-      type: "email",
-      name: "email",
-      placeholder: "Enter your email address",
-      formErrors: formErrors.email,
-      onChange: handleInputChange,
-    },
-    {
-      type: "password",
-      name: "password",
-      placeholder: "Enter your password",
-      onChange: handleInputChange,
-      formErrors: formErrors.password,
-    },
-  ];
+  const input = InputSignIn(email, password, handleInputChange);
 
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 ">
-      <div className="container p-5 w-25 mb-5 box-shadow">
-        <form>
+      <div className="container p-5 w-50 mb-5 box-shadow">
+        <form onSubmit={handleSubmit}>
           {input.map((item, index) => {
             return (
               <Fragment key={index}>
@@ -116,7 +101,6 @@ console.log(url)
               type="submit"
               buttonText={"Sign In"}
               disabled={!Object.values(formErrors).every((item) => item === "")}
-              onClick={handleSubmit}
             ></Button>
           </div>
           <div className="text-center ">
@@ -130,6 +114,7 @@ console.log(url)
                 buttonText={"Sign Up"}
               ></Button>
             </Link>
+            <ToastContainer autoClose={2000} theme="colored" />
           </div>
         </form>
       </div>

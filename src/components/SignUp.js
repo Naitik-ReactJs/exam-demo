@@ -2,7 +2,9 @@ import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../reusable/Button";
 import axios from "axios";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { InputSignUp } from "../utils/Input";
 const SignUp = () => {
   const min_password_length = 6;
   const min_length = 2;
@@ -14,6 +16,7 @@ const SignUp = () => {
   };
 
   const [formErrors, setFormErrors] = useState(emptyUserData);
+  const { name, email, password } = formErrors;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,15 +25,16 @@ const SignUp = () => {
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiUrl = process.env.REACT_APP_API_URL;
-    const endpoint = "users/SignUp";
-    const url = `${apiUrl}  ${endpoint}`;
+
+    const baseUrl = process.env.REACT_APP_API_URL;
+    const endPoint = "users/SignUp";
+    const url = `${baseUrl}${endPoint}`;
 
     try {
       const response = await axios.post(url, formData);
-      console.log(response.data);
+      toast.success(response.data.message);
     } catch (error) {
-      console.error("Error:", error);
+      toast.error(error);
     }
   };
   const [selectedRole, setSelectedRole] = useState("");
@@ -81,66 +85,48 @@ const SignUp = () => {
       [name]: value,
     }));
   };
-  console.log(formData);
 
-  const input = [
-    {
-      type: "text",
-      name: "name",
-      placeholder: "Enter your name",
-      formErrors: formErrors.name,
-      onChange: handleInputChange,
-      className: "form-control p-3 mb-4",
-    },
-    {
-      type: "email",
-      name: "email",
-      placeholder: "Enter your email address",
-      formErrors: formErrors.email,
-      onChange: handleInputChange,
-      className: "form-control p-3 mb-4",
-    },
-    {
-      type: "password",
-      name: "password",
-      placeholder: "Enter your password",
-      onChange: handleInputChange,
-      formErrors: formErrors.password,
-      className: "form-control p-3 mb-4",
-    },
-  ];
-  const roles = [
-    {
-      id: "student",
-      label: "Student",
-      type: "radio",
-      onChange: handleRadioChange,
-      name: "role",
-    },
-    {
-      id: "teacher",
-      label: "Teacher",
-      type: "radio",
-      onChange: handleRadioChange,
-      name: "role",
-    },
-  ];
+  const input = InputSignUp(
+    name,
+    email,
+    password,
+    handleInputChange,
+    handleRadioChange
+  );
 
   return (
-    <div className="d-flex align-items-center justify-content-center min-vh-100 box-shadow">
-      <div className="container p-5 w-50">
-        <form>
+    <div className="d-flex align-items-center justify-content-center min-vh-100 ">
+      <div className="container p-5 w-50 mb-5 box-shadow">
+        <form onSubmit={handleSubmit}>
           {input.map((item, index) => {
             return (
               <Fragment key={index}>
-                <input
-                  required
-                  className={item.className}
-                  type={item.type}
-                  name={item.name}
-                  placeholder={item.placeholder}
-                  onChange={item.onChange}
-                />
+                {item.type === "radio" ? (
+                  <>
+                    <label>{item.role}</label>
+                    <label key={item.id} className="p-2 mb-4" htmlFor={item.id}>
+                      <input
+                        id={item.id}
+                        required
+                        checked={selectedRole === item.id}
+                        value={item.id}
+                        type={item.type}
+                        onChange={handleRadioChange}
+                      />
+                      {item.label}
+                    </label>
+                  </>
+                ) : (
+                  <input
+                    required
+                    className={item.className}
+                    type={item.type}
+                    name={item.name}
+                    placeholder={item.placeholder}
+                    onChange={item.onChange}
+                  />
+                )}
+
                 {item.formErrors && (
                   <div
                     key={index}
@@ -153,31 +139,14 @@ const SignUp = () => {
               </Fragment>
             );
           })}
-          <div>
-            <label>Role:</label>
-            {roles.map((role) => (
-              <label key={role.id} className="p-2 mb-4" htmlFor={role.id}>
-                <input
-                  id={role.id}
-                  required
-                  checked={selectedRole === role.id}
-                  value={role.id}
-                  type={role.type}
-                  onChange={handleRadioChange}
-                />
-                {role.label}
-              </label>
-            ))}
-          </div>
           <div className="text-center mt-3">
             {" "}
             <Button
               className={"btn btn-dark"}
               type="submit"
               buttonText={"Sign Up"}
-              onClick={handleSubmit}
               disabled={!Object.values(formErrors).every((item) => item === "")}
-            ></Button>
+            />
             <Button
               className={"btn btn-dark mx-4"}
               type="reset"
@@ -185,6 +154,7 @@ const SignUp = () => {
               onClick={() => setFormData(emptyUserData)}
             ></Button>
           </div>
+          <ToastContainer autoClose={2000} theme="colored" />
         </form>
       </div>
     </div>
