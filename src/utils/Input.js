@@ -1,4 +1,4 @@
-export const InputForgotPass = (
+export const InputForgotPassForm = (
   email,
   password,
   retype_password,
@@ -29,7 +29,7 @@ export const InputForgotPass = (
   ];
 };
 
-export const InputSignIn = (email, password, handleInputChange) => {
+export const InputSignInForm = (email, password, handleInputChange) => {
   return [
     {
       type: "email",
@@ -47,7 +47,7 @@ export const InputSignIn = (email, password, handleInputChange) => {
     },
   ];
 };
-export const InputSignUp = (
+export const InputSignUpForm = (
   name,
   email,
   password,

@@ -2,12 +2,13 @@ import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../reusable/Button";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { InputSignIn } from "../utils/Input";
+import { InputSignInForm } from "../utils/Input";
+import validateInput from "../utils/Validation";
+import apiAction from "../api/apiAction";
+
 const SignIn = () => {
-  const min_password_length = 6;
   const emptyUserData = {
     email: "",
     password: "",
@@ -19,27 +20,11 @@ const SignIn = () => {
   const [formErrors, setFormErrors] = useState(emptyUserData);
   const { email, password } = formErrors;
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    let error = "";
-    switch (name) {
-      case "email":
-        if (
-          !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-            value
-          )
-        ) {
-          error = "Invalid email format";
-        }
-        break;
-      case "password":
-        if (value.length < min_password_length) {
-          error = "Password must be at least 6 characters";
-        }
-        break;
+    const target = e.target;
+    const { name, value } = target;
 
-      default:
-        break;
-    }
+    const error = validateInput(name, value);
+
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,
@@ -51,17 +36,9 @@ const SignIn = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const baseUrl = process.env.REACT_APP_API_URL;
-    const endPoint = "users/Login";
-    const url = `${baseUrl}${endPoint}`;
-    try {
-      const response = await axios.post(url, formData);
-      toast.success(response.data.message);
-    } catch (error) {
-      toast.error(error);
-    }
+    apiAction("post", "https://examination.onrender.com/users/Login", formData);
   };
-  const input = InputSignIn(email, password, handleInputChange);
+  const input = InputSignInForm(email, password, handleInputChange);
 
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 ">

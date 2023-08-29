@@ -1,12 +1,15 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../reusable/Button";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { InputForgotPass } from "../utils/Input";
+import { InputForgotPassForm } from "../utils/Input";
+import validateInput from "../utils/Validation";
+
+import apiAction from "../api/apiAction";
+
 const ForgotPassword = () => {
-  const min_password_length = 6;
   const emptyUserData = {
     email: "",
     password: "",
@@ -21,32 +24,10 @@ const ForgotPassword = () => {
     retype_password: "",
   });
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    let error = "";
-    switch (name) {
-      case "email":
-        if (
-          !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-            value
-          )
-        ) {
-          error = "Invalid email format";
-        }
-        break;
-      case "password":
-        if (value.length < min_password_length) {
-          error = "Password must be at least 6 characters";
-        }
-        break;
-      case "retype_password":
-        if (formData.password !== e.target.value) {
-          error = "Password must be equal";
-        }
-        break;
+    const target = e.target;
+    const { name, value } = target;
 
-      default:
-        break;
-    }
+    let error = validateInput(name, value, formData.password);
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,
@@ -56,21 +37,16 @@ const ForgotPassword = () => {
       [name]: value,
     }));
   };
-
+  const emailValue = { email: formData.email };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const baseUrl = process.env.REACT_APP_API_URL;
-    const endPoint = "users/ForgotPassword";
-    const url = `${baseUrl}${endPoint}`;
-    const emailValue = { email: formData.email };
-    try {
-      const response = await axios.post(url, emailValue);
-      toast.success(response.data.message);
-    } catch (error) {
-      toast.error(error);
-    }
+    apiAction({
+      method: "post",
+      url: "https://examination.onrender.com/users/ForgotPassword",
+      data: emailValue,
+    });
   };
-  const input = InputForgotPass(
+  const input = InputForgotPassForm(
     email,
     password,
     retype_password,

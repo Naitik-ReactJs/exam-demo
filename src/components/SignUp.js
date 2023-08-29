@@ -1,13 +1,13 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../reusable/Button";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { InputSignUp } from "../utils/Input";
+import { InputSignUpForm } from "../utils/Input";
+import validateInput from "../utils/Validation";
+import apiAction from "../api/apiAction";
+
 const SignUp = () => {
-  const min_password_length = 6;
-  const min_length = 2;
   const emptyUserData = {
     name: "",
     email: "",
@@ -25,17 +25,11 @@ const SignUp = () => {
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const baseUrl = process.env.REACT_APP_API_URL;
-    const endPoint = "users/SignUp";
-    const url = `${baseUrl}${endPoint}`;
-
-    try {
-      const response = await axios.post(url, formData);
-      toast.success(response.data.message);
-    } catch (error) {
-      toast.error(error);
-    }
+    apiAction(
+      "post",
+      "https://examination.onrender.com/users/SignUp",
+      formData
+    );
   };
   const [selectedRole, setSelectedRole] = useState("");
 
@@ -47,35 +41,9 @@ const SignUp = () => {
     }));
   };
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    let error = "";
-    switch (name) {
-      case "name":
-        if (value.trim().length < min_length) {
-          error = "Name must be at least 2 characters";
-        } else if (!/^[a-zA-Z\s]*$/.test(value)) {
-          error = "Name cannot contain numbers or special characters";
-        }
-        break;
-
-      case "email":
-        if (
-          !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-            value
-          )
-        ) {
-          error = "Invalid email format";
-        }
-        break;
-      case "password":
-        if (value.length < min_password_length) {
-          error = "Password must be at least 6 characters";
-        }
-        break;
-
-      default:
-        break;
-    }
+    const target = e.target;
+    const { name, value } = target;
+    const error = validateInput(name, value);
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,
@@ -86,7 +54,7 @@ const SignUp = () => {
     }));
   };
 
-  const input = InputSignUp(
+  const input = InputSignUpForm(
     name,
     email,
     password,
@@ -106,8 +74,8 @@ const SignUp = () => {
                     <label>{item.role}</label>
                     <label key={item.id} className="p-2 mb-4" htmlFor={item.id}>
                       <input
-                        id={item.id}
                         required
+                        id={item.id}
                         checked={selectedRole === item.id}
                         value={item.id}
                         type={item.type}
