@@ -1,0 +1,10 @@
+.forgotpass_link {
+  color: #000;
+  text-decoration: none;
+}
+.forgotpass_link:hover {
+  color: #959595;
+}
+.box-shadow {
+  box-shadow: -11px 11px 14px 7px rgba(0, 0, 0, 0.1);
+}
