@@ -36,7 +36,11 @@ const SignIn = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    apiAction("post", "https://examination.onrender.com/users/Login", formData);
+    apiAction({
+      method: "post",
+      url: "https://examination.onrender.com/users/Login",
+      data: formData,
+    });
   };
   const input = InputSignInForm(email, password, handleInputChange);
 

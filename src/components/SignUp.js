@@ -25,11 +25,11 @@ const SignUp = () => {
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    apiAction(
-      "post",
-      "https://examination.onrender.com/users/SignUp",
-      formData
-    );
+    apiAction({
+      method: "post",
+      url: "https://examination.onrender.com/users/SignUp",
+      data: formData,
+    });
   };
   const [selectedRole, setSelectedRole] = useState("");
 
