@@ -8,6 +8,9 @@ import validateInput from "../utils/Validation";
 import apiAction from "../api/apiAction";
 
 const SignUp = () => {
+  const [selectedRole, setSelectedRole] = useState("");
+  const [radioError, setRadioError] = useState(false);
+  const radioErrorMessage = "Please select a role";
   const emptyUserData = {
     name: "",
     email: "",
@@ -25,13 +28,17 @@ const SignUp = () => {
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (selectedRole === "") {
+      setRadioError(true);
+      return false;
+    }
+
     apiAction({
       method: "post",
-      url: "https://examination.onrender.com/users/SignUp",
+      url: "users/SignUp",
       data: formData,
     });
   };
-  const [selectedRole, setSelectedRole] = useState("");
 
   const handleRadioChange = (e) => {
     setSelectedRole(e.target.value);
@@ -39,6 +46,7 @@ const SignUp = () => {
       ...prevFormData,
       role: e.target.value,
     }));
+    setRadioError(false);
   };
   const handleInputChange = (e) => {
     const target = e.target;
@@ -98,7 +106,7 @@ const SignUp = () => {
                 {item.formErrors && (
                   <div
                     key={index}
-                    className="alert text-center alert-danger border text-center w-50"
+                    className="alert text-center alert-danger border text-center w-25"
                     role="alert"
                   >
                     {item.formErrors}
@@ -107,6 +115,14 @@ const SignUp = () => {
               </Fragment>
             );
           })}
+          {radioError && (
+            <div
+              className="alert text-center alert-danger border text-center w-50"
+              role="alert"
+            >
+              {radioErrorMessage}
+            </div>
+          )}
           <div className="text-center mt-3">
             {" "}
             <Button
@@ -115,12 +131,6 @@ const SignUp = () => {
               buttonText={"Sign Up"}
               disabled={!Object.values(formErrors).every((item) => item === "")}
             />
-            <Button
-              className={"btn btn-dark mx-4"}
-              type="reset"
-              buttonText={"Reset"}
-              onClick={() => setFormData(emptyUserData)}
-            ></Button>
           </div>
           <ToastContainer autoClose={2000} theme="colored" />
         </form>

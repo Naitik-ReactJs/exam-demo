@@ -1,11 +1,11 @@
 import React from "react";
 
-const SideBar = (props, children) => {
+const SideBar = (props) => {
   return (
     <div className="container-fluid">
       <div className="row flex-nowrap">
         <div className="col-auto col-md-3 col-xl-2 bg-secondary">
-          <div className="d-flex flex-column align-items-center align-items-sm-start  pt-2 text-white min-vh-100">
+          <div className="d-flex flex-column align-items-center  pt-2 text-white min-vh-100">
             <ul
               className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center"
               id="menu"
@@ -16,7 +16,7 @@ const SideBar = (props, children) => {
             </ul>
           </div>
         </div>
-        <div className="col py-3">{children}</div>
+        <div className="col py-3">Welcome Back</div>
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     apiAction({
       method: "post",
-      url: "https://examination.onrender.com/users/ForgotPassword",
+      url: "users/ForgotPassword",
       data: emailValue,
     });
   };
