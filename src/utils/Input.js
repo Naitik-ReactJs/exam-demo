@@ -12,20 +12,6 @@ export const InputForgotPassForm = (
       formErrors: email,
       onChange: handleInputChange,
     },
-    {
-      type: "password",
-      name: "password",
-      placeholder: "Enter your password",
-      onChange: handleInputChange,
-      formErrors: password,
-    },
-    {
-      type: "password",
-      name: "retype_password",
-      placeholder: "Retype your password",
-      onChange: handleInputChange,
-      formErrors: retype_password,
-    },
   ];
 };
 

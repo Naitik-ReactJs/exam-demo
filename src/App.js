@@ -6,7 +6,8 @@ import ForgotPassword from "./components/ForgotPassword";
 import SignUp from "./components/SignUp";
 import NotFound from "./reusable/NotFound";
 import SideBar from "./reusable/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRouteTeacher from "./Routes/ProtectedRouteTeacher";
+import ProtectedRouteStudent from "./Routes/ProtectedRouteStudent";
 function App() {
   return (
     <Router>
@@ -17,13 +18,21 @@ function App() {
           <Route
             path="/teacher"
             element={
-              <ProtectedRoute>
+              <ProtectedRouteTeacher>
                 <SideBar
                   title="dashboard"
                   title1="students list"
                   title2="profile"
                 />
-              </ProtectedRoute>
+              </ProtectedRouteTeacher>
+            }
+          ></Route>
+          <Route
+            path="/student"
+            element={
+              <ProtectedRouteStudent>
+                <SideBar title1="Exam" title2="profile" />
+              </ProtectedRouteStudent>
             }
           ></Route>
           <Route path="/forgotpassword" element={<ForgotPassword />} />

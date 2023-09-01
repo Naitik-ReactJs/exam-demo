@@ -2,30 +2,27 @@ import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../reusable/Button";
 
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputForgotPassForm } from "../utils/Input";
 import validateInput from "../utils/Validation";
 
 import apiAction from "../api/apiAction";
-import { useNavigate } from "react-router-dom";
 import Loader from "../reusable/Loader";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const emptyUserData = {
     email: "",
-    password: "",
-    retype_password: "",
   };
 
   const [formErrors, setFormErrors] = useState(emptyUserData);
   const { email, password, retype_password } = formErrors;
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
-    retype_password: "",
   });
   const handleInputChange = (e) => {
     const target = e.target;
@@ -41,7 +38,7 @@ const ForgotPassword = () => {
       [name]: value,
     }));
   };
-  const emailValue = { email: formData.email };
+
   if (loading) {
     return <Loader />;
   }
@@ -51,10 +48,9 @@ const ForgotPassword = () => {
     apiAction({
       method: "post",
       url: "users/ForgotPassword",
-      data: emailValue,
-      redirect: "/",
-      navigate,
+      data: formData,
       setLoading,
+      navigate,
     });
   };
   const input = InputForgotPassForm(

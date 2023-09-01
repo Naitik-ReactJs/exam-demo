@@ -1,14 +1,7 @@
 import api from "./api";
 import { toast } from "react-toastify";
 
-const apiAction = async ({
-  method,
-  url,
-  data,
-  redirect,
-  navigate,
-  setLoading,
-}) => {
+const apiAction = async ({ method, url, data, setLoading }) => {
   try {
     const response = await api({
       method: method,
@@ -17,14 +10,13 @@ const apiAction = async ({
     });
 
     if (response.data.statusCode === 200) {
-      navigate(redirect);
+      toast.success(response.data.message);
     } else {
-      setTimeout(() => {
-        toast.success(response.data.message);
-      }, 500);
+      toast.error(response.data.message);
     }
     setLoading(false);
     localStorage.setItem("user-info", JSON.stringify(response.data.data));
+    return response.data;
   } catch (error) {
     setLoading(false);
     toast.error(error.message);

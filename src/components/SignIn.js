@@ -43,14 +43,13 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    apiAction({
+    const response = await apiAction({
       method: "post",
       url: "users/Login",
       data: formData,
-      redirect: "/dashboard",
-      navigate,
       setLoading,
     });
+    navigate(`${response.data.role}`);
   };
   const input = InputSignInForm(email, password, handleInputChange);
 

@@ -46,7 +46,6 @@ const SignUp = () => {
       method: "post",
       url: "users/SignUp",
       data: formData,
-      redirect: "/",
       navigate,
       setLoading,
     });
@@ -118,7 +117,7 @@ const SignUp = () => {
                 {item.formErrors && (
                   <div
                     key={index}
-                    className="alert text-center alert-danger border text-center w-25"
+                    className="alert text-center alert-danger border text-center"
                     role="alert"
                   >
                     {item.formErrors}

@@ -1,12 +1,13 @@
 import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRouteTeacher = ({ children }) => {
   let data = JSON.parse(localStorage.getItem("user-info"));
-  if (data?.token) {
+
+  if (data?.token && data?.role === "teacher") {
     return children;
   } else {
     return <Navigate to="/" />;
   }
 };
 
-export default ProtectedRoute;
+export default ProtectedRouteTeacher;

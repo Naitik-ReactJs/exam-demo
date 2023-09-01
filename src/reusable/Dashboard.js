@@ -1,6 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
+import Button from "./Button";
 const SideBar = (props, { component }) => {
+  const navigate = useNavigate();
+
+  const handleOnClick = () => {
+    navigate("/");
+    localStorage.removeItem("user-info");
+  };
   return (
     <div className="container-fluid">
       <div className="row flex-nowrap">
@@ -23,6 +30,14 @@ const SideBar = (props, { component }) => {
                 );
               })}
             </ul>
+            <div className="mb-5">
+              <Button
+                className={"btn btn-danger mt-3 mb-4"}
+                type="submit"
+                buttonText={"Log Out"}
+                onClick={handleOnClick}
+              />
+            </div>
           </div>
         </div>
         <div className="col py-3">{component}</div>
