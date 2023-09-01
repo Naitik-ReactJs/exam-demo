@@ -1,14 +1,17 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../reusable/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputSignInForm } from "../utils/Input";
 import validateInput from "../utils/Validation";
 import apiAction from "../api/apiAction";
-
+import Loader from "../reusable/Loader";
 const SignIn = () => {
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
   const emptyUserData = {
     email: "",
     password: "",
@@ -34,12 +37,19 @@ const SignIn = () => {
       [name]: value,
     }));
   };
+  if (loading) {
+    return <Loader />;
+  }
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     apiAction({
       method: "post",
       url: "users/Login",
       data: formData,
+      redirect: "/dashboard",
+      navigate,
+      setLoading,
     });
   };
   const input = InputSignInForm(email, password, handleInputChange);

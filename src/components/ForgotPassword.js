@@ -8,8 +8,12 @@ import { InputForgotPassForm } from "../utils/Input";
 import validateInput from "../utils/Validation";
 
 import apiAction from "../api/apiAction";
+import { useNavigate } from "react-router-dom";
+import Loader from "../reusable/Loader";
 
 const ForgotPassword = () => {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const emptyUserData = {
     email: "",
     password: "",
@@ -38,12 +42,19 @@ const ForgotPassword = () => {
     }));
   };
   const emailValue = { email: formData.email };
+  if (loading) {
+    return <Loader />;
+  }
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     apiAction({
       method: "post",
       url: "users/ForgotPassword",
       data: emailValue,
+      redirect: "/",
+      navigate,
+      setLoading,
     });
   };
   const input = InputForgotPassForm(

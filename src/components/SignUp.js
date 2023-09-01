@@ -6,8 +6,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { InputSignUpForm } from "../utils/Input";
 import validateInput from "../utils/Validation";
 import apiAction from "../api/apiAction";
+import { useNavigate } from "react-router-dom";
+import Loader from "../reusable/Loader";
 
 const SignUp = () => {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const [selectedRole, setSelectedRole] = useState("");
   const [radioError, setRadioError] = useState(false);
   const radioErrorMessage = "Please select a role";
@@ -26,17 +31,24 @@ const SignUp = () => {
     password: "",
     role: "",
   });
+  if (loading) {
+    return <Loader />;
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedRole === "") {
       setRadioError(true);
       return false;
     }
-
+    setSelectedRole("");
+    setLoading(true);
     apiAction({
       method: "post",
       url: "users/SignUp",
       data: formData,
+      redirect: "/",
+      navigate,
+      setLoading,
     });
   };
 
