@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../reusable/Button";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputForgotPassForm } from "../utils/Input";
 import validateInput from "../utils/Validation";
@@ -13,17 +13,19 @@ import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
   const emptyUserData = {
     email: "",
   };
 
   const [formErrors, setFormErrors] = useState(emptyUserData);
-  const { email, password, retype_password } = formErrors;
+  const { email } = formErrors;
   const [formData, setFormData] = useState({
     email: "",
   });
+  const [loading, setLoading] = useState(false);
+  if (loading) {
+    return <Loader />;
+  }
   const handleInputChange = (e) => {
     const target = e.target;
     const { name, value } = target;
@@ -39,9 +41,6 @@ const ForgotPassword = () => {
     }));
   };
 
-  if (loading) {
-    return <Loader />;
-  }
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -53,12 +52,7 @@ const ForgotPassword = () => {
       navigate,
     });
   };
-  const input = InputForgotPassForm(
-    email,
-    password,
-    retype_password,
-    handleInputChange
-  );
+  const input = InputForgotPassForm(email, handleInputChange);
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100">
       <div className="container p-5 w-50 mb-5 box-shadow">

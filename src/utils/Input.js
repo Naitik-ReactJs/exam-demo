@@ -1,9 +1,4 @@
-export const InputForgotPassForm = (
-  email,
-  password,
-  retype_password,
-  handleInputChange
-) => {
+export const InputForgotPassForm = (email, handleInputChange) => {
   return [
     {
       type: "email",
@@ -11,6 +6,58 @@ export const InputForgotPassForm = (
       placeholder: "Enter your email address",
       formErrors: email,
       onChange: handleInputChange,
+    },
+  ];
+};
+export const InputNewPassForm = (
+  password,
+  retype_password,
+  handleInputChange
+) => {
+  return [
+    {
+      type: "password",
+      name: "Password",
+      placeholder: "Enter your password",
+      onChange: handleInputChange,
+      formErrors: password,
+    },
+    {
+      type: "password",
+      name: "ConfirmPassword",
+      placeholder: "Re Enter your password",
+      onChange: handleInputChange,
+      formErrors: retype_password,
+    },
+  ];
+};
+export const InputResetPassForm = (
+  old_password,
+  password,
+  retype_password,
+  handleInputChange
+) => {
+  return [
+    {
+      type: "password",
+      name: "oldPassword",
+      placeholder: "Enter your old password",
+      onChange: handleInputChange,
+      formErrors: old_password,
+    },
+    {
+      type: "password",
+      name: "Password",
+      placeholder: "Enter your new password",
+      onChange: handleInputChange,
+      formErrors: password,
+    },
+    {
+      type: "password",
+      name: "ConfirmPassword",
+      placeholder: "Re Enter your new password",
+      onChange: handleInputChange,
+      formErrors: retype_password,
     },
   ];
 };

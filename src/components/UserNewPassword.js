@@ -1,32 +1,32 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../reusable/Button";
-import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { InputSignInForm } from "../utils/Input";
+import { InputNewPassForm } from "../utils/Input";
 import validateInput from "../utils/Validation";
 import apiAction from "../api/apiAction";
 import Loader from "../reusable/Loader";
-const SignIn = () => {
+
+const UserResetPassword = () => {
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
   const emptyUserData = {
-    email: "",
     password: "",
+    retype_password: "",
   };
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    Password: "",
+    ConfirmPassword: "",
   });
   const [formErrors, setFormErrors] = useState(emptyUserData);
-  const { email, password } = formErrors;
+
+  const { password, retype_password } = formErrors;
+
   const handleInputChange = (e) => {
     const target = e.target;
     const { name, value } = target;
-
-    const error = validateInput(name, value);
+    const error = validateInput(name, value, formData.password);
 
     setFormErrors((prevErrors) => ({
       ...prevErrors,
@@ -43,20 +43,23 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    const response = await apiAction({
+    apiAction({
       method: "post",
-      url: "users/Login",
+      url: `users/ForgotPassword/Verify?token=${
+        JSON.parse(localStorage.getItem("user-info"))?.token
+      }`,
       data: formData,
+      params: {
+        token: JSON.parse(localStorage.getItem("user-info"))?.token,
+      },
       setLoading,
     });
-    if (response.statusCode === 200) {
-      navigate(`${response.data.role}`);
-    }
   };
-  const input = InputSignInForm(email, password, handleInputChange);
+
+  const input = InputNewPassForm(password, retype_password, handleInputChange);
 
   return (
-    <div className="d-flex align-items-center justify-content-center min-vh-100 ">
+    <div className="d-flex align-items-center justify-content-center min-vh-100">
       <div className="container p-5 w-50 mb-5 box-shadow">
         <form onSubmit={handleSubmit}>
           {input.map((item, index) => {
@@ -83,35 +86,18 @@ const SignIn = () => {
             );
           })}
           <div className="text-center mt-4">
-            <Link className="forgotpass_link" to="/forgotpassword">
-              Forgot password?
-            </Link>
-          </div>
-          <div className="text-center">
             <Button
-              className={"btn btn-dark mt-3 mb-4"}
+              className={"btn btn-dark"}
               type="submit"
-              buttonText={"Sign In"}
+              buttonText={"Submit"}
               disabled={!Object.values(formErrors).every((item) => item === "")}
             ></Button>
           </div>
-          <div className="text-center ">
-            <p> Don't have an account ? </p>
-            <p> </p>
-            <Link to="/signup">
-              {" "}
-              <Button
-                className={"btn btn-dark"}
-                type="submit"
-                buttonText={"Sign Up"}
-              ></Button>
-            </Link>
-            <ToastContainer autoClose={2000} theme="colored" />
-          </div>
+          <ToastContainer autoClose={2000} theme="colored" />
         </form>
       </div>
     </div>
   );
 };
 
-export default SignIn;
+export default UserResetPassword;

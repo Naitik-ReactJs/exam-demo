@@ -8,9 +8,13 @@ import NotFound from "./reusable/NotFound";
 import SideBar from "./reusable/Dashboard";
 import ProtectedRouteTeacher from "./Routes/ProtectedRouteTeacher";
 import ProtectedRouteStudent from "./Routes/ProtectedRouteStudent";
+import UserNewPassword from "./components/UserResetPassword";
+import UserResetPassword from "./components/UserNewPassword";
 function App() {
   return (
     <Router>
+      <UserResetPassword />
+      <UserNewPassword />
       <>
         <Routes>
           {" "}

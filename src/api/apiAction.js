@@ -1,17 +1,18 @@
 import api from "./api";
 import { toast } from "react-toastify";
 
-const apiAction = async ({ method, url, data, setLoading }) => {
+const apiAction = async ({ method, url, data, setLoading, token }) => {
   try {
     const response = await api({
       method: method,
       url: `${process.env.REACT_APP_API_URL}${url}`,
       data: data,
+      headers: {
+        "access-token": token,
+      },
     });
 
-    if (response.data.statusCode === 200) {
-      toast.success(response.data.message);
-    } else {
+    if (response.data.statusCode !== 200) {
       toast.error(response.data.message);
     }
     setLoading(false);

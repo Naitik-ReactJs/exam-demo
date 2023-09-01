@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../reusable/Loader";
 
 const SignUp = () => {
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const [selectedRole, setSelectedRole] = useState("");
@@ -31,6 +30,7 @@ const SignUp = () => {
     password: "",
     role: "",
   });
+  const [loading, setLoading] = useState(false);
   if (loading) {
     return <Loader />;
   }
