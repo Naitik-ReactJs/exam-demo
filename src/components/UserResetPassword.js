@@ -49,22 +49,21 @@ const UserNewPassword = () => {
       method: "post",
       url: "users/ResetPassword",
       data: formData,
-      headers: {
-        "access-token": JSON.parse(localStorage.getItem("user-info"))?.token,
-      },
+      token: JSON.parse(localStorage.getItem("user-info"))?.token,
       setLoading,
     });
   };
+  console.log(JSON.parse(localStorage.getItem("user-info"))?.token);
   const input = InputResetPassForm(
     old_password,
     password,
     retype_password,
     handleInputChange
   );
-  console.log(formData);
   return (
-    <div className="d-flex align-items-center justify-content-center min-vh-100">
-      <div className="container p-5 w-50 mb-5 box-shadow">
+    <div className="d-flex align-items-center justify-content-center min-vh-100 ">
+      <div className="container p-5 w-50 box-shadow">
+        <h2 className="text-center p-3">Reset Password</h2>
         <form onSubmit={handleSubmit}>
           {input.map((item, index) => {
             return (
