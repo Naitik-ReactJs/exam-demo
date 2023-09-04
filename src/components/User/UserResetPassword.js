@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputResetPassForm } from "../../utils/Input";
 import validateInput from "../../utils/Validation";
@@ -45,15 +45,22 @@ const UserNewPassword = () => {
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    apiAction({
-      method: "post",
-      url: "users/ResetPassword",
-      data: formData,
-      token: JSON.parse(localStorage.getItem("user-info"))?.token,
-      setLoading,
-    });
+
+    try {
+      const response = await apiAction({
+        method: "post",
+        url: "users/ResetPassword",
+        data: formData,
+        token: JSON.parse(localStorage.getItem("user-info"))?.token,
+        setLoading,
+      });
+
+      toast.success(response.message);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
-  console.log(JSON.parse(localStorage.getItem("user-info"))?.token);
+
   const input = InputResetPassForm(
     old_password,
     password,

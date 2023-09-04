@@ -33,7 +33,21 @@ const Teacher = () => {
   const handleSubmit = () => {
     navigate("/teacher/exam");
   };
+  const handleOnClick = async (id) => {
+    try {
+      const response = await apiAction({
+        method: "get",
+        url: "dashboard/Teachers/viewExam",
+        token: JSON.parse(localStorage.getItem("user-info"))?.token,
+        id,
+        setLoading,
+      });
 
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   return (
     <div className="container py-5">
       <Button
@@ -74,6 +88,7 @@ const Teacher = () => {
                   <Button
                     buttonText={"View Exam"}
                     className={"btn btn-dark w-25 m-auto mb-2"}
+                    onClick={() => handleOnClick(item._id)}
                   />
                   <Button
                     buttonText={"Edit Exam"}

@@ -12,10 +12,9 @@ const Students = () => {
       try {
         const response = await apiAction({
           method: "get",
-          url: "dashboard/Teachers",
+          url: "dashboard/Teachers/StudentForExam",
           token: JSON.parse(localStorage.getItem("user-info"))?.token,
           setLoading,
-          storageKey: "student-list",
         });
 
         setStudentList(response.data);
@@ -29,46 +28,53 @@ const Students = () => {
   if (loading) {
     return <Loader />;
   }
+  const handleOnClick = async (id) => {
+    try {
+      const response = await apiAction({
+        method: "get",
+        url: "dashboard/Teachers/viewStudentDetail",
+        token: JSON.parse(localStorage.getItem("user-info"))?.token,
+        id,
+        setLoading,
+      });
 
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   return (
     <div className="container py-5">
       {studentList.length === 0 ? (
         <Loader />
       ) : (
         <>
-          {studentList.map((item, index) => (
-            <Col xs={12} sm={6} md={4} lg={6} key={index}>
-              <Card className="mb-2">
+          <Col xs={12} sm={6} md={4} lg={6}>
+            {studentList.map((item, index) => (
+              <Card className="mb-2" key={index}>
                 <Card.Body>
-                  <Card.Title>
+                  <Card.Title className="pb-2">
                     <i className="pe-2 mr-2 bi bi-person-circle"></i>
                     {item.name}
                   </Card.Title>
-                  <Card.Subtitle className="mb-2">
+                  <Card.Subtitle className="pb-2">
                     <i className="pe-2 mr-2 bi bi-envelope-at-fill"></i>
                     {item.email}
                   </Card.Subtitle>
-                  <Card.Text>
-                    {item.status === "Active" ? (
-                      <>
-                        <i className="pe-2 mr-2 bi bi-toggle-on"></i>
-                        Status: {item.status}
-                      </>
-                    ) : (
-                      <>
-                        <i className="pe-2 mr-2 bi bi-toggle-off "></i>
-                        Status: {item.status}
-                      </>
-                    )}
+                  <Card.Text className="pb-2">
+                    <i className="pe-2 mr-2 bi bi-toggle-on"></i>
+                    Status: {item.status}
                   </Card.Text>
                 </Card.Body>
                 <Button
                   buttonText={"View detail"}
+                  type="submit"
                   className={"btn btn-dark w-25 m-auto mb-2"}
+                  onClick={() => handleOnClick(item._id)}
                 />
               </Card>
-            </Col>
-          ))}
+            ))}
+          </Col>
         </>
       )}
     </div>

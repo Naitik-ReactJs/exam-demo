@@ -8,6 +8,7 @@ const apiAction = async ({
   setLoading,
   token,
   storageKey,
+  id,
 }) => {
   try {
     const response = await api({
@@ -16,6 +17,9 @@ const apiAction = async ({
       data: data,
       headers: {
         "access-token": token,
+      },
+      params: {
+        id: id,
       },
     });
 
