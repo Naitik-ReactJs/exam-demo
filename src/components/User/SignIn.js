@@ -1,13 +1,13 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Button from "../reusable/Button";
+import Button from "../../reusable/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { InputSignInForm } from "../utils/Input";
-import validateInput from "../utils/Validation";
-import apiAction from "../api/apiAction";
-import Loader from "../reusable/Loader";
+import { InputSignInForm } from "../../utils/Input";
+import validateInput from "../../utils/Validation";
+import apiAction from "../../api/apiAction";
+import Loader from "../../reusable/Loader";
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
 
@@ -48,6 +48,7 @@ const SignIn = () => {
       url: "users/Login",
       data: formData,
       setLoading,
+      storageKey: "user-info",
     });
     if (response.statusCode === 200) {
       navigate(`${response.data.role}`);

@@ -1,33 +1,36 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Button from "../reusable/Button";
+import Button from "../../reusable/Button";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { InputNewPassForm } from "../utils/Input";
-import validateInput from "../utils/Validation";
-import apiAction from "../api/apiAction";
-import Loader from "../reusable/Loader";
+import { InputForgotPassForm } from "../../utils/Input";
+import validateInput from "../../utils/Validation";
 
-const UserResetPassword = () => {
-  const [loading, setLoading] = useState(false);
+import apiAction from "../../api/apiAction";
+import Loader from "../../reusable/Loader";
+import { useNavigate } from "react-router-dom";
 
+const ForgotPassword = () => {
+  const navigate = useNavigate();
   const emptyUserData = {
-    password: "",
-    retype_password: "",
+    email: "",
   };
-  const [formData, setFormData] = useState({
-    Password: "",
-    ConfirmPassword: "",
-  });
+
   const [formErrors, setFormErrors] = useState(emptyUserData);
-
-  const { password, retype_password } = formErrors;
-
+  const { email } = formErrors;
+  const [formData, setFormData] = useState({
+    email: "",
+  });
+  const [loading, setLoading] = useState(false);
+  if (loading) {
+    return <Loader />;
+  }
   const handleInputChange = (e) => {
     const target = e.target;
     const { name, value } = target;
-    const error = validateInput(name, value, formData.password);
 
+    let error = validateInput(name, value, formData.password);
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,
@@ -37,27 +40,19 @@ const UserResetPassword = () => {
       [name]: value,
     }));
   };
-  if (loading) {
-    return <Loader />;
-  }
+
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     apiAction({
       method: "post",
-      url: `users/ForgotPassword/Verify?token=${
-        JSON.parse(localStorage.getItem("user-info"))?.token
-      }`,
+      url: "users/ForgotPassword",
       data: formData,
-      params: {
-        token: JSON.parse(localStorage.getItem("user-info"))?.token,
-      },
       setLoading,
+      navigate,
     });
   };
-
-  const input = InputNewPassForm(password, retype_password, handleInputChange);
-
+  const input = InputForgotPassForm(email, handleInputChange);
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100">
       <div className="container p-5 w-50 mb-5 box-shadow">
@@ -100,4 +95,4 @@ const UserResetPassword = () => {
   );
 };
 
-export default UserResetPassword;
+export default ForgotPassword;

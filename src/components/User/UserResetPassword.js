@@ -1,12 +1,12 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Button from "../reusable/Button";
+import Button from "../../reusable/Button";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { InputResetPassForm } from "../utils/Input";
-import validateInput from "../utils/Validation";
-import apiAction from "../api/apiAction";
-import Loader from "../reusable/Loader";
+import { InputResetPassForm } from "../../utils/Input";
+import validateInput from "../../utils/Validation";
+import apiAction from "../../api/apiAction";
+import Loader from "../../reusable/Loader";
 
 const UserNewPassword = () => {
   const [loading, setLoading] = useState(false);

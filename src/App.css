@@ -12,3 +12,10 @@
 .custom-bg {
   background-color: #efefef;
 }
+.sidebar-menu {
+  background-color: #efefef;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  overflow-y: auto;
+}

@@ -1,13 +1,13 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Button from "../reusable/Button";
+import Button from "../../reusable/Button";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { InputSignUpForm } from "../utils/Input";
-import validateInput from "../utils/Validation";
-import apiAction from "../api/apiAction";
+import { InputSignUpForm } from "../../utils/Input";
+import validateInput from "../../utils/Validation";
+import apiAction from "../../api/apiAction";
 import { useNavigate } from "react-router-dom";
-import Loader from "../reusable/Loader";
+import Loader from "../../reusable/Loader";
 
 const SignUp = () => {
   const navigate = useNavigate();
