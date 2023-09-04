@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../App.css";
 import Button from "./Button";
 
@@ -7,7 +7,7 @@ const SideBar = ({ navigateTo, component, props }) => {
 
   const handleOnClick = () => {
     navigate("/");
-    localStorage.removeItem("user-info");
+    localStorage.clear();
   };
 
   return (
@@ -21,7 +21,7 @@ const SideBar = ({ navigateTo, component, props }) => {
             >
               {Object.entries(props).map(([key, value], index) => (
                 <li className="m-5 text-light" key={index}>
-                  <Link
+                  <NavLink
                     className="forgotpass_link"
                     to={
                       index !== 0
@@ -32,7 +32,7 @@ const SideBar = ({ navigateTo, component, props }) => {
                     }
                   >
                     {value.toUpperCase()}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>

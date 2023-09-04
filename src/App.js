@@ -5,19 +5,21 @@ import {
   Outlet,
 } from "react-router-dom";
 import "./App.css";
-import UserResetPassword from "./components/User/UserResetPassword";
-import SignIn from "./components/User/SignIn";
-import ForgotPassword from "./components/User/ForgotPassword";
-import SignUp from "./components/User/SignUp";
+import UserResetPassword from "./components/user/UserResetPassword";
+import SignIn from "./components/user/SignIn";
+import ForgotPassword from "./components/user/ForgotPassword";
+import SignUp from "./components/user/SignUp";
 import NotFound from "./reusable/NotFound";
 import SideBar from "./reusable/Dashboard";
 import ProtectedRouteTeacher from "./Routes/ProtectedRouteTeacher";
 import ProtectedRouteStudent from "./Routes/ProtectedRouteStudent";
-import Students from "./components/Teacher/Students";
-import Teacher from "./components/Teacher/Teacher";
-import CreateExam from "./components/Teacher/CreateExam";
+import ViewStudents from "./components/teacher/ViewStudents";
+import CreateExam from "./components/teacher/CreateExam";
 import { teacherSideBarProps } from "./utils/Constants";
 import { studentSideBarProps } from "./utils/Constants";
+import Teacher from "./components/teacher/Teacher";
+import ViewStudentDetail from "./components/teacher/ViewStudentDetail";
+
 function App() {
   return (
     <Router>
@@ -44,12 +46,12 @@ function App() {
             }
           />
           <Route
-            path="Students"
+            path="viewstudents"
             element={
               <SideBar
                 navigateTo="teacher"
                 props={teacherSideBarProps}
-                component={<Students />}
+                component={<ViewStudents />}
               />
             }
           />
@@ -60,6 +62,16 @@ function App() {
                 navigateTo="teacher"
                 props={teacherSideBarProps}
                 component={<CreateExam />}
+              />
+            }
+          />
+          <Route
+            path="viewstudents/result"
+            element={
+              <SideBar
+                navigateTo="teacher"
+                props={teacherSideBarProps}
+                component={<ViewStudentDetail />}
               />
             }
           />

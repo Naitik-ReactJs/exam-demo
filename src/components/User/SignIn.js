@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputSignInForm } from "../../utils/Input";
@@ -84,9 +84,9 @@ const SignIn = () => {
             );
           })}
           <div className="text-center mt-4">
-            <Link className="forgotpass_link" to="/forgotpassword">
+            <NavLink className="forgotpass_link" to="/forgotpassword">
               Forgot password?
-            </Link>
+            </NavLink>
           </div>
           <div className="text-center">
             <Button
@@ -99,14 +99,14 @@ const SignIn = () => {
           <div className="text-center ">
             <p> Don't have an account ? </p>
             <p> </p>
-            <Link to="/signup">
+            <NavLink to="/signup">
               {" "}
               <Button
                 className={"btn btn-dark"}
                 type="submit"
                 buttonText={"Sign Up"}
               ></Button>
-            </Link>
+            </NavLink>
             <ToastContainer autoClose={2000} theme="colored" />
           </div>
         </form>
