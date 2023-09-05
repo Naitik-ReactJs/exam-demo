@@ -30,3 +30,14 @@
   padding: 0.5rem;
   margin: 1.4rem;
 }
+.exam-container {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+}
+.button-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 30%;
+  margin: 3rem auto 0 0;
+}

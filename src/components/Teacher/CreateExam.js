@@ -1,137 +1,93 @@
-import React, { useState } from "react";
-
+import React, { Fragment, useState } from "react";
+import Button from "../../reusable/Button";
+import "../../App.css";
+import { createExamInput } from "../../utils/Input";
 const CreateExam = () => {
-  const [selectedAns, setSelectedAns] = useState("");
-  const [radioError, setRadioError] = useState(false);
-  const radioErrorMessage = "Please select a answers";
-  const handleRadioChange = () => {
-    setRadioError(false);
+  const [selectedValue, setSelectedValue] = useState("");
+  const handleRadioChange = (e) => {
+    setSelectedValue(e.target.value);
   };
-  const input = [
-    {
-      id: "answer1",
-      type: "radio",
-      onChange: handleRadioChange,
-      name: "answers",
-    },
-    {
-      id: "answer2",
-      type: "radio",
-      onChange: handleRadioChange,
-      name: "answers",
-    },
-    {
-      id: "answer3",
-      type: "radio",
-      onChange: handleRadioChange,
-      name: "answers",
-    },
-    {
-      id: "answer4",
-      type: "radio",
-      onChange: handleRadioChange,
-      name: "answers",
-    },
-  ];
+  let answer = "";
+  const [inputData, setInputData] = useState({
+    ans1: "",
+    ans2: "",
+    ans3: "",
+    ans4: "",
+  });
 
-  const inputText = [
-    {
-      type: "text",
-      placeholder: "Enter your answer here",
-    },
-  ];
+  const { ans1, ans2, ans3, ans4 } = inputData;
+
+  const input = createExamInput(ans1, ans2, ans3, ans4);
+  const handleOnChange = (e) => {
+    const target = e.target;
+    const { name, value } = target;
+    setInputData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
   return (
-    // <form>
-    //   {input.map((item) => {
-    //     return (
-    //       <>
-    //         {" "}
-    //         <input
-    //           required
-    //           id={item.id}
-    //           checked={selectedAns === item.id}
-    //           value={item.id}
-    //           type={item.type}
-    //           onChange={handleRadioChange}
-    //         />
-    //         <div>
-    //           {inputText.map((textItem) => {
-    //             return (
-    //               <>
-    //                 <input type={textItem.type} />
-    //               </>
-    //             );
-    //           })}
-    //         </div>
-    //       </>
-    //     );
-    //   })}
-    //   <div>
-    //     {radioError && (
-    //       <div
-    //         className="alert text-center alert-danger border text-center w-50"
-    //         answers="alert"
-    //       >
-    //         {radioErrorMessage}
-    //       </div>
-    //     )}
-    //   </div>
-    //   <div>
-    //     <span className="text-danger">{selectedAns}</span>
-    //   </div>
-    // </form>
-    <>
-      <form>
-        <br />
-        <input
-          id="ans1"
-          type="radio"
-          value="1"
-          name="question1"
-          className="me-3"
-        />
-        <label for="ans1">
-          <input type="text" name="ans1" />
-        </label>
-        <br />
-        <input
-          id="ans2"
-          type="radio"
-          className="me-3"
-          value="2"
-          name="question1"
-        />
-        <label for="ans2">
-          {" "}
-          <input type="text" name="ans1" />
-        </label>
-        <br />
-        <input
-          id="ans3"
-          type="radio"
-          className="me-3"
-          value="3"
-          name="question1"
-        />
-        <label for="ans3">
-          {" "}
-          <input type="text" name="ans1" />
-        </label>
-        <br />
-        <input
-          id="ans4"
-          type="radio"
-          className="me-3"
-          value="4"
-          name="question1"
-        />
-        <label for="ans4">
-          {" "}
-          <input type="text" name="ans1" />
-        </label>
-        <br />
-      </form>
-    </>
+    <div className="">
+      {" "}
+      <div className="container exam-container m-5">
+        {input.map((item, index) => (
+          <Fragment key={index}>
+            {item.type === "radio" ? (
+              <div key={item.id}>
+                <input
+                  id={item.id}
+                  type="radio"
+                  value={item.id}
+                  name="question"
+                  className="me-3"
+                  checked={selectedValue === item.id}
+                  onChange={handleRadioChange}
+                />
+                <label htmlFor={item.id}>
+                  <input
+                    type="text"
+                    name={`${item.id}`}
+                    onChange={handleOnChange}
+                    className="form-control mb-3"
+                  />
+                </label>
+                <br />
+              </div>
+            ) : (
+              <div>
+                {item.label} :{" "}
+                <input
+                  type={item.type}
+                  name={item.name}
+                  className="form-control mb-4"
+                />
+              </div>
+            )}
+          </Fragment>
+        ))}
+      </div>
+      <div className="text-start pe-5 me-5">
+        <div>
+          Answer:{" "}
+          {input.map((item) =>
+            Object.keys(inputData).map((value) => {
+              if (value === item.id && value === selectedValue) {
+                answer = answer + item.value;
+              } else {
+                answer = "";
+              }
+              return answer;
+            })
+          )}
+        </div>
+        <div className="button-container">
+          <Button className={"btn btn-dark 3"} buttonText={"Next"} />
+          <Button className={"btn btn-dark 3"} buttonText={"Previous"} />
+          <Button className={"btn btn-dark 3"} buttonText={"Submit"} />
+        </div>
+      </div>
+    </div>
   );
 };
 

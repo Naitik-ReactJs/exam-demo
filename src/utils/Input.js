@@ -127,3 +127,22 @@ export const InputSignUpForm = (
     },
   ];
 };
+
+export const createExamInput = (ans1, ans2, ans3, ans4) => {
+  return [
+    { type: "radio", name: "ans1", id: "ans1", value: ans1 },
+    { type: "radio", name: "ans1", id: "ans2", value: ans2 },
+    { type: "radio", name: "ans1", id: "ans3", value: ans3 },
+    { type: "radio", name: "ans1", id: "ans4", value: ans4 },
+    {
+      type: "text",
+      name: "subjectname",
+      label: "Subject",
+    },
+    {
+      type: "text",
+      name: "question",
+      label: "Question",
+    },
+  ];
+};
