@@ -50,7 +50,7 @@ const SignIn = () => {
       storageKey: "user-info",
     });
     if (response.statusCode === 200) {
-      navigate(`${response.data.role}`);
+      navigate(`${response.data.role}`, { replace: true });
     }
   };
   const input = InputSignInForm(email, password, handleInputChange);

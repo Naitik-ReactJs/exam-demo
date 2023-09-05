@@ -47,7 +47,7 @@ function App() {
             }
           />
           <Route
-            path="viewstudents"
+            path="view-students"
             element={
               <Dashboard
                 navigateTo="teacher"
@@ -57,7 +57,7 @@ function App() {
             }
           />
           <Route
-            path="exam"
+            path="create-exam"
             element={
               <Dashboard
                 navigateTo="teacher"
@@ -67,7 +67,7 @@ function App() {
             }
           />
           <Route
-            path="viewstudents/result"
+            path="view-students/result"
             element={
               <Dashboard
                 navigateTo="teacher"

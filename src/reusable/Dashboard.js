@@ -26,7 +26,7 @@ const Dashboard = ({ navigateTo, component, props }) => {
                     to={
                       index !== 0
                         ? `/${navigateTo}/${value
-                            .replace(/\s/g, "")
+                            .replace(/\s/g, "-")
                             .toLowerCase()}`
                         : `/${navigateTo}`
                     }

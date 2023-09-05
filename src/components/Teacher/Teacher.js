@@ -27,9 +27,7 @@ const Teacher = () => {
 
     fetchData();
   }, []);
-  const handleSubmit = () => {
-    navigate("/teacher/exam");
-  };
+
   const handleOnClick = async (id) => {
     try {
       apiAction({
@@ -48,11 +46,6 @@ const Teacher = () => {
   }
   return (
     <div className="container ms-0 py-5">
-      <Button
-        buttonText={"Create Exam"}
-        className={"btn btn-dark w-25 p-2 ms-4"}
-        onClick={handleSubmit}
-      />
       {viewExam.length === 0 ? (
         <Loader />
       ) : (
