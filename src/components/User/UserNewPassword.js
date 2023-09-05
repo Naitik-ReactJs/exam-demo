@@ -7,8 +7,11 @@ import { InputNewPassForm } from "../../utils/Input";
 import validateInput from "../../utils/Validation";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
-
-const UserResetPassword = () => {
+import { useLocation } from "react-router-dom";
+const UserNewPassword = () => {
+  const location = new URLSearchParams(useLocation().search);
+  const token = location.get("token");
+  console.log(token);
   const [loading, setLoading] = useState(false);
 
   const emptyUserData = {
@@ -26,7 +29,7 @@ const UserResetPassword = () => {
   const handleInputChange = (e) => {
     const target = e.target;
     const { name, value } = target;
-    const error = validateInput(name, value, formData.password);
+    const error = validateInput(name, value, formData.Password);
 
     setFormErrors((prevErrors) => ({
       ...prevErrors,
@@ -45,13 +48,8 @@ const UserResetPassword = () => {
     e.preventDefault();
     apiAction({
       method: "post",
-      url: `users/ForgotPassword/Verify?token=${
-        JSON.parse(localStorage.getItem("user-info"))?.token
-      }`,
+      url: `users/ForgotPassword/Verify?token=${token}`,
       data: formData,
-      params: {
-        token: JSON.parse(localStorage.getItem("user-info"))?.token,
-      },
       setLoading,
     });
   };
@@ -61,6 +59,7 @@ const UserResetPassword = () => {
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100">
       <div className="container p-5 w-50 mb-5 box-shadow">
+        <h2 className="text-center p-2">New password</h2>
         <form onSubmit={handleSubmit}>
           {input.map((item, index) => {
             return (
@@ -100,4 +99,4 @@ const UserResetPassword = () => {
   );
 };
 
-export default UserResetPassword;
+export default UserNewPassword;

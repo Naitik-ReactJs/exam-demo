@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "../App.css";
 import Button from "./Button";
 
-const SideBar = ({ navigateTo, component, props }) => {
+const Dashboard = ({ navigateTo, component, props }) => {
   const navigate = useNavigate();
 
   const handleOnClick = () => {
@@ -53,4 +53,4 @@ const SideBar = ({ navigateTo, component, props }) => {
   );
 };
 
-export default SideBar;
+export default Dashboard;

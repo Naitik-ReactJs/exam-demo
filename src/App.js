@@ -5,20 +5,21 @@ import {
   Outlet,
 } from "react-router-dom";
 import "./App.css";
-import UserResetPassword from "./components/user/UserResetPassword";
+import UserNewPassword from "./components/user/UserNewPassword";
 import SignIn from "./components/user/SignIn";
 import ForgotPassword from "./components/user/ForgotPassword";
 import SignUp from "./components/user/SignUp";
 import NotFound from "./reusable/NotFound";
-import SideBar from "./reusable/Dashboard";
-import ProtectedRouteTeacher from "./Routes/ProtectedRouteTeacher";
-import ProtectedRouteStudent from "./Routes/ProtectedRouteStudent";
+import Dashboard from "./reusable/Dashboard";
+import ProtectedRouteTeacher from "./routes/ProtectedRouteTeacher";
+import ProtectedRouteStudent from "./routes/ProtectedRouteStudent";
 import ViewStudents from "./components/teacher/ViewStudents";
 import CreateExam from "./components/teacher/CreateExam";
 import { teacherSideBarProps } from "./utils/Constants";
 import { studentSideBarProps } from "./utils/Constants";
 import Teacher from "./components/teacher/Teacher";
 import ViewStudentDetail from "./components/teacher/ViewStudentDetail";
+import UserResetPassword from "./components/user/UserResetPassword";
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
           <Route
             index
             element={
-              <SideBar
+              <Dashboard
                 navigateTo="teacher"
                 props={teacherSideBarProps}
                 component={<Teacher />}
@@ -48,7 +49,7 @@ function App() {
           <Route
             path="viewstudents"
             element={
-              <SideBar
+              <Dashboard
                 navigateTo="teacher"
                 props={teacherSideBarProps}
                 component={<ViewStudents />}
@@ -58,7 +59,7 @@ function App() {
           <Route
             path="exam"
             element={
-              <SideBar
+              <Dashboard
                 navigateTo="teacher"
                 props={teacherSideBarProps}
                 component={<CreateExam />}
@@ -68,7 +69,7 @@ function App() {
           <Route
             path="viewstudents/result"
             element={
-              <SideBar
+              <Dashboard
                 navigateTo="teacher"
                 props={teacherSideBarProps}
                 component={<ViewStudentDetail />}
@@ -78,7 +79,7 @@ function App() {
           <Route
             path="profile"
             element={
-              <SideBar
+              <Dashboard
                 navigateTo="teacher"
                 props={teacherSideBarProps}
                 component={<UserResetPassword />}
@@ -99,7 +100,7 @@ function App() {
           <Route
             index
             element={
-              <SideBar
+              <Dashboard
                 navigateTo="student"
                 props={studentSideBarProps}
                 component={<></>}
@@ -109,7 +110,7 @@ function App() {
           <Route
             path="profile"
             element={
-              <SideBar
+              <Dashboard
                 navigateTo="student"
                 props={studentSideBarProps}
                 component={<></>}
@@ -119,6 +120,7 @@ function App() {
         </Route>
 
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/newPassword" element={<UserNewPassword />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

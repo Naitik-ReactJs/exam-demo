@@ -30,7 +30,7 @@ const ForgotPassword = () => {
     const target = e.target;
     const { name, value } = target;
 
-    let error = validateInput(name, value, formData.password);
+    let error = validateInput(name, value);
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,

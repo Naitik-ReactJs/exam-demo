@@ -8,7 +8,7 @@ import validateInput from "../../utils/Validation";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 
-const UserNewPassword = () => {
+const UserResetPassword = () => {
   const [loading, setLoading] = useState(false);
 
   const emptyUserData = {
@@ -110,4 +110,4 @@ const UserNewPassword = () => {
   );
 };
 
-export default UserNewPassword;
+export default UserResetPassword;
