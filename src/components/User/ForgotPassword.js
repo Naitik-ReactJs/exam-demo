@@ -23,9 +23,6 @@ const ForgotPassword = () => {
     email: "",
   });
   const [loading, setLoading] = useState(false);
-  if (loading) {
-    return <Loader />;
-  }
   const handleInputChange = (e) => {
     const target = e.target;
     const { name, value } = target;
@@ -53,6 +50,9 @@ const ForgotPassword = () => {
     });
   };
   const input = InputForgotPassForm(email, handleInputChange);
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100">
       <div className="container p-5 w-50 mb-5 box-shadow">

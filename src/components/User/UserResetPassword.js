@@ -13,8 +13,8 @@ const UserResetPassword = () => {
 
   const emptyUserData = {
     old_password: "",
-    password: "",
-    retype_password: "",
+    Password: "",
+    ConfirmPassword: "",
   };
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -23,7 +23,7 @@ const UserResetPassword = () => {
   });
   const [formErrors, setFormErrors] = useState(emptyUserData);
 
-  const { old_password, password, retype_password } = formErrors;
+  const { Password, ConfirmPassword } = formErrors;
 
   const handleInputChange = (e) => {
     const target = e.target;
@@ -39,9 +39,7 @@ const UserResetPassword = () => {
       [name]: value,
     }));
   };
-  if (loading) {
-    return <Loader />;
-  }
+
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -62,11 +60,13 @@ const UserResetPassword = () => {
   };
 
   const input = InputResetPassForm(
-    old_password,
-    password,
-    retype_password,
+    Password,
+    ConfirmPassword,
     handleInputChange
   );
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 ">
       <div className="container p-5 w-50 box-shadow">

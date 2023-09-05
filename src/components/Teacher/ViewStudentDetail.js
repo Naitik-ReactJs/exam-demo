@@ -8,6 +8,15 @@ const ViewStudentDetail = () => {
   const [studentDetail, setStudentDetail] = useState([]);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
+  const tableHeading = [
+    "Name",
+    "Email",
+    "Subject",
+    "Score",
+    "Rank",
+    "Result status",
+  ];
+
   useEffect(() => {
     const showResult = async () => {
       try {
@@ -40,28 +49,30 @@ const ViewStudentDetail = () => {
             <table className="table table-bordered table-hover p-2">
               <thead className="thead-dark">
                 <tr>
-                  <th>Email</th>
-                  <th>Subject</th>
-                  <th>Rank</th>
-                  <th>Score</th>
-                  <th>Status</th>
+                  {tableHeading.map((heading) => (
+                    <th>{heading}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {studentDetail[0].Result[0] === undefined ? (
                   <tr>
-                    <td className="text-center fs-1" colSpan={5}>
-                      No result found , please try again
+                    <td
+                      className="text-center fw-bold fs-2"
+                      colSpan={tableHeading.length}
+                    >
+                      No result found , Please try to give an exam first
                     </td>
                   </tr>
                 ) : (
                   studentDetail.map((student) =>
                     student.Result.map((result) => (
                       <tr key={result._id}>
+                        <td>{student.name}</td>
                         <td>{student.email}</td>
                         <td>{result.subjectName}</td>
-                        <td>{result.rank}</td>
                         <td>{result.score}</td>
+                        <td>{result.rank}</td>
                         <td>{result.resultStatus}</td>
                       </tr>
                     ))

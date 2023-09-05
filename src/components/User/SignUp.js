@@ -31,9 +31,7 @@ const SignUp = () => {
     role: "",
   });
   const [loading, setLoading] = useState(false);
-  if (loading) {
-    return <Loader />;
-  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedRole === "") {
@@ -80,7 +78,9 @@ const SignUp = () => {
     handleInputChange,
     handleRadioChange
   );
-
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 ">
       <div className="container p-5 w-50 mb-5 box-shadow">

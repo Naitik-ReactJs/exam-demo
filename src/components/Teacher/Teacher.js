@@ -64,7 +64,7 @@ const Teacher = () => {
                   <Card.Body>
                     <Card.Title className="pb-2">
                       <i className="pe-2 mr-2 bi bi-book"></i>
-                      Subject name: {item.subjectName}
+                      Subject: {item.subjectName}
                     </Card.Title>
                     <Card.Subtitle className="pb-2">
                       <i className="pe-2 mr-2 bi bi-envelope-at-fill"></i>

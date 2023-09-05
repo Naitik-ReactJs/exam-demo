@@ -11,12 +11,11 @@ import { useLocation } from "react-router-dom";
 const UserNewPassword = () => {
   const location = new URLSearchParams(useLocation().search);
   const token = location.get("token");
-  console.log(token);
   const [loading, setLoading] = useState(false);
 
   const emptyUserData = {
-    password: "",
-    retype_password: "",
+    Password: "",
+    ConfirmPassword: "",
   };
   const [formData, setFormData] = useState({
     Password: "",
@@ -24,7 +23,7 @@ const UserNewPassword = () => {
   });
   const [formErrors, setFormErrors] = useState(emptyUserData);
 
-  const { password, retype_password } = formErrors;
+  const { Password, ConfirmPassword } = formErrors;
 
   const handleInputChange = (e) => {
     const target = e.target;
@@ -40,9 +39,7 @@ const UserNewPassword = () => {
       [name]: value,
     }));
   };
-  if (loading) {
-    return <Loader />;
-  }
+
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -53,9 +50,10 @@ const UserNewPassword = () => {
       setLoading,
     });
   };
-
-  const input = InputNewPassForm(password, retype_password, handleInputChange);
-
+  const input = InputNewPassForm(Password, ConfirmPassword, handleInputChange);
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100">
       <div className="container p-5 w-50 mb-5 box-shadow">

@@ -22,6 +22,12 @@ export default function validateInput(name, value, passwordValue) {
 
       break;
 
+    case "Password":
+      if (value.length < min_password_length) {
+        error = "Password must be at least 6 characters";
+      }
+
+      break;
     case "password":
       if (value.length < min_password_length) {
         error = "Password must be at least 6 characters";
@@ -29,7 +35,7 @@ export default function validateInput(name, value, passwordValue) {
 
       break;
 
-    case "retype_password":
+    case "ConfirmPassword":
       if (value !== passwordValue) {
         error = "Passwords do not match";
       }

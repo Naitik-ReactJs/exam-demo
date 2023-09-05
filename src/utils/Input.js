@@ -10,8 +10,8 @@ export const InputForgotPassForm = (email, handleInputChange) => {
   ];
 };
 export const InputNewPassForm = (
-  password,
-  retype_password,
+  Password,
+  ConfirmPassword,
   handleInputChange
 ) => {
   return [
@@ -20,21 +20,20 @@ export const InputNewPassForm = (
       name: "Password",
       placeholder: "Enter your password",
       onChange: handleInputChange,
-      formErrors: password,
+      formErrors: Password,
     },
     {
       type: "password",
       name: "ConfirmPassword",
       placeholder: "Re Enter your password",
       onChange: handleInputChange,
-      formErrors: retype_password,
+      formErrors: ConfirmPassword,
     },
   ];
 };
 export const InputResetPassForm = (
-  old_password,
-  password,
-  retype_password,
+  Password,
+  ConfirmPassword,
   handleInputChange
 ) => {
   return [
@@ -43,21 +42,20 @@ export const InputResetPassForm = (
       name: "oldPassword",
       placeholder: "Enter your old password",
       onChange: handleInputChange,
-      formErrors: old_password,
     },
     {
       type: "password",
       name: "Password",
       placeholder: "Enter your new password",
       onChange: handleInputChange,
-      formErrors: password,
+      formErrors: Password,
     },
     {
       type: "password",
       name: "ConfirmPassword",
       placeholder: "Re Enter your new password",
       onChange: handleInputChange,
-      formErrors: retype_password,
+      formErrors: ConfirmPassword,
     },
   ];
 };
