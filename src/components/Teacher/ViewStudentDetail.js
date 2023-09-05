@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
-import { Card } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
 
 const ViewStudentDetail = () => {
   const [loading, setLoading] = useState(false);
   const [studentDetail, setStudentDetail] = useState([]);
-
-  let id = localStorage.getItem("student-id");
+  const location = new URLSearchParams(useLocation().search);
+  const id = location.get("id");
   useEffect(() => {
     const showResult = async () => {
       try {
@@ -28,24 +28,47 @@ const ViewStudentDetail = () => {
   if (loading) {
     return <Loader />;
   }
-  // console.log(studentDetail[0].Result.map((item) => Object.keys(item)));
-  // console.log(studentDetail[0].Result.map((item) => Object.values(item)));
+
   return (
     <div className="container py-5 ms-5">
       {studentDetail.length === 0 ? (
         <Loader />
       ) : (
-        <div className="container">
-          <div className="row d-flex justify-content-space-around">
-            <div className="col custom-display">
-              <Card className="card">
-                <Card.Body>
-                  <Card.Title className="pb-2">
-                    <i className="pe-2 mr-2 bi bi-person-circle"></i>
-                  </Card.Title>
-                </Card.Body>
-              </Card>
-            </div>
+        <div>
+          <h1 className="my-4">Student Results</h1>
+          <div className="table-responsive">
+            <table className="table table-bordered table-hover p-2">
+              <thead className="thead-dark">
+                <tr>
+                  <th>Email</th>
+                  <th>Subject</th>
+                  <th>Rank</th>
+                  <th>Score</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {studentDetail[0].Result[0] === undefined ? (
+                  <tr>
+                    <td className="text-center fs-1" colSpan={5}>
+                      No result found , please try again
+                    </td>
+                  </tr>
+                ) : (
+                  studentDetail.map((student) =>
+                    student.Result.map((result) => (
+                      <tr key={result._id}>
+                        <td>{student.email}</td>
+                        <td>{result.subjectName}</td>
+                        <td>{result.rank}</td>
+                        <td>{result.score}</td>
+                        <td>{result.resultStatus}</td>
+                      </tr>
+                    ))
+                  )
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

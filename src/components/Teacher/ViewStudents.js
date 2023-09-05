@@ -33,8 +33,8 @@ const ViewStudents = () => {
     return <Loader />;
   }
   const handleOnClick = async (id) => {
-    localStorage.setItem("student-id", id);
-    navigate("result");
+    // localStorage.setItem("student-id", id);
+    navigate(`result?id=${id}`);
   };
   return (
     <div className="container py-5 ms-5">
