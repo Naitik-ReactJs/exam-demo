@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -9,6 +9,14 @@ import validateInput from "../../utils/Validation";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 const SignIn = () => {
+  useEffect(() => {
+    if (
+      JSON.parse(localStorage.getItem("user-info"))?.token &&
+      JSON.parse(localStorage.getItem("user-info"))?.role
+    ) {
+      navigate(`/${JSON.parse(localStorage.getItem("user-info"))?.role}`);
+    }
+  });
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
