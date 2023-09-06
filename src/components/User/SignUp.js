@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputSignUpForm } from "../../utils/Input";
 import validateInput from "../../utils/Validation";
@@ -40,13 +40,18 @@ const SignUp = () => {
     }
     setSelectedRole("");
     setLoading(true);
-    apiAction({
-      method: "post",
-      url: "users/SignUp",
-      data: formData,
-      navigate,
-      setLoading,
-    });
+    try {
+      const response = await apiAction({
+        method: "post",
+        url: "users/SignUp",
+        data: formData,
+        navigate,
+        setLoading,
+      });
+      toast.success(response.message);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const handleRadioChange = (e) => {
@@ -146,6 +151,7 @@ const SignUp = () => {
           <ToastContainer autoClose={2000} theme="colored" />
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

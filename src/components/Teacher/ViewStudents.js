@@ -6,34 +6,33 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 const ViewStudents = () => {
   const navigate = useNavigate();
   const [studentList, setStudentList] = useState([]);
 
   const [loading, setLoading] = useState(false);
+  const fetchStudentData = async () => {
+    try {
+      const response = await apiAction({
+        method: "get",
+        url: "dashboard/Teachers/StudentForExam",
+        token: JSON.parse(localStorage.getItem("user-info"))?.token,
+        setLoading,
+      });
+
+      setStudentList(response.data);
+    } catch (error) {
+      toast.error("Error fetching data:");
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiAction({
-          method: "get",
-          url: "dashboard/Teachers/StudentForExam",
-          token: JSON.parse(localStorage.getItem("user-info"))?.token,
-          setLoading,
-        });
-
-        setStudentList(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    fetchStudentData();
   }, []);
   if (loading) {
     return <Loader />;
   }
   const handleOnClick = async (id) => {
-    // localStorage.setItem("student-id", id);
     navigate(`result?id=${id}`);
   };
   return (
@@ -42,10 +41,10 @@ const ViewStudents = () => {
         <Loader />
       ) : (
         <div className="container">
-          <div className="row d-flex justify-content-space-around">
+          <div className="row d-flex justify-content-space-between">
             <div className="col custom-display">
               {studentList.map((item, index) => (
-                <Card className="card" key={index}>
+                <Card key={index} className="student-card">
                   <Card.Body>
                     <Card.Title className="pb-2">
                       <i className="pe-2 mr-2 bi bi-person-circle"></i>
@@ -72,6 +71,7 @@ const ViewStudents = () => {
           </div>
         </div>
       )}
+      <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );
 };

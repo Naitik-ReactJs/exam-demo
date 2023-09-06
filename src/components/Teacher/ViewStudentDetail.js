@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const ViewStudentDetail = () => {
   const [loading, setLoading] = useState(false);
@@ -29,7 +30,7 @@ const ViewStudentDetail = () => {
         });
         setStudentDetail(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        toast.error("Error fetching data:");
       }
     };
     showResult();
@@ -49,8 +50,8 @@ const ViewStudentDetail = () => {
             <table className="table table-bordered table-hover p-2">
               <thead className="thead-dark">
                 <tr>
-                  {tableHeading.map((heading) => (
-                    <th>{heading}</th>
+                  {tableHeading.map((heading, index) => (
+                    <th key={index}>{heading}</th>
                   ))}
                 </tr>
               </thead>
@@ -83,6 +84,7 @@ const ViewStudentDetail = () => {
           </div>
         </div>
       )}
+      <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );
 };

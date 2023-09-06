@@ -8,18 +8,19 @@ import { ToastContainer, toast } from "react-toastify";
 const Teacher = () => {
   const [viewExam, setViewExam] = useState([]);
   const [loading, setLoading] = useState(false);
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const fetchExamData = async () => {
     try {
       const response = await apiAction({
         method: "get",
         url: "dashboard/Teachers/viewExam",
-        token: JSON.parse(localStorage.getItem("user-info"))?.token,
+        token: token,
         setLoading,
       });
 
       setViewExam(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast.error("Error fetching data:");
     }
   };
   useEffect(() => {
@@ -31,12 +32,12 @@ const Teacher = () => {
       apiAction({
         method: "get",
         url: "dashboard/Teachers/examDetail",
-        token: JSON.parse(localStorage.getItem("user-info"))?.token,
+        token: token,
         id,
         setLoading,
       });
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast.error("Error fetching data:");
     }
   };
   const handleDeleteExam = async (id) => {
@@ -45,7 +46,7 @@ const Teacher = () => {
       const response = await apiAction({
         method: "delete",
         url: "dashboard/Teachers/deleteExam",
-        token: JSON.parse(localStorage.getItem("user-info"))?.token,
+        token: token,
         id,
         setLoading,
       });
@@ -53,13 +54,13 @@ const Teacher = () => {
         fetchExamData();
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast.error("Error fetching data:");
     }
   };
   if (loading) {
     return <Loader />;
   }
-  console.log(viewExam);
+
   return (
     <div className="container ms-0 py-5">
       {viewExam.length === 0 ? (
