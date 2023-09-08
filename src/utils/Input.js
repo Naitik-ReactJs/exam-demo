@@ -127,35 +127,3 @@ export const InputSignUpForm = (
     },
   ];
 };
-
-export const CreateExamInputForm = (currentQuestionIndex) => {
-  return [
-    {
-      type: "text",
-      name: "question",
-      label: `Question ${currentQuestionIndex + 1}`,
-      placeholder: "Enter Question here",
-      className: "form-control",
-    },
-    {
-      type: "text",
-      name: "options",
-      label: "Answers :",
-      placeholders: ["Option 1", "Option 2", "Option 3", "Option 4"],
-    },
-    {
-      type: "text",
-      name: "answer",
-      className: "form-control",
-      label: "Selected Answer",
-      readOnly: true,
-    },
-    {
-      type: "textarea",
-      name: "notes",
-      label: "Notes",
-      rows: 2,
-      className: "form-control",
-    },
-  ];
-};

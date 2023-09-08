@@ -1,27 +1,47 @@
-import React, { Fragment, useState } from "react";
+import React, { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
-import { ExamInputForm } from "../../utils/Input";
-const CreateExam = () => {
-  const [loading, setLoading] = useState(false);
+import { useLocation } from "react-router-dom";
+const EditExam = () => {
+  const [loading, setLoading] = useState(true);
+  const location = new URLSearchParams(useLocation().search);
+  const id = location.get("id");
   const initialQuestions = Array.from({ length: 15 }, () => ({
-    question: "question",
+    question: "",
     answer: "",
-    options: ["1", "2", "3", "4"],
+    options: ["", "", "", ""],
   }));
-  const input = ExamInputForm();
-  console.log("input", input);
-  const [questions, setQuestions] = useState(initialQuestions);
+
   // managing the questions state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
 
-  const [selectedAnswers, setSelectedAnswers] = useState(Array(15).fill(""));
+  const fetchExamDetail = async () => {
+    try {
+      const response = await apiAction({
+        method: "get",
+        url: "dashboard/Teachers/examDetail",
+        data: formData,
+        setLoading,
+        token,
+        id,
+      });
+      setQuestions(response.data.questions);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchExamDetail();
+  }, []);
   const [examData, setExamData] = useState({
     notes: "",
     subjectName: "",
   });
+  const [questions, setQuestions] = useState(initialQuestions);
+  const [selectedAnswers, setSelectedAnswers] = useState(Array(15).fill(""));
   const { subjectName, notes } = examData;
   const formData = {
     subjectName: subjectName,
@@ -65,17 +85,17 @@ const CreateExam = () => {
     });
   };
 
-  const handleSubmit = () => {
-    const token = JSON.parse(localStorage.getItem("user-info"))?.token;
-    setLoading(true);
+  const handleEditExam = async () => {
     try {
-      apiAction({
-        method: "post",
-        url: "dashboard/Teachers/Exam",
+      const response = await apiAction({
+        method: "put",
+        url: "dashboard/Teachers/editExam",
         data: formData,
         setLoading,
         token,
+        id,
       });
+      toast.success(response.message);
     } catch (error) {
       toast.error(error);
     }
@@ -87,7 +107,10 @@ const CreateExam = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">Create Exam</h2>
+      <h2 className="mb-4"> View Exam</h2>
+      <h4 className="alert alert-danger text-center">
+        You can also edit exam{" "}
+      </h4>
       <div className="mb-4">
         <h3>Question {currentQuestionIndex + 1}</h3>
         <div className="form-group">
@@ -151,9 +174,10 @@ const CreateExam = () => {
               type="text"
               className="form-control"
               placeholder="Selected Answer"
-              value={selectedAnswers[currentQuestionIndex]}
+              value={selectedAnswers && selectedAnswers[currentQuestionIndex]}
               readOnly
             />
+            {selectedAnswers[currentQuestionIndex]}
           </div>
         </form>
       </div>
@@ -175,8 +199,8 @@ const CreateExam = () => {
             />
             <Button
               className="btn btn-success"
-              onClick={handleSubmit}
-              buttonText={"   Submit"}
+              onClick={handleEditExam}
+              buttonText={"Save"}
             ></Button>
           </>
         ) : (
@@ -188,8 +212,12 @@ const CreateExam = () => {
         )}
       </div>
       <ToastContainer autoClose={2000} theme="colored" />
+      <div className="mt-4">
+        <h4>Exam data:</h4>
+        <pre>{JSON.stringify(formData, null, 2)}</pre>
+      </div>
     </div>
   );
 };
 
-export default CreateExam;
+export default EditExam;

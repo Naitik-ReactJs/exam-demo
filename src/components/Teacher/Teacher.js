@@ -5,7 +5,9 @@ import { Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const Teacher = () => {
+  const navigate = useNavigate();
   const [viewExam, setViewExam] = useState([]);
   const [loading, setLoading] = useState(false);
   const token = JSON.parse(localStorage.getItem("user-info"))?.token;
@@ -28,17 +30,7 @@ const Teacher = () => {
   }, []);
 
   const handleOnClick = async (id) => {
-    try {
-      apiAction({
-        method: "get",
-        url: "dashboard/Teachers/examDetail",
-        token: token,
-        id,
-        setLoading,
-      });
-    } catch (error) {
-      toast.error("Error fetching data:");
-    }
+    navigate(`view-exam?id=${id}`);
   };
   const handleDeleteExam = async (id) => {
     toast.success("Please wait processing your request");
