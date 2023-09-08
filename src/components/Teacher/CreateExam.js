@@ -1,75 +1,71 @@
 import React, { useState } from "react";
-import Button from "../../reusable/Button";
-import "../../App.css";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { ToastContainer, toast } from "react-toastify";
-import { CreateExamInputForm } from "../../utils/Input";
+import Button from "../../reusable/Button";
 const CreateExam = () => {
-  const questionCount = 15;
   const [loading, setLoading] = useState(false);
-  const initialQuestion = {
+  const initialQuestions = Array.from({ length: 15 }, () => ({
     question: "",
     answer: "",
     options: ["", "", "", ""],
-    notes: "",
-  };
+  }));
 
+  const [questions, setQuestions] = useState(initialQuestions);
+  // managing the questions state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [subjectName, setSubjectName] = useState("");
-  const [questionData, setQuestionData] = useState(initialQuestion);
-  const { question, answer, options, notes } = questionData;
-  const input = CreateExamInputForm(currentQuestionIndex);
+
+  const [examData, setExamData] = useState({
+    notes: "",
+    subjectName: "",
+  });
+  const [selectedAnswers, setSelectedAnswers] = useState(Array(15).fill(""));
+  const { subjectName, notes } = examData;
   const formData = {
     subjectName: subjectName,
-    questions: [{ question: question, answer: answer, options: options }],
+    questions: questions,
     notes: [notes],
   };
 
-  const handleInputChange = (e, optionNumber = null) => {
-    const updatedQuestionData = { ...questionData };
-
-    if (optionNumber !== null) {
-      updatedQuestionData.options[optionNumber] = e.target.value;
-    } else if (e.target.name === "question") {
-      updatedQuestionData.question = e.target.value;
-    } else if (e.target.name === "answer") {
-      updatedQuestionData.answer =
-        questionData.answer === questionData.options[optionNumber];
-    } else if (e.target.name === "notes") {
-      updatedQuestionData.notes = e.target.value;
-    }
-
-    setQuestionData(updatedQuestionData);
-  };
-
-  const handleSubjectChange = (e) => {
-    setSubjectName(e.target.value);
-  };
-
-  const handleRadioChange = (optionNumber) => {
-    const updatedQuestionData = { ...questionData };
-    updatedQuestionData.answer = updatedQuestionData.options[optionNumber];
-    setQuestionData(updatedQuestionData);
-  };
-
   const handleNextClick = () => {
-    if (currentQuestionIndex < questionCount - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setQuestionData(initialQuestion);
+    if (currentQuestionIndex < 14) {
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }
   };
 
-  const handlePrevClick = () => {
+  const handlePreviousClick = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setQuestionData(initialQuestion);
+      setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
     }
   };
-  const handleSubmit = async (e) => {
+
+  const handleAnswerChange = (e) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[currentQuestionIndex].answer = e.target.value;
+    setQuestions(updatedQuestions);
+
+    const updatedSelectedAnswers = [...selectedAnswers];
+    updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
+    setSelectedAnswers(updatedSelectedAnswers);
+  };
+
+  const handleNotesChange = (e) => {
+    setExamData({
+      ...examData,
+      notes: e.target.value,
+    });
+  };
+
+  const handleSubjectNameChange = (e) => {
+    setExamData({
+      ...examData,
+      subjectName: e.target.value,
+    });
+  };
+
+  const handleSubmit = () => {
     const token = JSON.parse(localStorage.getItem("user-info"))?.token;
     setLoading(true);
-    e.preventDefault();
     try {
       apiAction({
         method: "post",
@@ -82,129 +78,118 @@ const CreateExam = () => {
       toast.error(error);
     }
   };
+
   if (loading) {
     return <Loader />;
   }
-  return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-12">
-          <div className="card mb-4">
-            <div className="card-body">
-              <div className="form-group w-50 ">
-                <label className="p-1">Subject Name :</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter Subject Name here"
-                  value={subjectName}
-                  disabled={currentQuestionIndex !== 0}
-                  onChange={handleSubjectChange}
-                />
-              </div>
-              {input.map((field, index) => (
-                <div className="form-group" key={index}>
-                  {field.type === "textarea" ? (
-                    <>
-                      {currentQuestionIndex !== 14 ? (
-                        <></>
-                      ) : (
-                        <div>
-                          <label className="p-2 mt-2">{field.label}</label>
-                          <textarea
-                            className={field.className}
-                            name={field.name}
-                            rows={field.rows || 1}
-                            value={questionData[field.name]}
-                            onChange={(e) => handleInputChange(e)}
-                          />
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      <label className="p-2 mt-2">{field.label}</label>
 
-                      {field.name === "options" ? (
-                        <ul>
-                          {field.placeholders.map(
-                            (placeholder, optionNumber) => (
-                              <li
-                                key={optionNumber}
-                                className="list-group-item p-1 w-50 m-2"
-                              >
-                                <div className="form-check">
-                                  <input
-                                    type="radio"
-                                    className="form-check-input"
-                                    name="answer"
-                                    checked={
-                                      questionData.answer ===
-                                      questionData.options[optionNumber]
-                                    }
-                                    onChange={() =>
-                                      handleRadioChange(optionNumber)
-                                    }
-                                  />
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    name={`option-${optionNumber + 1}`}
-                                    placeholder={placeholder}
-                                    value={questionData.options[optionNumber]}
-                                    onChange={(e) =>
-                                      handleInputChange(e, optionNumber)
-                                    }
-                                  />
-                                </div>
-                              </li>
-                            )
-                          )}
-                        </ul>
-                      ) : (
-                        <input
-                          type={field.type}
-                          className={field.className}
-                          name={field.name}
-                          placeholder={
-                            field.placeholders && field.placeholders[index]
-                          }
-                          readOnly={field.readOnly}
-                          value={questionData[field.name]}
-                          onChange={(e) => handleInputChange(e)}
-                        />
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>{" "}
-          <div className="ms-auto">
-            <Button
-              className="btn btn-dark me-5"
-              onClick={handlePrevClick}
-              disabled={currentQuestionIndex === 0}
-              buttonText={"Previous"}
-            />
-            {currentQuestionIndex === questionCount - 1 ? (
-              <Button
-                className={"btn btn-primary"}
-                buttonText={"Submit"}
-                onClick={handleSubmit}
-              />
-            ) : (
-              <Button
-                className={"btn btn-primary"}
-                onClick={handleNextClick}
-                disabled={currentQuestionIndex === questionCount - 1}
-                buttonText={"Next"}
-              />
-            )}
-          </div>
+  return (
+    <div className="container mt-5">
+      <h2 className="mb-4">Create Exam</h2>
+      <div className="mb-4">
+        <h3>Question {currentQuestionIndex + 1}</h3>
+        <div className="form-group">
+          <label className="mt-2 mb-2">Subject Name:</label>
+          <input
+            type="text"
+            className="form-control mb-3"
+            placeholder="Enter Subject Name here"
+            value={subjectName}
+            onChange={handleSubjectNameChange}
+            disabled={currentQuestionIndex !== 0}
+          />
         </div>
+        <div className="form-group">
+          <label className="mt-2 mb-2">Question:</label>
+          <input
+            type="text"
+            className="form-control mb-3"
+            placeholder="Enter your question here"
+            value={questions[currentQuestionIndex]?.question || ""}
+            onChange={(e) => {
+              const updatedQuestions = [...questions];
+              updatedQuestions[currentQuestionIndex].question = e.target.value;
+              setQuestions(updatedQuestions);
+            }}
+          />
+        </div>
+        <form>
+          <div className="form-group">
+            <label className="mt-2 mb-2">Answers:</label>
+            {questions[currentQuestionIndex]?.options.map((option, index) => (
+              <div className="mb-3" key={index}>
+                <div className="form-check">
+                  <input
+                    type="radio"
+                    className="form-check-input"
+                    name={`question${currentQuestionIndex}`}
+                    value={option}
+                    checked={questions[currentQuestionIndex]?.answer === option}
+                    onChange={handleAnswerChange}
+                  />
+                  <input
+                    type="text"
+                    className="form-control ms-2"
+                    placeholder={`Option ${index + 1}`}
+                    value={option}
+                    onChange={(e) => {
+                      const updatedQuestions = [...questions];
+                      updatedQuestions[currentQuestionIndex].options[index] =
+                        e.target.value;
+                      setQuestions(updatedQuestions);
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="form-group">
+            <label className="mt-2 mb-2">Selected answer:</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Selected Answer"
+              value={selectedAnswers[currentQuestionIndex]}
+              readOnly
+            />
+          </div>
+        </form>
+      </div>
+      <div className="mb-3">
+        <Button
+          className="btn btn-primary me-2"
+          onClick={handlePreviousClick}
+          disabled={currentQuestionIndex === 0}
+          buttonText={"    Previous"}
+        ></Button>
+        {currentQuestionIndex === 14 ? (
+          <>
+            <label className="mb-2 d-block mt-4">Notes:</label>
+            <textarea
+              className="form-control mb-3"
+              placeholder="Notes for this Exam..."
+              onChange={handleNotesChange}
+              value={notes}
+            />
+            <Button
+              className="btn btn-success"
+              onClick={handleSubmit}
+              buttonText={"   Submit"}
+            ></Button>
+          </>
+        ) : (
+          <Button
+            className="btn btn-primary"
+            onClick={handleNextClick}
+            buttonText={"Next"}
+          ></Button>
+        )}
       </div>
       <ToastContainer autoClose={2000} theme="colored" />
+      <div className="mt-4">
+        <h4>Exam data:</h4>
+        <pre>{JSON.stringify(formData, null, 2)}</pre>
+      </div>
     </div>
   );
 };
