@@ -29,8 +29,11 @@ const Teacher = () => {
     fetchExamData();
   }, []);
 
-  const handleOnClick = async (id) => {
+  const handleViewExam = async (id) => {
     navigate(`view-exam?id=${id}`);
+  };
+  const handleEditExam = async (id) => {
+    navigate(`edit-exam?id=${id}`);
   };
   const handleDeleteExam = async (id) => {
     toast.success("Please wait processing your request");
@@ -89,11 +92,12 @@ const Teacher = () => {
                     <Button
                       buttonText={"View Exam"}
                       className={"btn btn-dark w-25 m-auto mb-2"}
-                      onClick={() => handleOnClick(item._id)}
+                      onClick={() => handleViewExam(item._id)}
                     />
                     <Button
                       buttonText={"Edit Exam"}
                       className={"btn btn-dark w-25 m-auto mb-2 ms-2"}
+                      onClick={() => handleEditExam(item._id)}
                     />
                     <Button
                       buttonText={"Delete Exam"}
