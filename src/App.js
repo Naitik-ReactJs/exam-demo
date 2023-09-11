@@ -16,6 +16,7 @@ import ProtectedRouteStudent from "./routes/ProtectedRouteStudent";
 import ViewStudents from "./components/teacher/ViewStudents";
 import CreateExam from "./components/teacher/CreateExam";
 import ViewExam from "./components/teacher/ViewExam";
+import EditExam from "./components/teacher/EditExam";
 import { teacherSideBarProps } from "./utils/Constants";
 import { studentSideBarProps } from "./utils/Constants";
 import Teacher from "./components/teacher/Teacher";
@@ -74,6 +75,16 @@ function App() {
                 navigateTo="teacher"
                 props={teacherSideBarProps}
                 component={<ViewExam />}
+              />
+            }
+          />
+          <Route
+            path="edit-exam"
+            element={
+              <Dashboard
+                navigateTo="teacher"
+                props={teacherSideBarProps}
+                component={<EditExam />}
               />
             }
           />

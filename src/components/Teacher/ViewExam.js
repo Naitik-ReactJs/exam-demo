@@ -7,31 +7,10 @@ const ViewExam = () => {
   const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
-  const tableHeading = ["Sr no", "Questions", "Answer", "Options"];
+
   const token = JSON.parse(localStorage.getItem("user-info"))?.token;
-  const [examData, setExamData] = useState([]);
-  const [examsDetail, setExamsDetail] = useState([]);
-  const fetchExamData = async () => {
-    try {
-      const response = await apiAction({
-        method: "get",
-        url: "dashboard/Teachers/viewExam",
-        token: token,
-        setLoading,
-      });
-
-      setExamsDetail(response.data);
-    } catch (error) {
-      toast.error("Error fetching data:");
-    }
-  };
-  useEffect(() => {
-    fetchExamData();
-  }, []);
-
-  const subjectName = examsDetail
-    .filter((item) => item._id === id)
-    .map((item) => item.subjectName);
+  const [tableData, setTableData] = useState([]);
+  const tableHeaders = ["Sr. no", "Question", "Options", "Correct Answer"];
 
   const fetchExamDetail = async () => {
     try {
@@ -42,7 +21,7 @@ const ViewExam = () => {
         token,
         id,
       });
-      setExamData(response.data.questions);
+      setTableData(response.data.questions);
     } catch (error) {
       toast.error(error);
     }
@@ -55,47 +34,35 @@ const ViewExam = () => {
   }
   return (
     <div>
-      <div className="container py-5 ms-5">
-        {examData.length === 0 ? (
-          <Loader />
-        ) : (
-          <div>
-            <h1 className="my-4">
-              Exam details : Subject name - {subjectName}
-            </h1>
-            <div className="table-responsive">
-              <table className="table table-bordered table-hover p-2">
-                <thead className="thead-dark ">
-                  <tr>
-                    {tableHeading.map((heading, index) => (
-                      <th className="p-3" key={index}>
-                        {heading}
-                      </th>
+      <table className="table table-bordered table-hover">
+        <thead>
+          <tr>
+            {tableHeaders.map((header, index) => (
+              <th key={index}>{header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {tableData &&
+            tableData.map((question, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{question.question}</td>
+                <td>
+                  <ul className="list-group">
+                    {question.options.map((option, optionIndex) => (
+                      <li className="list-group-item" key={optionIndex}>
+                        {option}
+                      </li>
                     ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {examData.map((data, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{data.question}</td>
-                      <td>{data.answer}</td>
-                      <td>
-                        {data.options.map((item, index) => (
-                          <ul key={index}>
-                            <li>{item}</li>
-                          </ul>
-                        ))}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-        <ToastContainer autoClose={2000} theme="colored" />
-      </div>
+                  </ul>
+                </td>
+                <td>{question.answer}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+      <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );
 };

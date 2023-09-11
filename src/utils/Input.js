@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 export const InputForgotPassForm = (email, handleInputChange) => {
   return [
     {
@@ -127,3 +129,96 @@ export const InputSignUpForm = (
     },
   ];
 };
+
+export const UserProfileInputForm = () => {
+  return [
+    {
+      type: "text",
+      label: "Name",
+      key: "name",
+      className: "form-control",
+      readOnly: false,
+    },
+    {
+      type: "text",
+      label: "Email",
+      key: "email",
+      className: "form-control custom-disabled",
+      readOnly: true,
+    },
+    {
+      type: "text",
+      label: "Role",
+      key: "role",
+      className: "form-control custom-disabled",
+      readOnly: true,
+    },
+  ];
+};
+
+export const CreateExamInputForm = (
+  examData,
+  handleSubjectNameChange,
+  currentQuestionIndex,
+  questions,
+  handleQuestionChange,
+  handleAnswerChange,
+  selectedAnswers
+) => {
+  return [
+    {
+      label: "Subject Name:",
+      type: "text",
+      placeholder: "Enter Subject Name here",
+      value: examData.subjectName,
+      onChange: handleSubjectNameChange,
+      disabled: currentQuestionIndex !== 0,
+    },
+    {
+      label: "Question:",
+      type: "text",
+      placeholder: "Enter your question here",
+      value: questions[currentQuestionIndex]?.question,
+      onChange: handleQuestionChange,
+    },
+    {
+      label: "Answers:",
+      type: "radio",
+      options: questions[currentQuestionIndex]?.options,
+      onChange: handleAnswerChange,
+      answer: questions[currentQuestionIndex]?.answer,
+    },
+    {
+      label: "Selected answer:",
+      type: "text",
+      placeholder: "Selected Answer",
+      value: selectedAnswers[currentQuestionIndex],
+      readOnly: true,
+    },
+  ];
+};
+
+export default function examValidation(
+  subjectName,
+  questions,
+  currentQuestionIndex,
+  selectedAnswers,
+  notes
+) {
+  if (subjectName === "") {
+    toast.error("Please Enter Subject Name before proceeding.");
+    return;
+  }
+  if (questions[currentQuestionIndex]?.question === "") {
+    toast.error("Please enter a question before proceeding.");
+    return;
+  }
+  if (selectedAnswers[currentQuestionIndex] === "") {
+    toast.error("Please select an answer before proceeding.");
+    return;
+  }
+  if (notes === "") {
+    toast.error("Please enter notes for this exam.");
+    return;
+  }
+}

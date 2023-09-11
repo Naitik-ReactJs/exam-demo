@@ -1,22 +1,20 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
-import { ExamInputForm } from "../../utils/Input";
+import examValidation, { CreateExamInputForm } from "../../utils/Input";
+
 const CreateExam = () => {
   const [loading, setLoading] = useState(false);
-  const initialQuestions = Array.from({ length: 15 }, () => ({
-    question: "question",
-    answer: "",
-    options: ["1", "2", "3", "4"],
-  }));
-  const input = ExamInputForm();
-  console.log("input", input);
-  const [questions, setQuestions] = useState(initialQuestions);
-  // managing the questions state
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
+  const initialQuestions = Array.from({ length: 15 }, () => ({
+    question: "",
+    answer: "",
+    options: ["", "", "", ""],
+  }));
+  const [questions, setQuestions] = useState(initialQuestions);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState(Array(15).fill(""));
   const [examData, setExamData] = useState({
     notes: "",
@@ -51,6 +49,12 @@ const CreateExam = () => {
     setSelectedAnswers(updatedSelectedAnswers);
   };
 
+  const handleQuestionChange = (e) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[currentQuestionIndex].question = e.target.value;
+    setQuestions(updatedQuestions);
+  };
+
   const handleNotesChange = (e) => {
     setExamData({
       ...examData,
@@ -66,6 +70,13 @@ const CreateExam = () => {
   };
 
   const handleSubmit = () => {
+    examValidation(
+      subjectName,
+      questions,
+      currentQuestionIndex,
+      selectedAnswers,
+      notes
+    );
     const token = JSON.parse(localStorage.getItem("user-info"))?.token;
     setLoading(true);
     try {
@@ -84,77 +95,66 @@ const CreateExam = () => {
   if (loading) {
     return <Loader />;
   }
+  const input = CreateExamInputForm(
+    examData,
+    handleSubjectNameChange,
+    currentQuestionIndex,
+    questions,
+    handleQuestionChange,
+    handleAnswerChange,
+    selectedAnswers
+  );
 
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Create Exam</h2>
       <div className="mb-4">
         <h3>Question {currentQuestionIndex + 1}</h3>
-        <div className="form-group">
-          <label className="mt-2 mb-2">Subject Name:</label>
-          <input
-            type="text"
-            className="form-control mb-3"
-            placeholder="Enter Subject Name here"
-            value={subjectName}
-            onChange={handleSubjectNameChange}
-            disabled={currentQuestionIndex !== 0}
-          />
-        </div>
-        <div className="form-group">
-          <label className="mt-2 mb-2">Question:</label>
-          <input
-            type="text"
-            className="form-control mb-3"
-            placeholder="Enter your question here"
-            value={questions[currentQuestionIndex]?.question || ""}
-            onChange={(e) => {
-              const updatedQuestions = [...questions];
-              updatedQuestions[currentQuestionIndex].question = e.target.value;
-              setQuestions(updatedQuestions);
-            }}
-          />
-        </div>
         <form>
-          <div className="form-group">
-            <label className="mt-2 mb-2">Answers:</label>
-            {questions[currentQuestionIndex]?.options.map((option, index) => (
-              <div className="mb-3" key={index}>
-                <div className="form-check">
-                  <input
-                    type="radio"
-                    className="form-check-input"
-                    name={`question${currentQuestionIndex}`}
-                    value={option}
-                    checked={questions[currentQuestionIndex]?.answer === option}
-                    onChange={handleAnswerChange}
-                  />
-                  <input
-                    type="text"
-                    className="form-control ms-2"
-                    placeholder={`Option ${index + 1}`}
-                    value={option}
-                    onChange={(e) => {
-                      const updatedQuestions = [...questions];
-                      updatedQuestions[currentQuestionIndex].options[index] =
-                        e.target.value;
-                      setQuestions(updatedQuestions);
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="form-group">
-            <label className="mt-2 mb-2">Selected answer:</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Selected Answer"
-              value={selectedAnswers[currentQuestionIndex]}
-              readOnly
-            />
-          </div>
+          {input.map((field, index) => (
+            <div className="form-group" key={index}>
+              <label className="mt-2 mb-2">{field.label}</label>
+              {field.type === "radio" ? (
+                field.options.map((option, optionIndex) => (
+                  <div className="mb-3" key={optionIndex}>
+                    <div className="form-check">
+                      <input
+                        type={field.type}
+                        className="form-check-input"
+                        name={`question${currentQuestionIndex}`}
+                        value={option}
+                        checked={field.answer === option}
+                        onChange={field.onChange}
+                      />
+                      <input
+                        type="text"
+                        className="form-control ms-2"
+                        placeholder={`Option ${optionIndex + 1}`}
+                        value={option}
+                        onChange={(e) => {
+                          const updatedQuestions = [...questions];
+                          updatedQuestions[currentQuestionIndex].options[
+                            optionIndex
+                          ] = e.target.value;
+                          setQuestions(updatedQuestions);
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <input
+                  type={field.type}
+                  className={`form-control mb-3`}
+                  placeholder={field.placeholder}
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={field.disabled}
+                  readOnly={field.readOnly}
+                />
+              )}
+            </div>
+          ))}
         </form>
       </div>
       <div className="mb-3">
@@ -171,12 +171,12 @@ const CreateExam = () => {
               className="form-control mb-3"
               placeholder="Notes for this Exam..."
               onChange={handleNotesChange}
-              value={notes}
+              value={examData.notes}
             />
             <Button
               className="btn btn-success"
               onClick={handleSubmit}
-              buttonText={"   Submit"}
+              buttonText={"Submit"}
             ></Button>
           </>
         ) : (
@@ -184,10 +184,19 @@ const CreateExam = () => {
             className="btn btn-primary"
             onClick={handleNextClick}
             buttonText={"Next"}
+            // disabled={
+            //   !Object.values(questions[currentQuestionIndex]).every(
+            //     (item) => item === ""
+            //   )
+            // }
           ></Button>
         )}
       </div>
       <ToastContainer autoClose={2000} theme="colored" />
+      <div className="mt-4">
+        <h4>Exam data:</h4>
+        {/* {<pre>{JSON.stringify(, null, 2)}</pre>} */}
+      </div>
     </div>
   );
 };
