@@ -22,15 +22,18 @@ import { studentSideBarProps } from "./utils/Constants";
 import Teacher from "./components/teacher/Teacher";
 import ViewStudentDetail from "./components/teacher/ViewStudentDetail";
 import UserResetPassword from "./components/user/UserResetPassword";
-
+import Student from "./components/student/Student";
+import Profile from "./components/student/Profile";
+import Form from "./components/Form";
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<SignIn />} />
+      <Form />
+      {/* <Routes>
+        <Route path="/" element={<SignIn />} /> */}
 
-        {/* Teacher Routes */}
-        <Route
+      {/* Teacher Routes */}
+      {/* <Route
           path="/teacher/*"
           element={
             <ProtectedRouteTeacher>
@@ -108,10 +111,10 @@ function App() {
               />
             }
           />
-        </Route>
+        </Route> */}
 
-        {/* Student Routes */}
-        <Route
+      {/* Student Routes */}
+      {/* <Route
           path="/student/*"
           element={
             <ProtectedRouteStudent>
@@ -125,7 +128,7 @@ function App() {
               <Dashboard
                 navigateTo="student"
                 props={studentSideBarProps}
-                component={<></>}
+                component={<Student />}
               />
             }
           />
@@ -135,7 +138,7 @@ function App() {
               <Dashboard
                 navigateTo="student"
                 props={studentSideBarProps}
-                component={<></>}
+                component={<Profile />}
               />
             }
           />
@@ -145,7 +148,7 @@ function App() {
         <Route path="/newPassword" element={<UserNewPassword />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />
-      </Routes>
+      </Routes> */}
     </Router>
   );
 }

@@ -32,8 +32,7 @@ const CreateExam = () => {
     optionError: "",
     selectedAnsError: "",
   });
-  const { subjectError, questionError, optionError, selectedAnsError } =
-    formErrors;
+
   const handleNextClick = () => {
     if (subjectName === "") {
       setFormErrors((prevErrors) => ({

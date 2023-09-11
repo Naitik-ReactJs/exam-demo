@@ -20,7 +20,12 @@ const EditExam = () => {
     subjectName: "",
   });
   const { subjectName, notes } = examData;
-
+  const [formErrors, setFormErrors] = useState({
+    subjectError: "",
+    questionError: "",
+    optionError: "",
+    selectedAnsError: "",
+  });
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const fetchExamData = async () => {
     try {
@@ -73,7 +78,36 @@ const EditExam = () => {
   };
 
   const handleNextClick = () => {
-    if (currentQuestionIndex < 14) {
+    if (subjectName === "") {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        subjectError: "subject is required",
+      }));
+
+      return false;
+    }
+    if (questions[currentQuestionIndex]?.question === "") {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        questionError: "question is required",
+      }));
+      return false;
+    }
+
+    if (questions[currentQuestionIndex]?.options.every((item) => item === "")) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        optionError: "option is required",
+      }));
+      return false;
+    }
+    if (selectedAnswers[currentQuestionIndex] === "") {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedAnsError: "answer is required",
+      }));
+      return false;
+    } else if (currentQuestionIndex < 14) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }
   };
@@ -92,6 +126,10 @@ const EditExam = () => {
     const updatedSelectedAnswers = [...selectedAnswers];
     updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
     setSelectedAnswers(updatedSelectedAnswers);
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      selectedAnsError: "",
+    }));
   };
 
   const handleNotesChange = (e) => {
@@ -106,6 +144,10 @@ const EditExam = () => {
       ...examData,
       subjectName: e.target.value,
     });
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      subjectError: "",
+    }));
   };
 
   const handleEditExam = async () => {
@@ -131,6 +173,10 @@ const EditExam = () => {
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex].question = e.target.value;
     setQuestions(updatedQuestions);
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      questionError: "",
+    }));
   };
   const input = CreateExamInputForm(
     examData,
@@ -173,6 +219,10 @@ const EditExam = () => {
                             optionIndex
                           ] = e.target.value;
                           setQuestions(updatedQuestions);
+                          setFormErrors((prevErrors) => ({
+                            ...prevErrors,
+                            optionError: "",
+                          }));
                         }}
                       />
                     </div>
@@ -192,6 +242,38 @@ const EditExam = () => {
             </div>
           ))}
         </form>
+        {formErrors.subjectError && (
+          <div
+            className="alert alert-danger m-3 border text-center p-2"
+            role="alert"
+          >
+            {formErrors.subjectError}
+          </div>
+        )}
+        {formErrors.optionError && (
+          <div
+            className="alert alert-danger m-3 border text-center p-2"
+            role="alert"
+          >
+            {formErrors.optionError}
+          </div>
+        )}
+        {formErrors.selectedAnsError && (
+          <div
+            className="alert alert-danger m-3 border text-center p-2"
+            role="alert"
+          >
+            {formErrors.selectedAnsError}
+          </div>
+        )}
+        {formErrors.questionError && (
+          <div
+            className="alert alert-danger m-3 border text-center p-2"
+            role="alert"
+          >
+            {formErrors.questionError}
+          </div>
+        )}
       </div>
       <div className="mb-3">
         <Button
@@ -223,6 +305,7 @@ const EditExam = () => {
           ></Button>
         )}
       </div>
+
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );
