@@ -3,7 +3,7 @@ import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
-import examValidation, { CreateExamInputForm } from "../../utils/Input";
+import { CreateExamInputForm } from "../../utils/Input";
 
 const CreateExam = () => {
   const [loading, setLoading] = useState(false);
@@ -26,9 +26,45 @@ const CreateExam = () => {
     questions: questions,
     notes: [notes],
   };
-
+  const [formErrors, setFormErrors] = useState({
+    subjectError: "",
+    questionError: "",
+    optionError: "",
+    selectedAnsError: "",
+  });
+  const { subjectError, questionError, optionError, selectedAnsError } =
+    formErrors;
   const handleNextClick = () => {
-    if (currentQuestionIndex < 14) {
+    if (subjectName === "") {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        subjectError: "subject is required",
+      }));
+
+      return false;
+    }
+    if (questions[currentQuestionIndex]?.question === "") {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        questionError: "question is required",
+      }));
+      return false;
+    }
+
+    if (questions[currentQuestionIndex]?.options.every((item) => item === "")) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        optionError: "option is required",
+      }));
+      return false;
+    }
+    if (selectedAnswers[currentQuestionIndex] === "") {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedAnsError: "answer is required",
+      }));
+      return false;
+    } else if (currentQuestionIndex < 14) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }
   };
@@ -47,12 +83,21 @@ const CreateExam = () => {
     const updatedSelectedAnswers = [...selectedAnswers];
     updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
     setSelectedAnswers(updatedSelectedAnswers);
+
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      selectedAnsError: "",
+    }));
   };
 
   const handleQuestionChange = (e) => {
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex].question = e.target.value;
     setQuestions(updatedQuestions);
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      questionError: "",
+    }));
   };
 
   const handleNotesChange = (e) => {
@@ -67,16 +112,13 @@ const CreateExam = () => {
       ...examData,
       subjectName: e.target.value,
     });
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      subjectError: "",
+    }));
   };
 
   const handleSubmit = () => {
-    examValidation(
-      subjectName,
-      questions,
-      currentQuestionIndex,
-      selectedAnswers,
-      notes
-    );
     const token = JSON.parse(localStorage.getItem("user-info"))?.token;
     setLoading(true);
     try {
@@ -119,6 +161,7 @@ const CreateExam = () => {
                   <div className="mb-3" key={optionIndex}>
                     <div className="form-check">
                       <input
+                        required
                         type={field.type}
                         className="form-check-input"
                         name={`question${currentQuestionIndex}`}
@@ -127,6 +170,7 @@ const CreateExam = () => {
                         onChange={field.onChange}
                       />
                       <input
+                        required
                         type="text"
                         className="form-control ms-2"
                         placeholder={`Option ${optionIndex + 1}`}
@@ -137,26 +181,66 @@ const CreateExam = () => {
                             optionIndex
                           ] = e.target.value;
                           setQuestions(updatedQuestions);
+
+                          setFormErrors((prevErrors) => ({
+                            ...prevErrors,
+                            optionError: "",
+                          }));
                         }}
                       />
                     </div>
                   </div>
                 ))
               ) : (
-                <input
-                  type={field.type}
-                  className={`form-control mb-3`}
-                  placeholder={field.placeholder}
-                  value={field.value}
-                  onChange={field.onChange}
-                  disabled={field.disabled}
-                  readOnly={field.readOnly}
-                />
+                <>
+                  <input
+                    type={field.type}
+                    className={`form-control mb-3`}
+                    placeholder={field.placeholder}
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={field.disabled}
+                    readOnly={field.readOnly}
+                  />
+                </>
               )}
             </div>
           ))}
         </form>
+        {formErrors.subjectError && (
+          <div
+            className="alert alert-danger m-3 border text-center p-2"
+            role="alert"
+          >
+            {formErrors.subjectError}
+          </div>
+        )}
+        {formErrors.optionError && (
+          <div
+            className="alert alert-danger m-3 border text-center p-2"
+            role="alert"
+          >
+            {formErrors.optionError}
+          </div>
+        )}
+        {formErrors.selectedAnsError && (
+          <div
+            className="alert alert-danger m-3 border text-center p-2"
+            role="alert"
+          >
+            {formErrors.selectedAnsError}
+          </div>
+        )}
+        {formErrors.questionError && (
+          <div
+            className="alert alert-danger m-3 border text-center p-2"
+            role="alert"
+          >
+            {formErrors.questionError}
+          </div>
+        )}
       </div>
+
       <div className="mb-3">
         <Button
           className="btn btn-primary me-2"
@@ -184,19 +268,10 @@ const CreateExam = () => {
             className="btn btn-primary"
             onClick={handleNextClick}
             buttonText={"Next"}
-            // disabled={
-            //   !Object.values(questions[currentQuestionIndex]).every(
-            //     (item) => item === ""
-            //   )
-            // }
           ></Button>
         )}
       </div>
       <ToastContainer autoClose={2000} theme="colored" />
-      <div className="mt-4">
-        <h4>Exam data:</h4>
-        {/* {<pre>{JSON.stringify(, null, 2)}</pre>} */}
-      </div>
     </div>
   );
 };

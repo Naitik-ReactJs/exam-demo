@@ -163,7 +163,11 @@ export const CreateExamInputForm = (
   questions,
   handleQuestionChange,
   handleAnswerChange,
-  selectedAnswers
+  selectedAnswers,
+  subjectError,
+  questionError,
+  optionError,
+  selectedAnsError
 ) => {
   return [
     {
@@ -173,6 +177,7 @@ export const CreateExamInputForm = (
       value: examData.subjectName,
       onChange: handleSubjectNameChange,
       disabled: currentQuestionIndex !== 0,
+      error: subjectError,
     },
     {
       label: "Question:",
@@ -180,12 +185,14 @@ export const CreateExamInputForm = (
       placeholder: "Enter your question here",
       value: questions[currentQuestionIndex]?.question,
       onChange: handleQuestionChange,
+      error: questionError,
     },
     {
       label: "Answers:",
       type: "radio",
       options: questions[currentQuestionIndex]?.options,
       onChange: handleAnswerChange,
+      error: optionError,
       answer: questions[currentQuestionIndex]?.answer,
     },
     {
@@ -194,31 +201,7 @@ export const CreateExamInputForm = (
       placeholder: "Selected Answer",
       value: selectedAnswers[currentQuestionIndex],
       readOnly: true,
+      error: selectedAnsError,
     },
   ];
 };
-
-export default function examValidation(
-  subjectName,
-  questions,
-  currentQuestionIndex,
-  selectedAnswers,
-  notes
-) {
-  if (subjectName === "") {
-    toast.error("Please Enter Subject Name before proceeding.");
-    return;
-  }
-  if (questions[currentQuestionIndex]?.question === "") {
-    toast.error("Please enter a question before proceeding.");
-    return;
-  }
-  if (selectedAnswers[currentQuestionIndex] === "") {
-    toast.error("Please select an answer before proceeding.");
-    return;
-  }
-  if (notes === "") {
-    toast.error("Please enter notes for this exam.");
-    return;
-  }
-}

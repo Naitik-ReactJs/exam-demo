@@ -124,7 +124,7 @@ const EditExam = () => {
     }
   };
 
-  if (subjectName === "" || loading) {
+  if (loading) {
     return <Loader />;
   }
   const handleQuestionChange = (e) => {
