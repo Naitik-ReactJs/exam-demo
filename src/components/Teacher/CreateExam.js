@@ -3,7 +3,7 @@ import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
-import { CreateExamInputForm } from "../../utils/Input";
+import { CreateExamInputForm, handleExamError } from "../../utils/Input";
 
 const CreateExam = () => {
   const [loading, setLoading] = useState(false);
@@ -35,44 +35,13 @@ const CreateExam = () => {
   });
 
   const handleNextClick = () => {
-    const currentQuestion = questions[currentQuestionIndex];
-
-    if (!examData.subjectName) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        subjectError: "Subject is required",
-      }));
-      return;
-    }
-
-    if (!currentQuestion.question) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        questionError: "Question is required",
-      }));
-      return;
-    }
-    console.log(
-      currentQuestion.options.map((item) => item).every((item) => item !== "")
+    handleExamError(
+      setFormErrors,
+      questions,
+      currentQuestionIndex,
+      examData,
+      selectedAnswers
     );
-    if (
-      !currentQuestion.options.map((item) => item).every((item) => item !== "")
-    ) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        optionError: "Options are required",
-      }));
-      return;
-    }
-
-    if (!selectedAnswers[currentQuestionIndex]) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        selectedAnsError: "Answer is required",
-      }));
-      return;
-    }
-
     if (currentQuestionIndex < 14) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }
@@ -128,42 +97,6 @@ const CreateExam = () => {
   };
 
   const handleSubmit = async () => {
-    const currentQuestion = questions[currentQuestionIndex];
-
-    if (!examData.subjectName) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        subjectError: "Subject is required",
-      }));
-      return;
-    }
-
-    if (!currentQuestion.question) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        questionError: "Question is required",
-      }));
-      return;
-    }
-
-    if (
-      !currentQuestion.options.map((item) => item).every((item) => item !== "")
-    ) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        optionError: "Options are required",
-      }));
-      return;
-    }
-
-    if (!selectedAnswers[currentQuestionIndex]) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        selectedAnsError: "Answer is required",
-      }));
-      return;
-    }
-
     const token = JSON.parse(localStorage.getItem("user-info"))?.token;
     setLoading(true);
     try {
@@ -297,6 +230,13 @@ const CreateExam = () => {
           />
         )}
       </div>
+      <pre>
+        {JSON.stringify(
+          !Object.values(formErrors).every((error) => error === ""),
+          null,
+          2
+        )}
+      </pre>
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );

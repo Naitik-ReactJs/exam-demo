@@ -28,7 +28,7 @@ import Form from "./components/Form";
 function App() {
   return (
     <Router>
-      {/* <Form /> */}
+      <Form />
       <Routes>
         <Route path="/" element={<SignIn />} />
 
