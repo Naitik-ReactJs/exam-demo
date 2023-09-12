@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 
 const Form = () => {
   const [checked, setChecked] = useState(false);
+  const [response, setResponse] = useState();
   const input = [
     {
       label: "Name",
@@ -9,6 +10,7 @@ const Form = () => {
       name: "username",
       placeholder: "Enter your name",
       className: "form-control",
+      heading: "details",
     },
     {
       label: "Email",
@@ -16,6 +18,7 @@ const Form = () => {
       name: "email",
       placeholder: "Enter your email",
       className: "form-control",
+      heading: "details",
     },
 
     {
@@ -24,12 +27,14 @@ const Form = () => {
       name: "current_state",
       placeholder: "Enter your Current state",
       className: "form-control",
+      heading: "current address",
     },
     {
       label: "Current city",
       type: "text",
       name: "current_city",
       placeholder: "Enter your Current city",
+      heading: "current address",
       className: "form-control",
     },
     {
@@ -38,6 +43,7 @@ const Form = () => {
       name: "permanent_state",
       placeholder: "Enter your Permanent state",
       className: "form-control",
+      heading: "permanent address",
       disabled: checked,
     },
     {
@@ -46,20 +52,20 @@ const Form = () => {
       name: "permanent_city",
       placeholder: "Enter your Permanent city",
       className: "form-control",
+      heading: "permanent address",
       disabled: checked,
     },
     {
       label: "Permanent address same as current?",
       type: "checkbox",
       className: "mb-4 ms-2",
-      value: "checked",
-      name: "address",
     },
     {
       label: "Credit card number",
       type: "text",
       name: "card_number",
       placeholder: "Enter your card number",
+      heading: "credit card detail",
       className: "form-control",
     },
     {
@@ -67,6 +73,7 @@ const Form = () => {
       name: "card_cvv",
       type: "text",
       placeholder: "Enter your card cvv",
+      heading: "credit card detail",
       className: "form-control",
     },
     {
@@ -74,21 +81,11 @@ const Form = () => {
       name: "card_exp",
       type: "text",
       placeholder: "Enter your card exp",
+      heading: "credit card detail",
       className: "form-control",
     },
   ];
   const [formData, setFormData] = useState(input.map((value) => value.name));
-  // const {
-  //   username,
-  //   email,
-  //   current_state,
-  //   current_city,
-  //   permanent_state,
-  //   permanent_city,
-  //   card_number,
-  //   card_cvv,
-  //   card_exp,
-  // } = formData;
 
   const handleOnChange = (e) => {
     const target = e.target;
@@ -105,7 +102,20 @@ const Form = () => {
       [name]: value,
     }));
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const personal_details = {};
 
+    input.forEach((item) => {
+      if (formData[item.name]) {
+        if (!personal_details[item.heading]) {
+          personal_details[item.heading] = {};
+        }
+        personal_details[item.heading][item.label] = formData[item.name];
+      }
+      setResponse(personal_details);
+    });
+  };
   return (
     <div className="container py-5">
       {input.map((item, index) => {
@@ -124,16 +134,10 @@ const Form = () => {
           </Fragment>
         );
       })}
-      <button className="btn btn-primary" type="submit">
+      <button className="btn btn-primary" type="submit" onClick={handleSubmit}>
         Submit
       </button>
-      <pre>
-        {JSON.stringify(
-          input.map((value) => value.name),
-          null,
-          2
-        )}
-      </pre>
+      <pre>{JSON.stringify(response, null, 2)}</pre>
     </div>
   );
 };
