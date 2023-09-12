@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 
 const Form = () => {
+  const [checked, setChecked] = useState(false);
   const input = [
     {
       label: "Name",
@@ -37,6 +38,7 @@ const Form = () => {
       name: "permanent_state",
       placeholder: "Enter your Permanent state",
       className: "form-control",
+      disabled: checked,
     },
     {
       label: "Permanent city",
@@ -44,11 +46,14 @@ const Form = () => {
       name: "permanent_city",
       placeholder: "Enter your Permanent city",
       className: "form-control",
+      disabled: checked,
     },
     {
       label: "Permanent address same as current?",
       type: "checkbox",
       className: "mb-4 ms-2",
+      value: "checked",
+      name: "address",
     },
     {
       label: "Credit card number",
@@ -73,51 +78,34 @@ const Form = () => {
     },
   ];
   const [formData, setFormData] = useState(input.map((value) => value.name));
-  const {
-    username,
-    email,
-    current_state,
-    current_city,
-    permanent_state,
-    permanent_city,
-    card_number,
-    card_cvv,
-    card_exp,
-  } = formData;
-  const data = {
-    "personal details": {
-      username: username,
-      email: email,
-    },
-    "current address": [
-      {
-        state: current_state,
-        city: current_city,
-      },
-    ],
-    "permanent address": [
-      {
-        state: permanent_state,
-        city: permanent_city,
-      },
-    ],
-    "card details": [
-      {
-        card_number: card_number,
-        card_exp: card_exp,
-        card_cvv: card_cvv,
-      },
-    ],
-  };
+  // const {
+  //   username,
+  //   email,
+  //   current_state,
+  //   current_city,
+  //   permanent_state,
+  //   permanent_city,
+  //   card_number,
+  //   card_cvv,
+  //   card_exp,
+  // } = formData;
+
   const handleOnChange = (e) => {
     const target = e.target;
     const { name, value } = target;
+    if (target.checked) {
+      formData.permanent_city = formData.current_city;
+      formData.permanent_state = formData.current_state;
+      setChecked(true);
+    } else if (!target.checked) {
+      setChecked(false);
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
   };
-  console.log(["personal details"]?.username);
+
   return (
     <div className="container py-5">
       {input.map((item, index) => {
@@ -130,12 +118,22 @@ const Form = () => {
               placeholder={item.placeholder}
               className={item.className}
               onChange={handleOnChange}
+              disabled={item.disabled}
             />
             <br />
           </Fragment>
         );
       })}
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <button className="btn btn-primary" type="submit">
+        Submit
+      </button>
+      <pre>
+        {JSON.stringify(
+          input.map((value) => value.name),
+          null,
+          2
+        )}
+      </pre>
     </div>
   );
 };
