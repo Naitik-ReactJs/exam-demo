@@ -42,6 +42,7 @@ const CreateExam = () => {
       examData,
       selectedAnswers
     );
+
     if (currentQuestionIndex < 14) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }
@@ -225,14 +226,16 @@ const CreateExam = () => {
         ) : (
           <Button
             className="btn btn-primary"
-            onClick={handleNextClick}
+            onClick={() => handleNextClick()}
             buttonText={"Next"}
           />
         )}
       </div>
       <pre>
         {JSON.stringify(
-          !Object.values(formErrors).every((error) => error === ""),
+          Object.values(formData.questions[currentQuestionIndex]).every(
+            (value) => value
+          ) === "",
           null,
           2
         )}

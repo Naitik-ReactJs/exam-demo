@@ -10,7 +10,7 @@ const Form = () => {
       name: "username",
       placeholder: "Enter your name",
       className: "form-control",
-      heading: "details",
+      obj_key: "personal details",
     },
     {
       label: "Email",
@@ -18,7 +18,15 @@ const Form = () => {
       name: "email",
       placeholder: "Enter your email",
       className: "form-control",
-      heading: "details",
+      obj_key: "personal details",
+    },
+    {
+      label: "Age",
+      type: "text",
+      name: "age",
+      placeholder: "Enter your age",
+      className: "form-control",
+      obj_key: "personal details",
     },
 
     {
@@ -27,15 +35,22 @@ const Form = () => {
       name: "current_state",
       placeholder: "Enter your Current state",
       className: "form-control",
-      heading: "current address",
+      obj_key: "personal details",
+      sub_key: "Current address",
     },
     {
       label: "Current city",
       type: "text",
       name: "current_city",
       placeholder: "Enter your Current city",
-      heading: "current address",
+      obj_key: "personal details",
+      sub_key: "Current address",
       className: "form-control",
+    },
+    {
+      label: "Permanent address same as current?",
+      type: "checkbox",
+      className: "mb-4 ms-2",
     },
     {
       label: "Permanent state",
@@ -43,7 +58,8 @@ const Form = () => {
       name: "permanent_state",
       placeholder: "Enter your Permanent state",
       className: "form-control",
-      heading: "permanent address",
+      obj_key: "personal details",
+      sub_key: "Permanent address",
       disabled: checked,
     },
     {
@@ -52,20 +68,16 @@ const Form = () => {
       name: "permanent_city",
       placeholder: "Enter your Permanent city",
       className: "form-control",
-      heading: "permanent address",
+      obj_key: "personal details",
+      sub_key: "Permanent address",
       disabled: checked,
-    },
-    {
-      label: "Permanent address same as current?",
-      type: "checkbox",
-      className: "mb-4 ms-2",
     },
     {
       label: "Credit card number",
       type: "text",
       name: "card_number",
       placeholder: "Enter your card number",
-      heading: "credit card detail",
+      obj_key: "credit card detail",
       className: "form-control",
     },
     {
@@ -73,7 +85,7 @@ const Form = () => {
       name: "card_cvv",
       type: "text",
       placeholder: "Enter your card cvv",
-      heading: "credit card detail",
+      obj_key: "credit card detail",
       className: "form-control",
     },
     {
@@ -81,7 +93,7 @@ const Form = () => {
       name: "card_exp",
       type: "text",
       placeholder: "Enter your card exp",
-      heading: "credit card detail",
+      obj_key: "credit card detail",
       className: "form-control",
     },
   ];
@@ -108,10 +120,18 @@ const Form = () => {
 
     input.forEach((item) => {
       if (formData[item.name]) {
-        if (!personal_details[item.heading]) {
-          personal_details[item.heading] = {};
+        if (item.obj_key && item.sub_key) {
+          if (!personal_details[item.obj_key][item.sub_key]) {
+            personal_details[item.obj_key][item.sub_key] = {};
+          }
+          personal_details[item.obj_key][item.sub_key][item.label] =
+            formData[item.name];
+        } else {
+          if (!personal_details[item.obj_key]) {
+            personal_details[item.obj_key] = {};
+          }
+          personal_details[item.obj_key][item.label] = formData[item.name];
         }
-        personal_details[item.heading][item.label] = formData[item.name];
       }
       setResponse(personal_details);
     });
@@ -128,7 +148,7 @@ const Form = () => {
               placeholder={item.placeholder}
               className={item.className}
               onChange={handleOnChange}
-              disabled={item.disabled}
+              readOnly={item.disabled}
             />
             <br />
           </Fragment>

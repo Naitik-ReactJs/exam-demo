@@ -25,6 +25,7 @@ import UserResetPassword from "./components/user/UserResetPassword";
 import Student from "./components/student/Student";
 import Profile from "./components/student/Profile";
 import Form from "./components/Form";
+import ExamForStudent from "./components/student/ExamForStudent";
 function App() {
   return (
     <Router>
@@ -139,6 +140,16 @@ function App() {
                 navigateTo="student"
                 props={studentSideBarProps}
                 component={<Profile />}
+              />
+            }
+          />
+          <Route
+            path="exam"
+            element={
+              <Dashboard
+                navigateTo="student"
+                props={studentSideBarProps}
+                component={<ExamForStudent />}
               />
             }
           />

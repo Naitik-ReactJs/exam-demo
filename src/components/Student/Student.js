@@ -61,7 +61,9 @@ const Student = () => {
                           <div key={resultIndex}>
                             <h6>Result: {resultData.resultStatus}</h6>
                             <p>Rank: {resultData.rank}</p>
-                            <p>Score: {resultData.score}</p>
+                            <p>
+                              Score: {Math.round((resultData.score * 100) / 7)}%
+                            </p>
                           </div>
                         ))}
                       </div>
