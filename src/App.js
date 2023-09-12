@@ -28,12 +28,12 @@ import Form from "./components/Form";
 function App() {
   return (
     <Router>
-      <Form />
-      {/* <Routes>
-        <Route path="/" element={<SignIn />} /> */}
+      {/* <Form /> */}
+      <Routes>
+        <Route path="/" element={<SignIn />} />
 
-      {/* Teacher Routes */}
-      {/* <Route
+        {/* Teacher Routes */}
+        <Route
           path="/teacher/*"
           element={
             <ProtectedRouteTeacher>
@@ -111,10 +111,10 @@ function App() {
               />
             }
           />
-        </Route> */}
+        </Route>
 
-      {/* Student Routes */}
-      {/* <Route
+        {/* Student Routes */}
+        <Route
           path="/student/*"
           element={
             <ProtectedRouteStudent>
@@ -148,7 +148,7 @@ function App() {
         <Route path="/newPassword" element={<UserNewPassword />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />
-      </Routes> */}
+      </Routes>
     </Router>
   );
 }

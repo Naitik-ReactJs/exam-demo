@@ -78,36 +78,43 @@ const EditExam = () => {
   };
 
   const handleNextClick = () => {
-    if (subjectName === "") {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        subjectError: "subject is required",
-      }));
+    const currentQuestion = questions[currentQuestionIndex];
 
-      return false;
-    }
-    if (questions[currentQuestionIndex]?.question === "") {
+    if (!examData.subjectName) {
       setFormErrors((prevErrors) => ({
         ...prevErrors,
-        questionError: "question is required",
+        subjectError: "Subject is required",
       }));
-      return false;
+      return;
     }
 
-    if (questions[currentQuestionIndex]?.options.every((item) => item === "")) {
+    if (!currentQuestion.question) {
       setFormErrors((prevErrors) => ({
         ...prevErrors,
-        optionError: "option is required",
+        questionError: "Question is required",
       }));
-      return false;
+      return;
     }
-    if (selectedAnswers[currentQuestionIndex] === "") {
+
+    if (
+      !currentQuestion.options.map((item) => item).every((item) => item !== "")
+    ) {
       setFormErrors((prevErrors) => ({
         ...prevErrors,
-        selectedAnsError: "answer is required",
+        optionError: "Options are required",
       }));
-      return false;
-    } else if (currentQuestionIndex < 14) {
+      return;
+    }
+
+    if (!selectedAnswers[currentQuestionIndex]) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedAnsError: "Answer is required",
+      }));
+      return;
+    }
+
+    if (currentQuestionIndex < 14) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }
   };
@@ -151,6 +158,42 @@ const EditExam = () => {
   };
 
   const handleEditExam = async () => {
+    const currentQuestion = questions[currentQuestionIndex];
+
+    if (!examData.subjectName) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        subjectError: "Subject is required",
+      }));
+      return;
+    }
+
+    if (!currentQuestion.question) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        questionError: "Question is required",
+      }));
+      return;
+    }
+
+    if (
+      !currentQuestion.options.map((item) => item).every((item) => item !== "")
+    ) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        optionError: "Options are required",
+      }));
+      return;
+    }
+
+    if (!selectedAnswers[currentQuestionIndex]) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedAnsError: "Answer is required",
+      }));
+      return;
+    }
+
     try {
       const response = await apiAction({
         method: "put",
@@ -185,7 +228,11 @@ const EditExam = () => {
     questions,
     handleQuestionChange,
     handleAnswerChange,
-    selectedAnswers
+    selectedAnswers,
+    formErrors.subjectError,
+    formErrors.questionError,
+    formErrors.optionError,
+    formErrors.selectedAnsError
   );
   return (
     <div className="container mt-5">
@@ -239,41 +286,17 @@ const EditExam = () => {
                   readOnly={field.readOnly}
                 />
               )}
+              {field.error && (
+                <div
+                  className="alert alert-danger m-3 border text-center p-2"
+                  role="alert"
+                >
+                  {field.error}
+                </div>
+              )}
             </div>
           ))}
         </form>
-        {formErrors.subjectError && (
-          <div
-            className="alert alert-danger m-3 border text-center p-2"
-            role="alert"
-          >
-            {formErrors.subjectError}
-          </div>
-        )}
-        {formErrors.optionError && (
-          <div
-            className="alert alert-danger m-3 border text-center p-2"
-            role="alert"
-          >
-            {formErrors.optionError}
-          </div>
-        )}
-        {formErrors.selectedAnsError && (
-          <div
-            className="alert alert-danger m-3 border text-center p-2"
-            role="alert"
-          >
-            {formErrors.selectedAnsError}
-          </div>
-        )}
-        {formErrors.questionError && (
-          <div
-            className="alert alert-danger m-3 border text-center p-2"
-            role="alert"
-          >
-            {formErrors.questionError}
-          </div>
-        )}
       </div>
       <div className="mb-3">
         <Button
