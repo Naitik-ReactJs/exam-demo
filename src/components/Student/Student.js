@@ -5,11 +5,11 @@ import Button from "../../reusable/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
-
+import { token } from "../../utils/Constants";
+import { ToastContainer, toast } from "react-toastify";
 const Student = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const [data, setData] = useState(null);
 
   const fetchAllExams = async () => {
@@ -22,7 +22,7 @@ const Student = () => {
       });
       setData(response.data);
     } catch (error) {
-      console.error("Error fetching data:");
+      toast.error("Error fetching data:");
     }
   };
   useEffect(() => {
@@ -34,6 +34,7 @@ const Student = () => {
   const handleOnClick = async (id) => {
     navigate(`exam?id=${id}`);
   };
+
   return (
     <div className="container mt-4">
       <div className="row">
@@ -82,6 +83,7 @@ const Student = () => {
             </div>
           ))}
       </div>
+      <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );
 };

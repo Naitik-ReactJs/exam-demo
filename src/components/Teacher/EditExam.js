@@ -4,12 +4,13 @@ import Loader from "../../reusable/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
 import { useLocation } from "react-router-dom";
-import { CreateExamInputForm } from "../../utils/Input";
+import { CreateExamInputForm, handleExamError } from "../../utils/Input";
+import ExamForm from "../../reusable/ExamForm";
+import { token } from "../../utils/Constants";
 const EditExam = () => {
   const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const initialQuestions = Array.from({ length: 15 }, () => ({
     question: "",
     answer: "",
@@ -78,44 +79,17 @@ const EditExam = () => {
   };
 
   const handleNextClick = () => {
-    const currentQuestion = questions[currentQuestionIndex];
-
-    if (!examData.subjectName) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        subjectError: "Subject is required",
-      }));
-      return;
-    }
-
-    if (!currentQuestion.question) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        questionError: "Question is required",
-      }));
-      return;
-    }
-
-    if (
-      !currentQuestion.options.map((item) => item).every((item) => item !== "")
-    ) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        optionError: "Options are required",
-      }));
-      return;
-    }
-
-    if (!selectedAnswers[currentQuestionIndex]) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        selectedAnsError: "Answer is required",
-      }));
-      return;
-    }
-
-    if (currentQuestionIndex < 14) {
-      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    const error = handleExamError(
+      setFormErrors,
+      questions,
+      currentQuestionIndex,
+      examData,
+      selectedAnswers
+    );
+    if (error) {
+      if (currentQuestionIndex < 14) {
+        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+      }
     }
   };
 
@@ -158,54 +132,27 @@ const EditExam = () => {
   };
 
   const handleEditExam = async () => {
-    const currentQuestion = questions[currentQuestionIndex];
-
-    if (!examData.subjectName) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        subjectError: "Subject is required",
-      }));
-      return;
-    }
-
-    if (!currentQuestion.question) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        questionError: "Question is required",
-      }));
-      return;
-    }
-
-    if (
-      !currentQuestion.options.map((item) => item).every((item) => item !== "")
-    ) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        optionError: "Options are required",
-      }));
-      return;
-    }
-
-    if (!selectedAnswers[currentQuestionIndex]) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        selectedAnsError: "Answer is required",
-      }));
-      return;
-    }
-
-    try {
-      const response = await apiAction({
-        method: "put",
-        url: "dashboard/Teachers/editExam",
-        data: formData,
-        setLoading,
-        token,
-        id,
-      });
-      toast.success(response.message);
-    } catch (error) {
-      toast.error(error);
+    const error = handleExamError(
+      setFormErrors,
+      questions,
+      currentQuestionIndex,
+      examData,
+      selectedAnswers
+    );
+    if (error) {
+      try {
+        const response = await apiAction({
+          method: "put",
+          url: "dashboard/Teachers/editExam",
+          data: formData,
+          setLoading,
+          token,
+          id,
+        });
+        toast.success(response.message);
+      } catch (error) {
+        toast.error(error);
+      }
     }
   };
 
@@ -239,64 +186,13 @@ const EditExam = () => {
       <h2 className="mb-4"> Edit Exam</h2>
       <div className="mb-4">
         <h3>Question {currentQuestionIndex + 1}</h3>
-        <form>
-          {input.map((field, index) => (
-            <div className="form-group" key={index}>
-              <label className="mt-2 mb-2">{field.label}</label>
-              {field.type === "radio" ? (
-                field.options.map((option, optionIndex) => (
-                  <div className="mb-3" key={optionIndex}>
-                    <div className="form-check">
-                      <input
-                        type={field.type}
-                        className="form-check-input"
-                        name={`question${currentQuestionIndex}`}
-                        value={option}
-                        checked={field.answer === option}
-                        onChange={field.onChange}
-                      />
-                      <input
-                        type="text"
-                        className="form-control ms-2"
-                        placeholder={`Option ${optionIndex + 1}`}
-                        value={option}
-                        onChange={(e) => {
-                          const updatedQuestions = [...questions];
-                          updatedQuestions[currentQuestionIndex].options[
-                            optionIndex
-                          ] = e.target.value;
-                          setQuestions(updatedQuestions);
-                          setFormErrors((prevErrors) => ({
-                            ...prevErrors,
-                            optionError: "",
-                          }));
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <input
-                  type={field.type}
-                  className={`form-control mb-3`}
-                  placeholder={field.placeholder}
-                  value={field.value}
-                  onChange={field.onChange}
-                  disabled={field.disabled}
-                  readOnly={field.readOnly}
-                />
-              )}
-              {field.error && (
-                <div
-                  className="alert alert-danger m-3 border text-center p-2"
-                  role="alert"
-                >
-                  {field.error}
-                </div>
-              )}
-            </div>
-          ))}
-        </form>
+        <ExamForm
+          inputField={input}
+          currentQuestionIndex={currentQuestionIndex}
+          questions={questions}
+          setQuestions={setQuestions}
+          setFormErrors={setFormErrors}
+        />
       </div>
       <div className="mb-3">
         <Button
@@ -335,4 +231,3 @@ const EditExam = () => {
 };
 
 export default EditExam;
-// !Object.values(formErrors).every((item) => item === "");

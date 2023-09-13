@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,6 +8,7 @@ import validateInput from "../../utils/Validation";
 import apiAction from "../../api/apiAction";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../reusable/Loader";
+import Form from "../../reusable/UserForm";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -89,67 +90,30 @@ const SignUp = () => {
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 ">
       <div className="container p-5 w-50 mb-5 box-shadow">
-        <form onSubmit={handleSubmit}>
-          {input.map((item, index) => {
-            return (
-              <Fragment key={index}>
-                {item.type === "radio" ? (
-                  <>
-                    <label>{item.role}</label>
-                    <label key={item.id} className="p-2 mb-4" htmlFor={item.id}>
-                      <input
-                        required
-                        id={item.id}
-                        checked={selectedRole === item.id}
-                        value={item.id}
-                        type={item.type}
-                        onChange={handleRadioChange}
-                      />
-                      {item.label}
-                    </label>
-                  </>
-                ) : (
-                  <input
-                    required
-                    className={item.className}
-                    type={item.type}
-                    name={item.name}
-                    placeholder={item.placeholder}
-                    onChange={item.onChange}
-                  />
-                )}
-
-                {item.formErrors && (
-                  <div
-                    key={index}
-                    className="alert text-center alert-danger border text-center"
-                    role="alert"
-                  >
-                    {item.formErrors}
-                  </div>
-                )}
-              </Fragment>
-            );
-          })}
-          {radioError && (
-            <div
-              className="alert text-center alert-danger border text-center w-50"
-              role="alert"
-            >
-              {radioErrorMessage}
-            </div>
-          )}
-          <div className="text-center mt-3">
-            {" "}
-            <Button
-              className={"btn btn-dark"}
-              type="submit"
-              buttonText={"Sign Up"}
-              disabled={!Object.values(formErrors).every((item) => item === "")}
-            />
+        <Form
+          handleRadioChange={handleRadioChange}
+          inputFields={input}
+          selectedRole={selectedRole}
+        />
+        {radioError && (
+          <div
+            className="alert text-center alert-danger border text-center w-50"
+            role="alert"
+          >
+            {radioErrorMessage}
           </div>
-          <ToastContainer autoClose={2000} theme="colored" />
-        </form>
+        )}
+        <div className="text-center mt-3">
+          {" "}
+          <Button
+            className={"btn btn-dark"}
+            type="submit"
+            onClick={handleSubmit}
+            buttonText={"Sign Up"}
+            disabled={!Object.values(formErrors).every((item) => item === "")}
+          />
+        </div>
+        <ToastContainer autoClose={2000} theme="colored" />
       </div>
       <ToastContainer />
     </div>

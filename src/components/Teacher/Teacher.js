@@ -1,16 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
-import { Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../../App.css";
 import Button from "../../reusable/Button";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { token } from "../../utils/Constants";
 const Teacher = () => {
   const navigate = useNavigate();
   const [viewExam, setViewExam] = useState([]);
   const [loading, setLoading] = useState(false);
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const fetchExamData = async () => {
     try {
       const response = await apiAction({
@@ -57,7 +57,7 @@ const Teacher = () => {
   }
 
   return (
-    <div className="container ms-0 py-5">
+    <div className="container ms-0 py-5 fs-5">
       {viewExam.length === 0 ? (
         <Loader />
       ) : (
@@ -65,16 +65,16 @@ const Teacher = () => {
           <div className="row d-flex justify-content-space-around">
             <div className="col custom-display">
               {viewExam.map((item, index) => (
-                <Card key={index} className="m-2 w-50">
-                  <Card.Body>
-                    <Card.Title className="pb-2">
+                <div key={index} className="w-50 card-design">
+                  <div>
+                    <div className="pb-2">
                       <i className="pe-2 mr-2 bi bi-book"></i>
                       Subject: {item.subjectName}
-                    </Card.Title>
-                    <Card.Subtitle className="pb-2">
+                    </div>
+                    <div className="pb-2">
                       <i className="pe-2 mr-2 bi bi-envelope-at-fill"></i>
                       E-mail: {item.email}
-                    </Card.Subtitle>
+                    </div>
                     <div>
                       <i className="pe-2 mr-2 bi bi-card-list"></i>Notes:{" "}
                       <ul className="ps-5">
@@ -87,7 +87,7 @@ const Teacher = () => {
                         })}
                       </ul>
                     </div>
-                  </Card.Body>
+                  </div>
                   <div className="text-center">
                     <Button
                       buttonText={"View Exam"}
@@ -105,7 +105,7 @@ const Teacher = () => {
                       onClick={() => handleDeleteExam(item._id)}
                     />
                   </div>
-                </Card>
+                </div>
               ))}
             </div>
           </div>

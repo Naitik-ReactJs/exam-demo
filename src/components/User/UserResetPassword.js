@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,6 +7,7 @@ import { InputResetPassForm } from "../../utils/Input";
 import validateInput from "../../utils/Validation";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
+import Form from "../../reusable/UserForm";
 
 const UserResetPassword = () => {
   const [loading, setLoading] = useState(false);
@@ -71,40 +72,17 @@ const UserResetPassword = () => {
     <div className="d-flex align-items-center justify-content-center min-vh-100 ">
       <div className="container p-5 w-50 box-shadow">
         <h2 className="text-center p-3">Reset Password</h2>
-        <form onSubmit={handleSubmit}>
-          {input.map((item, index) => {
-            return (
-              <Fragment key={index}>
-                <input
-                  required
-                  className="form-control p-3 mt-4"
-                  type={item.type}
-                  name={item.name}
-                  placeholder={item.placeholder}
-                  onChange={item.onChange}
-                />
-                {item.formErrors && (
-                  <div
-                    key={index}
-                    className="alert alert-danger m-3 border text-center p-2"
-                    role="alert"
-                  >
-                    {item.formErrors}
-                  </div>
-                )}
-              </Fragment>
-            );
-          })}
-          <div className="text-center mt-4">
-            <Button
-              className={"btn btn-dark"}
-              type="submit"
-              buttonText={"Submit"}
-              disabled={!Object.values(formErrors).every((item) => item === "")}
-            ></Button>
-          </div>
-          <ToastContainer autoClose={2000} theme="colored" />
-        </form>
+        <Form inputFields={input} />
+        <div className="text-center mt-4">
+          <Button
+            className={"btn btn-dark"}
+            type="submit"
+            buttonText={"Submit"}
+            onClick={handleSubmit}
+            disabled={!Object.values(formErrors).every((item) => item === "")}
+          ></Button>
+        </div>
+        <ToastContainer autoClose={2000} theme="colored" />
       </div>
     </div>
   );

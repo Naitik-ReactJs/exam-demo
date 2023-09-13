@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
 import Button from "./Button";
 
@@ -21,7 +21,7 @@ const Dashboard = ({ navigateTo, component, props }) => {
             >
               {Object.entries(props).map(([key, value], index) => (
                 <li className="m-5 text-light" key={index}>
-                  <NavLink
+                  <Link
                     className="forgotpass_link"
                     to={
                       index !== 0
@@ -32,7 +32,7 @@ const Dashboard = ({ navigateTo, component, props }) => {
                     }
                   >
                     {value.toUpperCase()}
-                  </NavLink>
+                  </Link>
                 </li>
               ))}
             </ul>

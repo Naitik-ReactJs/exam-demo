@@ -24,12 +24,10 @@ import ViewStudentDetail from "./components/teacher/ViewStudentDetail";
 import UserResetPassword from "./components/user/UserResetPassword";
 import Student from "./components/student/Student";
 import Profile from "./components/student/Profile";
-import Form from "./components/Form";
 import ExamForStudent from "./components/student/ExamForStudent";
 function App() {
   return (
     <Router>
-      <Form />
       <Routes>
         <Route path="/" element={<SignIn />} />
 

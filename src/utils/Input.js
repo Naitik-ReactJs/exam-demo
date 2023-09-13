@@ -1,5 +1,3 @@
-import { toast } from "react-toastify";
-
 export const InputForgotPassForm = (email, handleInputChange) => {
   return [
     {
@@ -8,6 +6,7 @@ export const InputForgotPassForm = (email, handleInputChange) => {
       placeholder: "Enter your email address",
       formErrors: email,
       onChange: handleInputChange,
+      className: "form-control p-3 mt-3",
     },
   ];
 };
@@ -23,6 +22,7 @@ export const InputNewPassForm = (
       placeholder: "Enter your password",
       onChange: handleInputChange,
       formErrors: Password,
+      className: "form-control p-3 mt-3",
     },
     {
       type: "password",
@@ -30,6 +30,7 @@ export const InputNewPassForm = (
       placeholder: "Re Enter your password",
       onChange: handleInputChange,
       formErrors: ConfirmPassword,
+      className: "form-control p-3 mt-3",
     },
   ];
 };
@@ -44,6 +45,7 @@ export const InputResetPassForm = (
       name: "oldPassword",
       placeholder: "Enter your old password",
       onChange: handleInputChange,
+      className: "form-control p-3 mt-3",
     },
     {
       type: "password",
@@ -51,6 +53,7 @@ export const InputResetPassForm = (
       placeholder: "Enter your new password",
       onChange: handleInputChange,
       formErrors: Password,
+      className: "form-control p-3 mt-3",
     },
     {
       type: "password",
@@ -58,6 +61,7 @@ export const InputResetPassForm = (
       placeholder: "Re Enter your new password",
       onChange: handleInputChange,
       formErrors: ConfirmPassword,
+      className: "form-control p-3 mt-3",
     },
   ];
 };
@@ -70,6 +74,7 @@ export const InputSignInForm = (email, password, handleInputChange) => {
       placeholder: "Enter your email address",
       formErrors: email,
       onChange: handleInputChange,
+      className: "form-control p-3 mt-4",
     },
     {
       type: "password",
@@ -77,6 +82,7 @@ export const InputSignInForm = (email, password, handleInputChange) => {
       placeholder: "Enter your password",
       onChange: handleInputChange,
       formErrors: password,
+      className: "form-control p-3 mt-4",
     },
   ];
 };
@@ -248,4 +254,5 @@ export const handleExamError = (
     }));
     return false;
   }
+  return true;
 };

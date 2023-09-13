@@ -26,7 +26,9 @@ const apiAction = async ({
     if (response.data.statusCode !== 200) {
       toast.error(response.data.message);
     }
-
+    if (response.data.statusCode === 401) {
+      toast.warning("error");
+    }
     setLoading(false);
     if (storageKey) {
       localStorage.setItem(storageKey, JSON.stringify(response.data.data));
@@ -34,33 +36,9 @@ const apiAction = async ({
     return response.data;
   } catch (error) {
     setLoading(false);
+
     toast.error(error.message);
   }
 };
 
 export default apiAction;
-// function App() {
-//   const [controller, setController] = useState(new AbortController()); // Initialize with an AbortController
-//   const [users, setData] = useState([]);
-
-//   const getApiData = async () => {
-//     controller.abort(); // Abort the previous request
-//     const newController = new AbortController(); // Create a new controller
-//     setController(newController); // Update the controller state
-
-//     try {
-//       const response = await axios.get(
-//         "https://jsonplaceholder.typicode.com/users",
-//         {
-//           signal: newController.signal,
-//         }
-//       );
-//       setData(response.data);
-//     } catch (error) {
-//       if (error.name === "AbortError") {
-//         console.log("Previous request was aborted");
-//       } else {
-//         console.error("Error fetching data:", error);
-//       }
-//     }
-//   };

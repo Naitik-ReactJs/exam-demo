@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
-import { Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import "../../App.css";
@@ -40,32 +39,32 @@ const ViewStudents = () => {
       {studentList.length === 0 ? (
         <Loader />
       ) : (
-        <div className="container">
-          <div className="row d-flex justify-content-space-between">
-            <div className="col custom-display">
+        <div className="container fs-5">
+          <div className="row">
+            <div className="col d-flex flex-column">
               {studentList.map((item, index) => (
-                <Card key={index} className="student-card">
-                  <Card.Body>
-                    <Card.Title className="pb-2">
+                <div key={index} className="card-design w-50">
+                  <div>
+                    <div className="pb-2">
                       <i className="pe-2 mr-2 bi bi-person-circle"></i>
                       {item.name}
-                    </Card.Title>
-                    <Card.Subtitle className="pb-2">
+                    </div>
+                    <div className="pb-2">
                       <i className="pe-2 mr-2 bi bi-envelope-at-fill"></i>
                       {item.email}
-                    </Card.Subtitle>
-                    <Card.Text className="pb-2">
+                    </div>
+                    <div className="pb-2">
                       <i className="pe-2 mr-2 bi bi-toggle-on"></i>
                       Status: {item.status}
-                    </Card.Text>
-                  </Card.Body>
+                    </div>
+                  </div>
                   <Button
                     buttonText={"View result"}
                     type="submit"
                     className={"btn btn-dark  m-auto mb-2"}
                     onClick={() => handleOnClick(item._id)}
                   />
-                </Card>
+                </div>
               ))}
             </div>
           </div>

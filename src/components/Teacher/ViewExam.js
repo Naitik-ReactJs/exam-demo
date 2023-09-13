@@ -3,12 +3,12 @@ import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
+import { token } from "../../utils/Constants";
 const ViewExam = () => {
   const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
 
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const [tableData, setTableData] = useState([]);
   const tableHeaders = ["Sr. no", "Question", "Options", "Correct Answer"];
 
@@ -33,7 +33,7 @@ const ViewExam = () => {
     return <Loader />;
   }
   return (
-    <div>
+    <div className="container p-3 w-75">
       <table className="table table-bordered table-hover">
         <thead>
           <tr>

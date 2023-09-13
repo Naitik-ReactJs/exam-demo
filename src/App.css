@@ -19,11 +19,7 @@
   z-index: 1;
   overflow-y: auto;
 }
-.custom-display {
-  display: contents;
-  justify-content: center;
-  align-items: center;
-}
+
 .student-card {
   padding: 0.5rem;
   margin: 1.4rem;
@@ -41,4 +37,9 @@
 }
 .card {
   width: 60%;
+}
+.card-design {
+  border: 3px solid #212121;
+  padding: 1.4rem;
+  margin-bottom: 2.5rem;
 }
