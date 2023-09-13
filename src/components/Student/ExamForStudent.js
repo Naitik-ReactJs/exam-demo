@@ -82,25 +82,43 @@ const ExamForStudent = () => {
   return (
     <>
       {isEdit ? (
-        currentQuestion.options.map((option, index) => (
-          <div className="form-check mb-3" key={index}>
-            <ul className="list-group w-50">
-              <li className="list-group-item">
-                <input
-                  type="radio"
-                  className="form-check-input m-2"
-                  name={`question${currentQuestionIndex}`}
-                  value={option}
-                  checked={
-                    selectedAnswers[data[currentQuestionIndex]._id] === option
-                  }
-                  onChange={handleAnswerChange}
+        <>
+          {data.map((item, index) => {
+            return (
+              <div className="card-body">
+                {" "}
+                <div className="form-group w-50">
+                  <label className="mb-2">Question: {index + 1}</label>
+                  <h4 className="form-control">{item.question}</h4>
+                </div>
+                {item.options.map((option, index) => (
+                  <div className="form-check mb-3" key={index}>
+                    <ul className="list-group w-25">
+                      <li className="list-group-item">
+                        <input
+                          type="radio"
+                          className="form-check-input m-2"
+                          name={`question${currentQuestionIndex}`}
+                          value={option}
+                          checked={
+                            selectedAnswers[data[currentQuestionIndex]._id] ===
+                            option
+                          }
+                          onChange={handleAnswerChange}
+                        />
+                        <label className="form-check-label">{option}</label>
+                      </li>
+                    </ul>
+                  </div>
+                ))}
+                <Button
+                  buttonText={"edit answer"}
+                  className={"btn btn-danger mb-3"}
                 />
-                <label className="form-check-label">{option}</label>
-              </li>
-            </ul>
-          </div>
-        ))
+              </div>
+            );
+          })}
+        </>
       ) : (
         <>
           <div className="container mt-5">
@@ -146,7 +164,7 @@ const ExamForStudent = () => {
             </div>
             <div className="mb-3">
               <Button
-                className="btn btn-primary me-2"
+                className="btn btn-danger me-2"
                 onClick={handlePreviousClick}
                 disabled={currentQuestionIndex === 0}
                 buttonText={"Previous"}
