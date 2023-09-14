@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 const Student = () => {
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
+  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -32,7 +32,7 @@ const Student = () => {
   if (loading) {
     return <Loader />;
   }
-  const handleOnClick = async (id) => {
+  const handleGiveExamClick = async (id) => {
     navigate(`exam?id=${id}`);
   };
 
@@ -76,7 +76,7 @@ const Student = () => {
                       disabled={item.Result.length !== 0}
                       className="btn btn-success"
                       buttonText="Give Exam"
-                      onClick={() => handleOnClick(item._id)}
+                      onClick={() => handleGiveExamClick(item._id)}
                     />
                   </div>
                 </div>

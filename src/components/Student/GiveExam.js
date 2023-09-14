@@ -6,8 +6,8 @@ import Loader from "../../reusable/Loader";
 import apiAction from "../../api/apiAction";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const ExamForStudent = () => {
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
+const GiveExam = () => {
+  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const [isEdit, setIsEdit] = useState(false);
   const [answerEdit, setAnswerEdit] = useState({});
   const [loading, setLoading] = useState(true);
@@ -64,7 +64,6 @@ const ExamForStudent = () => {
     const updatedSelectedAnswers = { ...selectedAnswers };
     updatedSelectedAnswers[questionId] = e.target.value;
     setSelectedAnswers(updatedSelectedAnswers);
-    console.log(questionId);
   };
 
   const handleReviewClick = () => {
@@ -156,7 +155,6 @@ const ExamForStudent = () => {
             className={"btn btn-success"}
             onClick={handleSubmitExam}
           />
-          <pre>{JSON.stringify(formData, null, 2)}</pre>
         </>
       ) : (
         <>
@@ -230,4 +228,4 @@ const ExamForStudent = () => {
   );
 };
 
-export default ExamForStudent;
+export default GiveExam;

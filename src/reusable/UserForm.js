@@ -19,7 +19,6 @@ const Form = ({
                     <label>{item.role}</label>
                     <label key={item.id} className="p-2 mb-4" htmlFor={item.id}>
                       <input
-                        required
                         id={item.id}
                         checked={selectedRole === item.id}
                         value={item.id}
@@ -33,7 +32,6 @@ const Form = ({
                   </>
                 ) : (
                   <input
-                    required
                     className={item.className}
                     type={item.type}
                     name={item.name}

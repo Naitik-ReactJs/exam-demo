@@ -8,7 +8,7 @@ import { CreateExamInputForm, handleExamError } from "../../utils/Input";
 import ExamForm from "../../reusable/ExamForm";
 
 const EditExam = () => {
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
+  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");

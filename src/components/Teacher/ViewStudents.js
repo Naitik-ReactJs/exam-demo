@@ -7,7 +7,7 @@ import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 const ViewStudents = () => {
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
+  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const navigate = useNavigate();
   const [studentList, setStudentList] = useState([]);
 
@@ -32,7 +32,7 @@ const ViewStudents = () => {
   if (loading) {
     return <Loader />;
   }
-  const handleOnClick = async (id) => {
+  const handleViewResultClick = async (id) => {
     navigate(`result?id=${id}`);
   };
   return (
@@ -63,7 +63,7 @@ const ViewStudents = () => {
                     buttonText={"View result"}
                     type="submit"
                     className={"btn btn-dark  m-auto mb-2"}
-                    onClick={() => handleOnClick(item._id)}
+                    onClick={() => handleViewResultClick(item._id)}
                   />
                 </div>
               ))}

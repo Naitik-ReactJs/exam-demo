@@ -9,7 +9,7 @@ import Button from "../../reusable/Button";
 import validateInput from "../../utils/Validation";
 
 const Profile = () => {
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
+  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
     name: "",

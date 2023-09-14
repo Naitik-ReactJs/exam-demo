@@ -5,10 +5,12 @@ import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
 import { CreateExamInputForm, handleExamError } from "../../utils/Input";
 import ExamForm from "../../reusable/ExamForm";
+import { useNavigate } from "react-router-dom";
 
 const CreateExam = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
+  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const initialQuestions = Array.from({ length: 15 }, () => ({
     question: "",
     answer: "",
@@ -110,15 +112,16 @@ const CreateExam = () => {
     if (error) {
       setLoading(true);
       try {
-        await apiAction({
+        apiAction({
           method: "post",
           url: "dashboard/Teachers/Exam",
           data: formData,
           setLoading,
           token,
         });
+        navigate("/teacher");
       } catch (error) {
-        toast.error(error.message || "An error occurred.");
+        toast.error(error.message);
       }
     }
   };
@@ -185,7 +188,6 @@ const CreateExam = () => {
           />
         )}
       </div>
-      {/* <pre>{JSON.stringify(erorr, null, 2)}</pre> */}
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );

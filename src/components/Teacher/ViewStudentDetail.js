@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 const ViewStudentDetail = () => {
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
+  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const [loading, setLoading] = useState(false);
   const [studentDetail, setStudentDetail] = useState([]);
   const location = new URLSearchParams(useLocation().search);

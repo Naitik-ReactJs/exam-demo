@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputNewPassForm } from "../../utils/Input";
 import validateInput from "../../utils/Validation";
@@ -42,14 +42,18 @@ const UserNewPassword = () => {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
+    if (Object.values(formData).some((value) => value === "")) {
+      toast.error("Please enter your details");
+    } else {
+      setLoading(true);
+      apiAction({
+        method: "post",
+        url: `users/ForgotPassword/Verify?token=${token}`,
+        data: formData,
+        setLoading,
+      });
+    }
     e.preventDefault();
-    apiAction({
-      method: "post",
-      url: `users/ForgotPassword/Verify?token=${token}`,
-      data: formData,
-      setLoading,
-    });
   };
   const input = InputNewPassForm(Password, ConfirmPassword, handleInputChange);
   if (loading) {

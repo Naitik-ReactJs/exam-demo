@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputForgotPassForm } from "../../utils/Input";
 import validateInput from "../../utils/Validation";
@@ -40,15 +40,19 @@ const ForgotPassword = () => {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
-    apiAction({
-      method: "post",
-      url: "users/ForgotPassword",
-      data: formData,
-      setLoading,
-      navigate,
-    });
+    if (Object.values(formData).every((value) => value === "")) {
+      toast.error("Please enter your details");
+    } else {
+      setLoading(true);
+      apiAction({
+        method: "post",
+        url: "users/ForgotPassword",
+        data: formData,
+        setLoading,
+        navigate,
+      });
+    }
   };
   const input = InputForgotPassForm(email, handleInputChange);
   if (loading) {

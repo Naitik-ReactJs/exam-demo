@@ -2,9 +2,11 @@
   color: #000;
   text-decoration: none;
 }
+
 .forgotpass_link:hover {
   color: #959595;
 }
+
 .box-shadow {
   box-shadow: -20px 20px 20px 4px rgba(0, 0, 0, 0.1);
 }
@@ -12,6 +14,7 @@
 .custom-bg {
   background-color: #efefef;
 }
+
 .sidebar-menu {
   background-color: #efefef;
   position: fixed;
@@ -24,22 +27,30 @@
   padding: 0.5rem;
   margin: 1.4rem;
 }
+
 .exam-container {
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-start;
 }
+
 .button-container {
   display: flex;
   justify-content: space-evenly;
   width: 30%;
   margin: 3rem auto 0 0;
 }
+
 .card {
   width: 60%;
 }
+
 .card-design {
   border: 3px solid #212121;
   padding: 1.4rem;
   margin-bottom: 2.5rem;
+}
+
+.user-resetpass {
+  min-height: 90vh;
 }

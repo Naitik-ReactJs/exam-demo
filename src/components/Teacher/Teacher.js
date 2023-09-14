@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Teacher = () => {
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
+  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const navigate = useNavigate();
   const [viewExam, setViewExam] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -39,16 +39,17 @@ const Teacher = () => {
   const handleDeleteExam = async (id) => {
     toast.success("Please wait processing your request");
     try {
-      const response = await apiAction({
+      const reponse = await apiAction({
         method: "delete",
         url: "dashboard/Teachers/deleteExam",
         token: token,
         id,
         setLoading,
       });
-      if (response.statusCode === 200) {
+      if (reponse.statusCode === 200) {
         fetchExamData();
       }
+      setLoading(true);
     } catch (error) {
       toast.error("Error fetching data:");
     }

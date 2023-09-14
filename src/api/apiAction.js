@@ -31,7 +31,7 @@ const apiAction = async ({
     }
     setLoading(false);
     if (storageKey) {
-      localStorage.setItem(storageKey, JSON.stringify(response.data.data));
+      sessionStorage.setItem(storageKey, JSON.stringify(response.data.data));
     }
     return response.data;
   } catch (error) {

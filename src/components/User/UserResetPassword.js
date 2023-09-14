@@ -8,7 +8,7 @@ import validateInput from "../../utils/Validation";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import Form from "../../reusable/UserForm";
-
+import "../../App.css";
 const UserResetPassword = () => {
   const [loading, setLoading] = useState(false);
 
@@ -42,21 +42,24 @@ const UserResetPassword = () => {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    if (Object.values(formData).some((value) => value === "")) {
+      toast.error("Please enter your details");
+    } else {
+      setLoading(true);
+      try {
+        const response = await apiAction({
+          method: "post",
+          url: "users/ResetPassword",
+          data: formData,
+          token: JSON.parse(sessionStorage.getItem("user-info"))?.token,
+          setLoading,
+        });
 
-    try {
-      const response = await apiAction({
-        method: "post",
-        url: "users/ResetPassword",
-        data: formData,
-        token: JSON.parse(localStorage.getItem("user-info"))?.token,
-        setLoading,
-      });
-
-      toast.success(response.message);
-    } catch (error) {
-      toast.error("Error fetching data:");
+        toast.success(response.message);
+      } catch (error) {
+        toast.error("Error fetching data:");
+      }
     }
   };
 
@@ -69,7 +72,7 @@ const UserResetPassword = () => {
     return <Loader />;
   }
   return (
-    <div className="d-flex align-items-center justify-content-center min-vh-100 ">
+    <div className="d-flex align-items-center justify-content-center user-resetpass">
       <div className="container p-5 w-50 box-shadow">
         <h2 className="text-center p-3">Reset Password</h2>
         <Form inputFields={input} />

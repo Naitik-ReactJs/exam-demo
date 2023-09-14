@@ -12,7 +12,6 @@ import Form from "../../reusable/UserForm";
 
 const SignUp = () => {
   const navigate = useNavigate();
-
   const [selectedRole, setSelectedRole] = useState("");
   const [radioError, setRadioError] = useState(false);
   const radioErrorMessage = "Please select a role";
@@ -35,24 +34,27 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (selectedRole === "") {
+    if (Object.values(formData).some((value) => value === "")) {
+      toast.error("Please enter your details");
+    } else if (selectedRole === "") {
       setRadioError(true);
       return false;
+    } else {
+      setLoading(true);
+      try {
+        const response = await apiAction({
+          method: "post",
+          url: "users/SignUp",
+          data: formData,
+          navigate,
+          setLoading,
+        });
+        toast.success(response.message);
+      } catch (error) {
+        toast.error(error);
+      }
     }
     setSelectedRole("");
-    setLoading(true);
-    try {
-      const response = await apiAction({
-        method: "post",
-        url: "users/SignUp",
-        data: formData,
-        navigate,
-        setLoading,
-      });
-      toast.success(response.message);
-    } catch (error) {
-      toast.error(error);
-    }
   };
 
   const handleRadioChange = (e) => {
@@ -115,7 +117,6 @@ const SignUp = () => {
         </div>
         <ToastContainer autoClose={2000} theme="colored" />
       </div>
-      <ToastContainer />
     </div>
   );
 };

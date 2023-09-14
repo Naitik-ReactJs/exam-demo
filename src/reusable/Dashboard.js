@@ -5,9 +5,9 @@ import Button from "./Button";
 const Dashboard = ({ navigateTo, component, props }) => {
   const navigate = useNavigate();
 
-  const handleOnClick = () => {
+  const handleLogOutClick = () => {
     navigate("/");
-    localStorage.clear();
+    sessionStorage.clear();
   };
 
   return (
@@ -42,7 +42,7 @@ const Dashboard = ({ navigateTo, component, props }) => {
                 className={"btn btn-danger mt-3 mb-4"}
                 type="submit"
                 buttonText={"Log Out"}
-                onClick={handleOnClick}
+                onClick={handleLogOutClick}
               />
             </div>
           </div>

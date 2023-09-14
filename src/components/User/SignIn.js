@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputSignInForm } from "../../utils/Input";
 import validateInput from "../../utils/Validation";
@@ -11,15 +11,14 @@ import Loader from "../../reusable/Loader";
 import Form from "../../reusable/UserForm";
 
 const SignIn = () => {
-  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
-  const role = JSON.parse(localStorage.getItem("user-info"))?.role;
+  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
+  const role = JSON.parse(sessionStorage.getItem("user-info"))?.role;
   useEffect(() => {
     if (token && role) {
       navigate(`/${role}`);
     }
   });
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
   const emptyUserData = {
     email: "",
@@ -49,17 +48,21 @@ const SignIn = () => {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
-    const response = await apiAction({
-      method: "post",
-      url: "users/Login",
-      data: formData,
-      setLoading,
-      storageKey: "user-info",
-    });
-    if (response.statusCode === 200) {
-      navigate(`${response.data.role}`, { replace: true });
+    if (Object.values(formData).some((value) => value === "")) {
+      toast.error("Please enter your details");
+    } else {
+      setLoading(true);
+      const response = await apiAction({
+        method: "post",
+        url: "users/Login",
+        data: formData,
+        setLoading,
+        storageKey: "user-info",
+      });
+      if (response.statusCode === 200) {
+        navigate(`${response.data.role}`, { replace: true });
+      }
     }
   };
   const input = InputSignInForm(email, password, handleInputChange);
