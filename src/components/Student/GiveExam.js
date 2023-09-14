@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "../../reusable/Button";
 import Loader from "../../reusable/Loader";
 import apiAction from "../../api/apiAction";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import Exam from "./Exam";
 const GiveExam = () => {
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const [isEdit, setIsEdit] = useState(false);
@@ -100,128 +100,79 @@ const GiveExam = () => {
   return (
     <>
       {isEdit ? (
-        <>
-          {data.map((item, questionIndex) => {
-            return (
-              <div className="card-body" key={questionIndex}>
-                {" "}
-                <div className="form-group w-50">
-                  <label className="mb-2">Question: {questionIndex + 1}</label>
-                  <h4 className="form-control">{item.question}</h4>
-                </div>
-                {item &&
-                  item.options.map((option, index) => (
-                    <div className="form-check mb-3" key={index}>
-                      <ul className="list-group w-50">
-                        <li className="list-group-item">
-                          <form>
-                            <input
-                              type="radio"
-                              className="form-check-input m-2"
-                              name={`question${index}`}
-                              value={option}
-                              checked={
-                                Object.values(selectedAnswers)[
-                                  questionIndex
-                                ] === option
-                              }
-                              onChange={(e) => {
-                                const questionId = data[questionIndex]._id;
-                                const updatedSelectedAnswers = {
-                                  ...selectedAnswers,
-                                };
-                                updatedSelectedAnswers[questionId] =
-                                  e.target.value;
-                                setSelectedAnswers(updatedSelectedAnswers);
-                              }}
-                              disabled={!answerEdit[questionIndex]}
-                            />
-                            <label className="form-check-label">{option}</label>
-                          </form>
-                        </li>
-                      </ul>
-                    </div>
-                  ))}
+        <div>
+          {data.map((item, questionIndex) => (
+            <Fragment key={questionIndex}>
+              <Exam
+                key={questionIndex}
+                questionIndex={questionIndex}
+                question={item.question}
+                options={item.options}
+                selectedAnswer={selectedAnswers[item._id]}
+                onAnswerChange={(e) => {
+                  const questionId = data[questionIndex]._id;
+                  const updatedSelectedAnswers = {
+                    ...selectedAnswers,
+                  };
+                  updatedSelectedAnswers[questionId] = e.target.value;
+                  setSelectedAnswers(updatedSelectedAnswers);
+                }}
+                answerEdit={answerEdit[questionIndex]}
+              />
+              <div className="text-center w-25">
                 <Button
                   buttonText={"edit answer"}
                   className={"btn btn-danger mb-3"}
                   onClick={() => handleEditAnswer(questionIndex)}
                 />
               </div>
-            );
-          })}
-          <Button
-            buttonText={"Submit"}
-            className={"btn btn-success"}
-            onClick={handleSubmitExam}
-          />
-        </>
+            </Fragment>
+          ))}
+          <div className="text-center w-75 mt-3 pt-3 mb-5">
+            <Button
+              buttonText={"Submit"}
+              className={"btn btn-success"}
+              onClick={handleSubmitExam}
+            />
+          </div>
+        </div>
       ) : (
         <>
-          <div className="container mt-5">
-            <div className="card mb-4">
-              <div className="card-body">
-                <h2 className="mb-4 text-center">Start Exam</h2>
-                <div className="form-group">
-                  <label className="mb-2">
-                    Question: {currentQuestionIndex + 1}
-                  </label>
-                  <h4 className="form-control">{currentQuestion.question}</h4>
-                </div>
-                <form>
-                  <div className="form-group">
-                    <label className="mb-2">Options:</label>
-                    {currentQuestion &&
-                      currentQuestion.options.map((option, index) => (
-                        <div className="form-check mb-3" key={index}>
-                          <ul className="list-group w-50">
-                            <li className="list-group-item">
-                              <input
-                                type="radio"
-                                className="form-check-input m-2"
-                                name={`question${currentQuestionIndex}`}
-                                value={option}
-                                checked={
-                                  selectedAnswers[
-                                    data[currentQuestionIndex]._id
-                                  ] === option
-                                }
-                                onChange={handleAnswerChange}
-                              />
-                              <label className="form-check-label">
-                                {option}
-                              </label>
-                            </li>
-                          </ul>
-                        </div>
-                      ))}
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div className="mb-3">
-              <Button
-                className="btn btn-danger me-2"
-                onClick={handlePreviousClick}
-                disabled={currentQuestionIndex === 0}
-                buttonText={"Previous"}
+          {currentQuestion && (
+            <>
+              <Exam
+                questionIndex={currentQuestionIndex}
+                question={currentQuestion.question}
+                options={currentQuestion.options}
+                selectedAnswer={selectedAnswers[data[currentQuestionIndex]._id]}
+                onAnswerChange={handleAnswerChange}
+                answerEdit={true}
               />
-              {currentQuestionIndex === data.length - 1 ? (
+              <div className="text-center w-50">
                 <Button
-                  className="btn btn-success"
-                  onClick={handleReviewClick}
-                  buttonText={"Review & Submit"}
+                  className="btn btn-danger me-2"
+                  onClick={handlePreviousClick}
+                  disabled={currentQuestionIndex === 0}
+                  buttonText={"Previous"}
                 />
-              ) : (
-                <Button
-                  className="btn btn-primary"
-                  onClick={handleNextClick}
-                  buttonText={"Next"}
-                />
-              )}
-            </div>
-            <ToastContainer autoClose={2000} theme="colored" />
-          </div>
+                {currentQuestionIndex === data.length - 1 ? (
+                  <Button
+                    className="btn btn-success"
+                    onClick={handleReviewClick}
+                    buttonText={"Review & Submit"}
+                  />
+                ) : (
+                  <Button
+                    className="btn btn-primary"
+                    onClick={handleNextClick}
+                    buttonText={"Next"}
+                  />
+                )}
+              </div>
+            </>
+          )}
+
+          <ToastContainer autoClose={2000} theme="colored" />
         </>
       )}
     </>
