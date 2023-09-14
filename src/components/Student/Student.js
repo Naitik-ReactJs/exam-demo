@@ -5,9 +5,10 @@ import Button from "../../reusable/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
-import { token } from "../../utils/Constants";
+
 import { ToastContainer, toast } from "react-toastify";
 const Student = () => {
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);

@@ -5,11 +5,10 @@ import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
 import { CreateExamInputForm, handleExamError } from "../../utils/Input";
 import ExamForm from "../../reusable/ExamForm";
-import { token } from "../../utils/Constants";
 
 const CreateExam = () => {
   const [loading, setLoading] = useState(false);
-
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const initialQuestions = Array.from({ length: 15 }, () => ({
     question: "",
     answer: "",

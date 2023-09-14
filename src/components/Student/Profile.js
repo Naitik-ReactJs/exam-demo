@@ -7,8 +7,9 @@ import { UserProfileInputForm } from "../../utils/Input";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
 import validateInput from "../../utils/Validation";
-import { token } from "../../utils/Constants";
+
 const Profile = () => {
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
     name: "",

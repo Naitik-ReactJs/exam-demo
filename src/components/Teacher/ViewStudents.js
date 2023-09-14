@@ -7,6 +7,7 @@ import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 const ViewStudents = () => {
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const navigate = useNavigate();
   const [studentList, setStudentList] = useState([]);
 
@@ -16,7 +17,7 @@ const ViewStudents = () => {
       const response = await apiAction({
         method: "get",
         url: "dashboard/Teachers/StudentForExam",
-        token: JSON.parse(localStorage.getItem("user-info"))?.token,
+        token: token,
         setLoading,
       });
 

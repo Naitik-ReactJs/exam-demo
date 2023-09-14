@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 const ViewStudentDetail = () => {
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const [loading, setLoading] = useState(false);
   const [studentDetail, setStudentDetail] = useState([]);
   const location = new URLSearchParams(useLocation().search);
@@ -24,7 +25,7 @@ const ViewStudentDetail = () => {
         const response = await apiAction({
           method: "get",
           url: "dashboard/Teachers/viewStudentDetail",
-          token: JSON.parse(localStorage.getItem("user-info"))?.token,
+          token: token,
           setLoading,
           id,
         });

@@ -4,21 +4,26 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "../../reusable/Button";
 import Loader from "../../reusable/Loader";
 import apiAction from "../../api/apiAction";
-import { useLocation } from "react-router-dom";
-import { token } from "../../utils/Constants";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ExamForStudent = () => {
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const [isEdit, setIsEdit] = useState(false);
+  const [answerEdit, setAnswerEdit] = useState({});
   const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
-
+  const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [data, setData] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState(
     new Array(data.length).fill("")
   );
-  const [isAnswerSelected, setIsAnswerSelected] = useState(false);
+  const currentQuestion = data[currentQuestionIndex];
+  const formData = Object.keys(selectedAnswers).map((questionId) => ({
+    question: questionId,
+    answer: selectedAnswers[questionId],
+  }));
   const fetchExam = async () => {
     try {
       const response = await apiAction({
@@ -59,10 +64,10 @@ const ExamForStudent = () => {
     const updatedSelectedAnswers = { ...selectedAnswers };
     updatedSelectedAnswers[questionId] = e.target.value;
     setSelectedAnswers(updatedSelectedAnswers);
-    setIsAnswerSelected(true);
+    console.log(questionId);
   };
 
-  const handleSubmit = () => {
+  const handleReviewClick = () => {
     const selectedAnswer = selectedAnswers[data[currentQuestionIndex]._id];
     if (selectedAnswer) {
       setIsEdit(true);
@@ -71,53 +76,87 @@ const ExamForStudent = () => {
     }
   };
 
-  const currentQuestion = data[currentQuestionIndex];
-  // const formData = Object.keys(selectedAnswers).map((questionId) => ({
-  //   question: questionId,
-  //   answer: selectedAnswers[questionId],
-  // }));
+  const handleEditAnswer = (id) => {
+    setAnswerEdit(() => ({ [id]: true }));
+  };
+  const handleSubmitExam = () => {
+    try {
+      apiAction({
+        method: "post",
+        url: "student/giveExam",
+        token: token,
+        id,
+        data: formData,
+        setLoading,
+      });
+      navigate("/student");
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
+  };
   if (loading) {
     return <Loader />;
   }
+
   return (
     <>
       {isEdit ? (
         <>
-          {data.map((item, index) => {
+          {data.map((item, questionIndex) => {
             return (
-              <div className="card-body">
+              <div className="card-body" key={questionIndex}>
                 {" "}
                 <div className="form-group w-50">
-                  <label className="mb-2">Question: {index + 1}</label>
+                  <label className="mb-2">Question: {questionIndex + 1}</label>
                   <h4 className="form-control">{item.question}</h4>
                 </div>
-                {item.options.map((option, index) => (
-                  <div className="form-check mb-3" key={index}>
-                    <ul className="list-group w-25">
-                      <li className="list-group-item">
-                        <input
-                          type="radio"
-                          className="form-check-input m-2"
-                          name={`question${currentQuestionIndex}`}
-                          value={option}
-                          checked={
-                            selectedAnswers[data[currentQuestionIndex]._id] ===
-                            option
-                          }
-                          onChange={handleAnswerChange}
-                        />
-                        <label className="form-check-label">{option}</label>
-                      </li>
-                    </ul>
-                  </div>
-                ))}
+                {item &&
+                  item.options.map((option, index) => (
+                    <div className="form-check mb-3" key={index}>
+                      <ul className="list-group w-50">
+                        <li className="list-group-item">
+                          <form>
+                            <input
+                              type="radio"
+                              className="form-check-input m-2"
+                              name={`question${index}`}
+                              value={option}
+                              checked={
+                                Object.values(selectedAnswers)[
+                                  questionIndex
+                                ] === option
+                              }
+                              onChange={(e) => {
+                                const questionId = data[questionIndex]._id;
+                                const updatedSelectedAnswers = {
+                                  ...selectedAnswers,
+                                };
+                                updatedSelectedAnswers[questionId] =
+                                  e.target.value;
+                                setSelectedAnswers(updatedSelectedAnswers);
+                              }}
+                              disabled={!answerEdit[questionIndex]}
+                            />
+                            <label className="form-check-label">{option}</label>
+                          </form>
+                        </li>
+                      </ul>
+                    </div>
+                  ))}
                 <Button
                   buttonText={"edit answer"}
                   className={"btn btn-danger mb-3"}
+                  onClick={() => handleEditAnswer(questionIndex)}
                 />
               </div>
             );
           })}
+          <Button
+            buttonText={"Submit"}
+            className={"btn btn-success"}
+            onClick={handleSubmitExam}
+          />
+          <pre>{JSON.stringify(formData, null, 2)}</pre>
         </>
       ) : (
         <>
@@ -172,9 +211,8 @@ const ExamForStudent = () => {
               {currentQuestionIndex === data.length - 1 ? (
                 <Button
                   className="btn btn-success"
-                  onClick={handleSubmit}
+                  onClick={handleReviewClick}
                   buttonText={"Review & Submit"}
-                  disabled={isAnswerSelected === "false"}
                 />
               ) : (
                 <Button
@@ -186,7 +224,6 @@ const ExamForStudent = () => {
             </div>
             <ToastContainer autoClose={2000} theme="colored" />
           </div>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
         </>
       )}
     </>

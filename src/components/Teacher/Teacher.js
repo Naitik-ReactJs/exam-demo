@@ -6,8 +6,9 @@ import "../../App.css";
 import Button from "../../reusable/Button";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { token } from "../../utils/Constants";
+
 const Teacher = () => {
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const navigate = useNavigate();
   const [viewExam, setViewExam] = useState([]);
   const [loading, setLoading] = useState(false);

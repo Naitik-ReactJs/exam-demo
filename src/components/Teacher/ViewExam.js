@@ -3,8 +3,9 @@ import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
-import { token } from "../../utils/Constants";
+
 const ViewExam = () => {
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");

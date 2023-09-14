@@ -9,8 +9,9 @@ import validateInput from "../../utils/Validation";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import Form from "../../reusable/UserForm";
-import { token } from "../../utils/Constants";
+
 const SignIn = () => {
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const role = JSON.parse(localStorage.getItem("user-info"))?.role;
   useEffect(() => {
     if (token && role) {

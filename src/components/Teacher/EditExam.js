@@ -6,8 +6,9 @@ import Button from "../../reusable/Button";
 import { useLocation } from "react-router-dom";
 import { CreateExamInputForm, handleExamError } from "../../utils/Input";
 import ExamForm from "../../reusable/ExamForm";
-import { token } from "../../utils/Constants";
+
 const EditExam = () => {
+  const token = JSON.parse(localStorage.getItem("user-info"))?.token;
   const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
