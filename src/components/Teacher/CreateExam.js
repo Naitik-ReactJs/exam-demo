@@ -3,7 +3,8 @@ import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
-import { CreateExamInputForm, handleExamError } from "../../utils/Input";
+import { CreateExamInputForm } from "../../utils/Input";
+import { handleExamError } from "../../utils/Validation";
 import ExamForm from "../../reusable/ExamForm";
 import { useNavigate } from "react-router-dom";
 

@@ -3,11 +3,13 @@ import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
-import { useLocation } from "react-router-dom";
-import { CreateExamInputForm, handleExamError } from "../../utils/Input";
+import { useLocation, useNavigate } from "react-router-dom";
+import { CreateExamInputForm } from "../../utils/Input";
+import { handleExamError } from "../../utils/Validation";
 import ExamForm from "../../reusable/ExamForm";
 
 const EditExam = () => {
+  const navigate = useNavigate();
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
@@ -142,7 +144,7 @@ const EditExam = () => {
     );
     if (error) {
       try {
-        const response = await apiAction({
+        apiAction({
           method: "put",
           url: "dashboard/Teachers/editExam",
           data: formData,
@@ -150,7 +152,7 @@ const EditExam = () => {
           token,
           id,
         });
-        toast.success(response.message);
+        navigate("/teacher");
       } catch (error) {
         toast.error(error);
       }

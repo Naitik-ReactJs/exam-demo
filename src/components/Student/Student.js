@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 const Student = () => {
+  const totalExamQuestion = 7;
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -64,7 +65,11 @@ const Student = () => {
                             <h6>Result: {resultData.resultStatus}</h6>
                             <p>Rank: {resultData.rank}</p>
                             <p>
-                              Score: {Math.round((resultData.score * 100) / 7)}%
+                              Score:{" "}
+                              {Math.round(
+                                (resultData.score * 100) / totalExamQuestion
+                              )}
+                              %
                             </p>
                           </div>
                         ))}
