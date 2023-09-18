@@ -24,7 +24,7 @@ const ExamForm = ({
                       className="form-check-input"
                       name={`question${currentQuestionIndex}`}
                       value={option}
-                      checked={field.answer === option}
+                      checked={field.answer && field.answer === option}
                       onChange={field.onChange}
                     />
                     <input
