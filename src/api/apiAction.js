@@ -1,15 +1,9 @@
 import api from "./api";
 import { toast } from "react-toastify";
 
-const apiAction = async ({
-  method,
-  url,
-  data,
-  setLoading,
-  token,
-  storageKey,
-  id,
-}) => {
+const apiAction = async ({ method, url, data, setLoading, storageKey, id }) => {
+  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
+  setLoading(true);
   try {
     const response = await api({
       method: method,

@@ -6,9 +6,14 @@ import "../../App.css";
 import Button from "../../reusable/Button";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Teacher = () => {
-  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const navigate = useNavigate();
   const [viewExam, setViewExam] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -17,7 +22,6 @@ const Teacher = () => {
       const response = await apiAction({
         method: "get",
         url: "dashboard/Teachers/viewExam",
-        token: token,
         setLoading,
       });
 
@@ -37,12 +41,10 @@ const Teacher = () => {
     navigate(`edit-exam?id=${id}`);
   };
   const handleDeleteExam = async (id) => {
-    toast.success("Please wait processing your request");
     try {
       const reponse = await apiAction({
         method: "delete",
         url: "dashboard/Teachers/deleteExam",
-        token: token,
         id,
         setLoading,
       });
@@ -53,68 +55,88 @@ const Teacher = () => {
     } catch (error) {
       toast.error("Error fetching data:");
     }
+    handleClose();
   };
   if (loading) {
     return <Loader />;
   }
 
   return (
-    <div className="container ms-0 py-5 fs-5">
-      {viewExam.length === 0 ? (
-        <Loader />
-      ) : (
-        <div className="container">
-          <div className="row d-flex justify-content-space-around">
-            <div className="col custom-display">
-              {viewExam.map((item, index) => (
-                <div key={index} className="w-50 card-design">
-                  <div>
-                    <div className="pb-2">
-                      <i className="pe-2 mr-2 bi bi-book"></i>
-                      Subject: {item.subjectName}
+    <>
+      <div className="container mt-4 text-center">
+        <div className="row">
+          {viewExam.map((item, index) => (
+            <div key={index} className=" col-lg-5 mb-5 w-50 exam-design">
+              <div className="row me-1">
+                <div className="card card-hover-effect">
+                  <div className="card-body">
+                    <div className="text-start fs-5 lead">
+                      <p className="card-title p-1">
+                        <i className="pe-2 mr-2 bi bi-book"></i>Subject:{" "}
+                        {item.subjectName}
+                      </p>
+                      <p className="card-title p-1">
+                        <i className="pe-2 mr-2 bi bi-envelope-at-fill"></i>
+                        Email: {item.email}
+                      </p>
+
+                      <h6 className="card-title p-1">
+                        <i className="pe-2 mr-2 bi bi-card-list"></i>Notes:
+                      </h6>
                     </div>
-                    <div className="pb-2">
-                      <i className="pe-2 mr-2 bi bi-envelope-at-fill"></i>
-                      E-mail: {item.email}
+                    <ul className="list-group">
+                      {item.notes.map((note, noteIndex) => (
+                        <li key={noteIndex} className="list-group-item">
+                          {note}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-4 text-center">
+                      <Button
+                        buttonText={"View Exam"}
+                        className={"btn btn-dark m-auto mb-2"}
+                        onClick={() => handleViewExam(item._id)}
+                      />
+                      <Button
+                        buttonText={"Edit Exam"}
+                        className={"btn btn-dark  m-auto mb-2 ms-2"}
+                        onClick={() => handleEditExam(item._id)}
+                      />
+                      <Button
+                        buttonText={"Delete Exam"}
+                        className={"btn btn-dark  m-auto mb-2 ms-2"}
+                        onClick={handleShow}
+                      />
+                      <Modal show={show} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Delete Exam</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          Woohoo, Are you sure you want to delete !
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            onClick={() => handleDeleteExam(item._id)}
+                            buttonText={"Yes ✅"}
+                            className="btn btn-outline-danger text-dark"
+                          />
+                          <Button
+                            onClick={handleClose}
+                            buttonText={"No ❌"}
+                            className="btn btn-outline-primary text-dark"
+                          />
+                        </Modal.Footer>
+                      </Modal>
                     </div>
-                    <div>
-                      <i className="pe-2 mr-2 bi bi-card-list"></i>Notes:{" "}
-                      <ul className="ps-5">
-                        {item.notes.map((note, index) => {
-                          return (
-                            <Fragment key={index}>
-                              <li>{note}</li>
-                            </Fragment>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <Button
-                      buttonText={"View Exam"}
-                      className={"btn btn-dark w-25 m-auto mb-2"}
-                      onClick={() => handleViewExam(item._id)}
-                    />
-                    <Button
-                      buttonText={"Edit Exam"}
-                      className={"btn btn-dark w-25 m-auto mb-2 ms-2"}
-                      onClick={() => handleEditExam(item._id)}
-                    />
-                    <Button
-                      buttonText={"Delete Exam"}
-                      className={"btn btn-dark w-25 m-auto mb-2 ms-2"}
-                      onClick={() => handleDeleteExam(item._id)}
-                    />
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      )}
+      </div>
       <ToastContainer autoClose={2000} theme="colored" />
-    </div>
+    </>
   );
 };
 

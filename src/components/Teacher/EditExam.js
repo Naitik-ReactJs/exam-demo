@@ -7,7 +7,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CreateExamInputForm } from "../../utils/Input";
 import { handleExamError } from "../../utils/Validation";
 import ExamForm from "../../reusable/ExamForm";
-
 const EditExam = () => {
   const navigate = useNavigate();
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
@@ -99,6 +98,7 @@ const EditExam = () => {
   const handlePreviousClick = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+      setFormErrors("");
     }
   };
 

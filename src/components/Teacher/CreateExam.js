@@ -11,11 +11,10 @@ import { useNavigate } from "react-router-dom";
 const CreateExam = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const initialQuestions = Array.from({ length: 15 }, () => ({
-    question: "",
+    question: "demo",
     answer: "",
-    options: ["", "", "", ""],
+    options: ["1", "2", "3", "4"],
   }));
   const [questions, setQuestions] = useState(initialQuestions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -24,11 +23,11 @@ const CreateExam = () => {
     notes: "",
     subjectName: "",
   });
-
+  const { notes } = examData;
   const formData = {
     subjectName: examData.subjectName,
     questions: questions,
-    notes: [examData.notes],
+    notes: [notes],
   };
 
   const [formErrors, setFormErrors] = useState({
@@ -36,15 +35,23 @@ const CreateExam = () => {
     questionError: "",
     optionError: "",
     selectedAnsError: "",
+    notesError: "",
   });
-
+  const {
+    subjectError,
+    questionError,
+    optionError,
+    selectedAnsError,
+    notesError,
+  } = formErrors;
   const handleNextClick = () => {
     const error = handleExamError(
       setFormErrors,
       questions,
       currentQuestionIndex,
       examData,
-      selectedAnswers
+      selectedAnswers,
+      notes
     );
     if (error) {
       if (currentQuestionIndex < 14) {
@@ -57,6 +64,7 @@ const CreateExam = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
     }
+    setFormErrors("");
   };
 
   const handleAnswerChange = (e) => {
@@ -108,19 +116,22 @@ const CreateExam = () => {
       questions,
       currentQuestionIndex,
       examData,
-      selectedAnswers
+      selectedAnswers,
+      notes
     );
+
     if (error) {
       setLoading(true);
       try {
-        apiAction({
+        const response = await apiAction({
           method: "post",
           url: "dashboard/Teachers/Exam",
           data: formData,
           setLoading,
-          token,
         });
-        navigate("/teacher");
+        if (response.statusCode === 200) {
+          navigate("/teacher");
+        }
       } catch (error) {
         toast.error(error.message);
       }
@@ -139,10 +150,12 @@ const CreateExam = () => {
     handleQuestionChange,
     handleAnswerChange,
     selectedAnswers,
-    formErrors.subjectError,
-    formErrors.questionError,
-    formErrors.optionError,
-    formErrors.selectedAnsError
+    subjectError,
+    questionError,
+    optionError,
+    selectedAnsError,
+    notesError,
+    handleNotesChange
   );
 
   return (
@@ -168,13 +181,6 @@ const CreateExam = () => {
         />
         {currentQuestionIndex === 14 ? (
           <>
-            <label className="mb-2 d-block mt-4">Notes:</label>
-            <textarea
-              className="form-control mb-3"
-              placeholder="Notes for this Exam..."
-              onChange={handleNotesChange}
-              value={examData.notes}
-            />
             <Button
               className="btn btn-success"
               onClick={handleSubmit}

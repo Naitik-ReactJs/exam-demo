@@ -34,35 +34,39 @@ const ViewExam = () => {
     return <Loader />;
   }
   return (
-    <div className="container p-3 w-75">
-      <table className="table table-bordered table-hover">
-        <thead>
-          <tr>
-            {tableHeaders.map((header, index) => (
-              <th key={index}>{header}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {tableData &&
-            tableData.map((question, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{question.question}</td>
-                <td>
-                  <ul className="list-group">
-                    {question.options.map((option, optionIndex) => (
-                      <li className="list-group-item" key={optionIndex}>
-                        {option}
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-                <td>{question.answer}</td>
+    <div className="container p-3 ">
+      <div className="row">
+        <div className="col-lg-10">
+          <table className="table table-bordered table-hover">
+            <thead>
+              <tr>
+                {tableHeaders.map((header, index) => (
+                  <th key={index}>{header}</th>
+                ))}
               </tr>
-            ))}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {tableData &&
+                tableData.map((question, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{question.question}</td>
+                    <td>
+                      <ul className="list-group">
+                        {question.options.map((option, optionIndex) => (
+                          <li className="list-group-item" key={optionIndex}>
+                            {option}
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td>{question.answer}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );

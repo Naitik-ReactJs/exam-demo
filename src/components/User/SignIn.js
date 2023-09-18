@@ -52,7 +52,6 @@ const SignIn = () => {
     if (Object.values(formData).some((value) => value === "")) {
       toast.error("Please enter your details");
     } else {
-      setLoading(true);
       const response = await apiAction({
         method: "post",
         url: "users/Login",

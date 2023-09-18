@@ -7,7 +7,6 @@ import apiAction from "../../api/apiAction";
 import { useLocation, useNavigate } from "react-router-dom";
 import Exam from "./Exam";
 const GiveExam = () => {
-  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const [isEdit, setIsEdit] = useState(false);
   const [answerEdit, setAnswerEdit] = useState({});
   const [loading, setLoading] = useState(true);
@@ -29,7 +28,6 @@ const GiveExam = () => {
       const response = await apiAction({
         method: "get",
         url: "student/examPaper",
-        token: token,
         id,
         setLoading,
       });
@@ -83,7 +81,6 @@ const GiveExam = () => {
       apiAction({
         method: "post",
         url: "student/giveExam",
-        token: token,
         id,
         data: formData,
         setLoading,

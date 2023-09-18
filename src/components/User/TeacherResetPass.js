@@ -73,7 +73,7 @@ const UserResetPassword = () => {
   }
   return (
     <div className="d-flex align-items-center justify-content-center user-resetpass">
-      <div className="container p-5 w-50 box-shadow">
+      <div className="container p-5 box-shadow w-50">
         <h2 className="text-center p-3">Reset Password</h2>
         <Form inputFields={input} />
         <div className="text-center mt-4">

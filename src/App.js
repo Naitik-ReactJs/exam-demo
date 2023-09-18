@@ -10,21 +10,23 @@ import SignIn from "./components/user/SignIn";
 import ForgotPassword from "./components/user/ForgotPassword";
 import SignUp from "./components/user/SignUp";
 import NotFound from "./reusable/NotFound";
-import Dashboard from "./reusable/Dashboard";
+
 import ProtectedRouteTeacher from "./routes/ProtectedRouteTeacher";
 import ProtectedRouteStudent from "./routes/ProtectedRouteStudent";
 import ViewStudents from "./components/teacher/ViewStudents";
 import CreateExam from "./components/teacher/CreateExam";
 import ViewExam from "./components/teacher/ViewExam";
 import EditExam from "./components/teacher/EditExam";
-import { teacherSideBarProps } from "./utils/Constants";
-import { studentSideBarProps } from "./utils/Constants";
+
 import Teacher from "./components/teacher/Teacher";
 import ViewStudentDetail from "./components/teacher/ViewStudentDetail";
-import UserResetPassword from "./components/user/UserResetPassword";
+import TeacherResetPass from "./components/user/TeacherResetPass";
 import Student from "./components/student/Student";
 import Profile from "./components/student/Profile";
 import GiveExam from "./components/student/GiveExam";
+import Navbar from "./reusable/NavBar";
+import { studentSideBarProps, teacherSideBarProps } from "./utils/Constants";
+
 function App() {
   return (
     <Router>
@@ -43,9 +45,9 @@ function App() {
           <Route
             index
             element={
-              <Dashboard
+              <Navbar
                 navigateTo="teacher"
-                props={teacherSideBarProps}
+                navBarProps={teacherSideBarProps}
                 component={<Teacher />}
               />
             }
@@ -53,9 +55,9 @@ function App() {
           <Route
             path="view-students"
             element={
-              <Dashboard
+              <Navbar
                 navigateTo="teacher"
-                props={teacherSideBarProps}
+                navBarProps={teacherSideBarProps}
                 component={<ViewStudents />}
               />
             }
@@ -63,9 +65,9 @@ function App() {
           <Route
             path="create-exam"
             element={
-              <Dashboard
+              <Navbar
                 navigateTo="teacher"
-                props={teacherSideBarProps}
+                navBarProps={teacherSideBarProps}
                 component={<CreateExam />}
               />
             }
@@ -73,9 +75,9 @@ function App() {
           <Route
             path="view-exam"
             element={
-              <Dashboard
+              <Navbar
                 navigateTo="teacher"
-                props={teacherSideBarProps}
+                navBarProps={teacherSideBarProps}
                 component={<ViewExam />}
               />
             }
@@ -83,9 +85,9 @@ function App() {
           <Route
             path="edit-exam"
             element={
-              <Dashboard
+              <Navbar
                 navigateTo="teacher"
-                props={teacherSideBarProps}
+                navBarProps={teacherSideBarProps}
                 component={<EditExam />}
               />
             }
@@ -93,9 +95,9 @@ function App() {
           <Route
             path="view-students/result"
             element={
-              <Dashboard
+              <Navbar
                 navigateTo="teacher"
-                props={teacherSideBarProps}
+                navBarProps={teacherSideBarProps}
                 component={<ViewStudentDetail />}
               />
             }
@@ -103,10 +105,10 @@ function App() {
           <Route
             path="profile"
             element={
-              <Dashboard
+              <Navbar
                 navigateTo="teacher"
-                props={teacherSideBarProps}
-                component={<UserResetPassword />}
+                navBarProps={teacherSideBarProps}
+                component={<TeacherResetPass />}
               />
             }
           />
@@ -124,9 +126,9 @@ function App() {
           <Route
             index
             element={
-              <Dashboard
+              <Navbar
                 navigateTo="student"
-                props={studentSideBarProps}
+                navBarProps={studentSideBarProps}
                 component={<Student />}
               />
             }
@@ -134,9 +136,9 @@ function App() {
           <Route
             path="profile"
             element={
-              <Dashboard
+              <Navbar
                 navigateTo="student"
-                props={studentSideBarProps}
+                navBarProps={studentSideBarProps}
                 component={<Profile />}
               />
             }
@@ -144,9 +146,9 @@ function App() {
           <Route
             path="exam"
             element={
-              <Dashboard
+              <Navbar
                 navigateTo="student"
-                props={studentSideBarProps}
+                navBarProps={studentSideBarProps}
                 component={<GiveExam />}
               />
             }

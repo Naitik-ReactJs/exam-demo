@@ -53,7 +53,8 @@ export const handleExamError = (
   questions,
   currentQuestionIndex,
   examData,
-  selectedAnswers
+  selectedAnswers,
+  notes
 ) => {
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -63,17 +64,13 @@ export const handleExamError = (
       subjectError: "Subject is required",
     }));
     return false;
-  }
-
-  if (!currentQuestion.question) {
+  } else if (!currentQuestion.question) {
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       questionError: "Question is required",
     }));
     return false;
-  }
-
-  if (
+  } else if (
     !currentQuestion.options.map((item) => item).every((item) => item !== "")
   ) {
     setFormErrors((prevErrors) => ({
@@ -81,12 +78,16 @@ export const handleExamError = (
       optionError: "Options are required",
     }));
     return false;
-  }
-
-  if (!selectedAnswers[currentQuestionIndex]) {
+  } else if (!selectedAnswers[currentQuestionIndex]) {
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       selectedAnsError: "Answer is required",
+    }));
+    return false;
+  } else if (notes === "" && currentQuestionIndex === 14) {
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      notesError: "notes is required",
     }));
     return false;
   }
