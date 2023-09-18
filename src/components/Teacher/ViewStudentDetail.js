@@ -39,18 +39,20 @@ const ViewStudentDetail = () => {
   }
 
   return (
-    <div className="container py-5 ms-5">
+    <div className="container">
       {studentDetail.length === 0 ? (
         <Loader />
       ) : (
-        <div>
+        <div className="container">
           <h1 className="my-4">Student Results</h1>
-          <div className="table-responsive">
+          <div className="table-responsive-md">
             <table className="table table-bordered table-hover p-2">
               <thead className="thead-dark">
                 <tr>
                   {tableHeading.map((heading, index) => (
-                    <th key={index}>{heading}</th>
+                    <th scope="col" key={index}>
+                      {heading}
+                    </th>
                   ))}
                 </tr>
               </thead>

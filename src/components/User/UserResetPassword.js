@@ -9,6 +9,7 @@ import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import Form from "../../reusable/UserForm";
 import "../../App.css";
+
 const UserResetPassword = () => {
   const [loading, setLoading] = useState(false);
 
@@ -72,20 +73,22 @@ const UserResetPassword = () => {
     return <Loader />;
   }
   return (
-    <div className="d-flex align-items-center justify-content-center user-resetpass">
-      <div className="container p-5 box-shadow w-50">
-        <h2 className="text-center p-3">Reset Password</h2>
-        <Form inputFields={input} />
-        <div className="text-center mt-4">
-          <Button
-            className={"btn btn-dark"}
-            type="submit"
-            buttonText={"Submit"}
-            onClick={handleSubmit}
-            disabled={!Object.values(formErrors).every((item) => item === "")}
-          ></Button>
+    <div className="container ">
+      <div className="d-flex align-items-center justify-content-center user-resetpass">
+        <div className="p-5 box-shadow w-75">
+          <h2 className="text-center p-3">Reset Password</h2>
+          <Form inputFields={input} />
+          <div className="text-center">
+            <Button
+              className={"btn btn-dark mt-2"}
+              type="submit"
+              buttonText={"Submit"}
+              onClick={handleSubmit}
+              disabled={!Object.values(formErrors).every((item) => item === "")}
+            ></Button>
+          </div>
+          <ToastContainer autoClose={2000} theme="colored" />
         </div>
-        <ToastContainer autoClose={2000} theme="colored" />
       </div>
     </div>
   );

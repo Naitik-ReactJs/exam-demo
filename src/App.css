@@ -59,6 +59,7 @@
   min-height: 70vh;
 }
 
+/* dialog box */
 .switch {
   position: relative;
   display: inline-block;
@@ -108,4 +109,12 @@ input:checked+.slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
+}
+
+/* dialog box end */
+@media only screen and (max-width: 767px) {
+  .exam-design {
+    min-width: 100%;
+    margin-left: 0.5rem;
+  }
 }

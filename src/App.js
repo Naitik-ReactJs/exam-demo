@@ -20,7 +20,7 @@ import EditExam from "./components/teacher/EditExam";
 
 import Teacher from "./components/teacher/Teacher";
 import ViewStudentDetail from "./components/teacher/ViewStudentDetail";
-import TeacherResetPass from "./components/user/TeacherResetPass";
+import UserResetPassword from "./components/user/UserResetPassword";
 import Student from "./components/student/Student";
 import Profile from "./components/student/Profile";
 import GiveExam from "./components/student/GiveExam";
@@ -108,7 +108,7 @@ function App() {
               <Navbar
                 navigateTo="teacher"
                 navBarProps={teacherSideBarProps}
-                component={<TeacherResetPass />}
+                component={<UserResetPassword />}
               />
             }
           />

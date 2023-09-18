@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import StudentResetpass from "../user/StudentResetpass";
+import UserResetPassword from "../user/UserResetPassword";
 import apiAction from "../../api/apiAction";
 import "../../App.css";
 import Loader from "../../reusable/Loader";
@@ -138,8 +138,8 @@ const Profile = () => {
               ></Button>
             </div>
           ) : (
-            <div className="col-md-10">
-              <StudentResetpass />
+            <div className="col-md">
+              <UserResetPassword />
             </div>
           )}
         </div>

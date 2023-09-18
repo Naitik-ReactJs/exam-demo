@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -66,7 +66,7 @@ const Teacher = () => {
       <div className="container mt-4 text-center">
         <div className="row">
           {viewExam.map((item, index) => (
-            <div key={index} className=" col-lg-5 mb-5 w-50 exam-design">
+            <div key={index} className="col-lg-6  mb-5 w-50 exam-design">
               <div className="row me-1">
                 <div className="card card-hover-effect">
                   <div className="card-body">
