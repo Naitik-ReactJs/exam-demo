@@ -53,8 +53,7 @@ export const handleExamError = (
   questions,
   currentQuestionIndex,
   examData,
-  selectedAnswers,
-  notes
+  selectedAnswers
 ) => {
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -99,12 +98,6 @@ export const handleExamError = (
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       selectedAnsError: "Answer is required",
-    }));
-    return false;
-  } else if (notes === "" && currentQuestionIndex === 14) {
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      notesError: "notes is required",
     }));
     return false;
   }

@@ -9,6 +9,9 @@ import ExamForm from "../../reusable/ExamForm";
 import { useNavigate } from "react-router-dom";
 
 const CreateExam = () => {
+  const [notesText, setNotesText] = useState("");
+  const [addNotes, setAddNotes] = useState([]);
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const initialQuestions = Array.from({ length: 15 }, () => ({
@@ -20,14 +23,13 @@ const CreateExam = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState(Array(15).fill(""));
   const [examData, setExamData] = useState({
-    notes: "",
     subjectName: "",
   });
-  const { notes } = examData;
+  const { subjectName } = examData;
   const formData = {
-    subjectName: examData.subjectName,
+    subjectName: subjectName,
     questions: questions,
-    notes: [notes],
+    notes: [...addNotes],
   };
 
   const [formErrors, setFormErrors] = useState({
@@ -51,7 +53,7 @@ const CreateExam = () => {
       currentQuestionIndex,
       examData,
       selectedAnswers,
-      notes
+      addNotes
     );
     if (error) {
       if (currentQuestionIndex < 14) {
@@ -92,13 +94,6 @@ const CreateExam = () => {
     }));
   };
 
-  const handleNotesChange = (e) => {
-    setExamData({
-      ...examData,
-      notes: e.target.value,
-    });
-  };
-
   const handleSubjectNameChange = (e) => {
     setExamData({
       ...examData,
@@ -115,9 +110,7 @@ const CreateExam = () => {
       setFormErrors,
       questions,
       currentQuestionIndex,
-      examData,
-      selectedAnswers,
-      notes
+      examData
     );
 
     if (error) {
@@ -153,11 +146,48 @@ const CreateExam = () => {
     subjectError,
     questionError,
     optionError,
-    selectedAnsError,
-    notesError,
-    handleNotesChange
+    selectedAnsError
   );
 
+  const handleNotesChange = (e) => {
+    const { name, value } = e.target;
+    setNotesText(value);
+    setExamData({
+      ...examData,
+      notes: e.target.value,
+    });
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      notesError: "",
+    }));
+  };
+  const handleAddNotes = () => {
+    const filtered = addNotes.filter(
+      (item, index) => item && item === notesText
+    );
+    console.log(filtered);
+    if (notesText.trim() === "") {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        notesError: "notes is required",
+      }));
+    } else if (filtered.length !== 0) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        notesError: "error notes same",
+      }));
+
+      return false;
+    } else {
+      setAddNotes([...addNotes, notesText]);
+      setNotesText("");
+    }
+  };
+  const handleDeleteNotes = (index) => {
+    const newNotes = [...addNotes];
+    newNotes.splice(index, 1);
+    setAddNotes(newNotes);
+  };
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Create Exam</h2>
@@ -170,6 +200,44 @@ const CreateExam = () => {
           setQuestions={setQuestions}
           setFormErrors={setFormErrors}
         />
+        <div>
+          <label>Notes:</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter notes at last question"
+            value={notesText}
+            name="notes"
+            onChange={handleNotesChange}
+          />
+          {notesError && (
+            <div className="alert text-center alert-danger w-75 mt-4">
+              {notesError}{" "}
+            </div>
+          )}
+          <Button
+            className="btn btn-primary mt-2"
+            // disabled={currentQuestionIndex !== 14}
+            buttonText={"Add Another note"}
+            onClick={handleAddNotes}
+          />
+          {addNotes.map((item, index) => {
+            return (
+              <li key={index}>
+                {item}{" "}
+                <span>
+                  {" "}
+                  <Button
+                    className="btn btn-sm mt-2 mx-5"
+                    // disabled={currentQuestionIndex !== 14}
+                    buttonText={"❌"}
+                    onClick={(index) => handleDeleteNotes(index)}
+                  />
+                </span>{" "}
+              </li>
+            );
+          })}
+        </div>
       </div>
 
       <div className="mb-3">
@@ -194,6 +262,7 @@ const CreateExam = () => {
             buttonText={"Next"}
           />
         )}
+        <pre>{JSON.stringify(addNotes)}</pre>
       </div>
       <ToastContainer autoClose={2000} theme="colored" />
     </div>

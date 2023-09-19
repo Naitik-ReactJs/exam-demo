@@ -173,9 +173,7 @@ export const CreateExamInputForm = (
   subjectError,
   questionError,
   optionError,
-  selectedAnsError,
-  notesError,
-  handleNotesChange
+  selectedAnsError
 ) => {
   return [
     {
@@ -210,15 +208,6 @@ export const CreateExamInputForm = (
       value: selectedAnswers[currentQuestionIndex],
       readOnly: true,
       error: selectedAnsError,
-    },
-    {
-      label: "Notes",
-      type: "text",
-      value: examData.notes,
-      error: notesError,
-      disabled: currentQuestionIndex !== 14,
-      placeholder: "Notes available at last question",
-      onChange: handleNotesChange,
     },
   ];
 };
