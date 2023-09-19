@@ -5,11 +5,12 @@ const Exam = ({
   selectedAnswer,
   onAnswerChange,
   answerEdit,
+  totalQuestionCount,
 }) => (
-  <div className="container mt-5">
+  <div className="container mt-5 exam-responsive">
     <div className="card mb-4">
       <div className="card-body" key={questionIndex}>
-        <div className="form-group w-50">
+        <div className="form-group w-75 col-md-6">
           <label className="mb-2">Question: {questionIndex + 1}</label>
           <h4 className="form-control">{question}</h4>
         </div>
@@ -34,6 +35,11 @@ const Exam = ({
               </ul>
             </div>
           ))}
+      </div>
+      <div className="text-end m-2">
+        <label className="alert alert-danger">
+          {questionIndex + 1}/{totalQuestionCount}
+        </label>
       </div>
     </div>
   </div>

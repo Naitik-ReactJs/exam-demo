@@ -1,10 +1,16 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import Button from "./Button";
+import "bootstrap/dist/css/bootstrap.min.css";
+import DialogBox from "./DialogBox";
 
 const Navbar = ({ navBarProps, navigateTo, component }) => {
   const navigate = useNavigate();
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const handleLogOutClick = () => {
     navigate("/");
     sessionStorage.clear();
@@ -69,7 +75,16 @@ const Navbar = ({ navBarProps, navigateTo, component }) => {
             className={"btn btn-danger mt-3 mb-4 me-5"}
             type="submit"
             buttonText={"Log Out"}
-            onClick={handleLogOutClick}
+            onClick={handleShow}
+          />
+          <DialogBox
+            title={"Log out !!"}
+            body={"Woohoo, Are you sure you want to log out !"}
+            show={show}
+            handleClose={handleClose}
+            action={handleLogOutClick}
+            buttonText1={"Yes ✅"}
+            buttonText2={"No ❌"}
           />
         </div>
       </nav>

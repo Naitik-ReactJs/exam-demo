@@ -6,8 +6,8 @@ import "../../App.css";
 import Button from "../../reusable/Button";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import DialogBox from "../../reusable/DialogBox";
 
 const Teacher = () => {
   const [show, setShow] = useState(false);
@@ -107,26 +107,15 @@ const Teacher = () => {
                         className={"btn btn-dark  m-auto mb-2 ms-2"}
                         onClick={handleShow}
                       />
-                      <Modal show={show} onHide={handleClose}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Delete Exam</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          Woohoo, Are you sure you want to delete !
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button
-                            onClick={() => handleDeleteExam(item._id)}
-                            buttonText={"Yes ✅"}
-                            className="btn btn-outline-danger text-dark"
-                          />
-                          <Button
-                            onClick={handleClose}
-                            buttonText={"No ❌"}
-                            className="btn btn-outline-primary text-dark"
-                          />
-                        </Modal.Footer>
-                      </Modal>
+                      <DialogBox
+                        title={"Delete Exam!!"}
+                        body={"Woohoo, Are you sure you want to delete !"}
+                        show={show}
+                        handleClose={handleClose}
+                        action={() => handleDeleteExam(item._id)}
+                        buttonText1={"Yes ✅"}
+                        buttonText2={"No ❌"}
+                      />
                     </div>
                   </div>
                 </div>

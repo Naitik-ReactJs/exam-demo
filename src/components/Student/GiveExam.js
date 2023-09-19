@@ -5,6 +5,7 @@ import Button from "../../reusable/Button";
 import Loader from "../../reusable/Loader";
 import apiAction from "../../api/apiAction";
 import { useLocation, useNavigate } from "react-router-dom";
+import "../../App.css";
 import Exam from "./Exam";
 const GiveExam = () => {
   const [isEdit, setIsEdit] = useState(false);
@@ -18,6 +19,7 @@ const GiveExam = () => {
   const [selectedAnswers, setSelectedAnswers] = useState(
     new Array(data.length).fill("")
   );
+  const totalQuestionCount = data.map((item) => item.question).length;
   const currentQuestion = data[currentQuestionIndex];
   const formData = Object.keys(selectedAnswers).map((questionId) => ({
     question: questionId,
@@ -101,6 +103,7 @@ const GiveExam = () => {
           {data.map((item, questionIndex) => (
             <Fragment key={questionIndex}>
               <Exam
+                totalQuestionCount={totalQuestionCount}
                 key={questionIndex}
                 questionIndex={questionIndex}
                 question={item.question}
@@ -116,7 +119,7 @@ const GiveExam = () => {
                 }}
                 answerEdit={answerEdit[questionIndex]}
               />
-              <div className="text-center w-25">
+              <div className="text-center w-40 exam-responsive">
                 <Button
                   buttonText={"edit answer"}
                   className={"btn btn-danger mb-3"}
@@ -144,14 +147,16 @@ const GiveExam = () => {
                 selectedAnswer={selectedAnswers[data[currentQuestionIndex]._id]}
                 onAnswerChange={handleAnswerChange}
                 answerEdit={true}
+                totalQuestionCount={totalQuestionCount}
               />
-              <div className="text-center w-50">
+              <div className="text-center w-50 exam-responsive">
                 <Button
                   className="btn btn-danger me-2"
                   onClick={handlePreviousClick}
                   disabled={currentQuestionIndex === 0}
                   buttonText={"Previous"}
                 />
+
                 {currentQuestionIndex === data.length - 1 ? (
                   <Button
                     className="btn btn-success"
@@ -160,7 +165,7 @@ const GiveExam = () => {
                   />
                 ) : (
                   <Button
-                    className="btn btn-primary"
+                    className="btn btn-primary "
                     onClick={handleNextClick}
                     buttonText={"Next"}
                   />

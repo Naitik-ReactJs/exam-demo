@@ -44,8 +44,8 @@ const Student = () => {
             data.map((item, index) => (
               <div key={index} className=" col-lg-6 mb-5 w-50 exam-design">
                 <div className="row me-1">
-                  <div className="card card-hover-effect">
-                    <div className="card-body">
+                  <div className="card card-hover-effect ">
+                    <div className="card-body ">
                       <div className="text-start fs-5 lead">
                         <h5 className="card-text">
                           Subject :{item.subjectName}

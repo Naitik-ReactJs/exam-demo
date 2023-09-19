@@ -112,9 +112,21 @@ input:checked+.slider:before {
 }
 
 /* dialog box end */
+.w-40 {
+  width: 40%;
+}
+
+.exam-card {
+  min-width: 100%;
+}
+
 @media only screen and (max-width: 767px) {
   .exam-design {
     min-width: 100%;
     margin-left: 0.5rem;
+  }
+
+  .exam-responsive {
+    margin-left: 4.5rem !important;
   }
 }
