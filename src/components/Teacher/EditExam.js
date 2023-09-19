@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Button from "../../reusable/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CreateExamInputForm } from "../../utils/Input";
@@ -31,39 +31,31 @@ const EditExam = () => {
   });
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const fetchExamData = async () => {
-    try {
-      const response = await apiAction({
-        method: "get",
-        url: "dashboard/Teachers/viewExam",
-        token: token,
-        setLoading,
-      });
+    const response = await apiAction({
+      method: "get",
+      url: "dashboard/Teachers/viewExam",
+      token: token,
+      setLoading,
+    });
 
-      examData.subjectName = response.data.filter(
-        (item) => item._id === id
-      )[0]?.subjectName;
-      examData.notes = response.data
-        .filter((item) => item._id === id)[0]
-        ?.notes.join();
-    } catch (error) {
-      toast.error("Error fetching data:");
-    }
+    examData.subjectName = response.data.filter(
+      (item) => item._id === id
+    )[0]?.subjectName;
+    examData.notes = response.data
+      .filter((item) => item._id === id)[0]
+      ?.notes.join();
   };
   const fetchExamDetail = async () => {
-    try {
-      const response = await apiAction({
-        method: "get",
-        url: "dashboard/Teachers/examDetail",
-        data: formData,
-        setLoading,
-        token,
-        id,
-      });
-      setQuestions(response.data.questions);
-      setSelectedAnswers(response.data.questions.map((item) => item.answer));
-    } catch (error) {
-      toast.error(error);
-    }
+    const response = await apiAction({
+      method: "get",
+      url: "dashboard/Teachers/examDetail",
+      data: formData,
+      setLoading,
+      token,
+      id,
+    });
+    setQuestions(response.data.questions);
+    setSelectedAnswers(response.data.questions.map((item) => item.answer));
   };
 
   useEffect(() => {
@@ -143,22 +135,19 @@ const EditExam = () => {
       selectedAnswers
     );
     if (error) {
-      try {
-        apiAction({
-          method: "put",
-          url: "dashboard/Teachers/editExam",
-          data: formData,
-          setLoading,
-          token,
-          id,
-        });
+      const response = await apiAction({
+        method: "put",
+        url: "dashboard/Teachers/editExam",
+        data: formData,
+        setLoading,
+        token,
+        id,
+      });
+      if (response.statusCode === 200) {
         navigate("/teacher");
-      } catch (error) {
-        toast.error(error);
       }
     }
   };
-
   if (loading) {
     return <Loader />;
   }

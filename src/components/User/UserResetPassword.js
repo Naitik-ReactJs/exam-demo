@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import { ToastContainer, toast } from "react-toastify";
@@ -48,19 +48,14 @@ const UserResetPassword = () => {
       toast.error("Please enter your details");
     } else {
       setLoading(true);
-      try {
-        const response = await apiAction({
-          method: "post",
-          url: "users/ResetPassword",
-          data: formData,
-          token: JSON.parse(sessionStorage.getItem("user-info"))?.token,
-          setLoading,
-        });
-
-        toast.success(response.message);
-      } catch (error) {
-        toast.error("Error fetching data:");
-      }
+      const response = await apiAction({
+        method: "post",
+        url: "users/ResetPassword",
+        data: formData,
+        token: JSON.parse(sessionStorage.getItem("user-info"))?.token,
+        setLoading,
+      });
+      toast.success(response.message);
     }
   };
 

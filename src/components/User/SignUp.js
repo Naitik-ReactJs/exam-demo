@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import { ToastContainer, toast } from "react-toastify";
@@ -41,18 +41,15 @@ const SignUp = () => {
       return false;
     } else {
       setLoading(true);
-      try {
-        const response = await apiAction({
-          method: "post",
-          url: "users/SignUp",
-          data: formData,
-          navigate,
-          setLoading,
-        });
-        toast.success(response.message);
-      } catch (error) {
-        toast.error(error);
-      }
+
+      const response = await apiAction({
+        method: "post",
+        url: "users/SignUp",
+        data: formData,
+        navigate,
+        setLoading,
+      });
+      toast.success(response.message);
     }
     setSelectedRole("");
   };

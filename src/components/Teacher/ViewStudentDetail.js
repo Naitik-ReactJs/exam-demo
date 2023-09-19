@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { useLocation } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 const ViewStudentDetail = () => {
   const [loading, setLoading] = useState(false);
@@ -20,17 +20,13 @@ const ViewStudentDetail = () => {
 
   useEffect(() => {
     const showResult = async () => {
-      try {
-        const response = await apiAction({
-          method: "get",
-          url: "dashboard/Teachers/viewStudentDetail",
-          setLoading,
-          id,
-        });
-        setStudentDetail(response.data);
-      } catch (error) {
-        toast.error("Error fetching data:");
-      }
+      const response = await apiAction({
+        method: "get",
+        url: "dashboard/Teachers/viewStudentDetail",
+        setLoading,
+        id,
+      });
+      setStudentDetail(response.data);
     };
     showResult();
   }, [id]);

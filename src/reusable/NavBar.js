@@ -1,6 +1,5 @@
-import React, { Fragment, useState } from "react";
+import { Fragment, useState, useRef } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useRef } from "react";
 import Button from "./Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DialogBox from "./DialogBox";
@@ -26,7 +25,7 @@ const Navbar = ({ navbarTitle, navigateTo, component }) => {
   return (
     <div>
       {" "}
-      <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom p-3 fs-5">
+      <nav className="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom p-3 fs-5">
         <Link onClick={collapseNav} to="/" className="navbar-brand mx-5">
           <i className="fa-solid fa-book"></i> Exam-demo
         </Link>

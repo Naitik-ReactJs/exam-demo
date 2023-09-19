@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 const ViewStudents = () => {
   const navigate = useNavigate();
@@ -13,17 +13,13 @@ const ViewStudents = () => {
 
   const [loading, setLoading] = useState(false);
   const fetchStudentData = async () => {
-    try {
-      const response = await apiAction({
-        method: "get",
-        url: "dashboard/Teachers/StudentForExam",
-        setLoading,
-      });
+    const response = await apiAction({
+      method: "get",
+      url: "dashboard/Teachers/StudentForExam",
+      setLoading,
+    });
 
-      setStudentList(response.data);
-    } catch (error) {
-      toast.error("Error fetching data:");
-    }
+    setStudentList(response.data);
   };
   useEffect(() => {
     fetchStudentData();

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { useLocation } from "react-router-dom";
 
 const ViewExam = () => {
@@ -14,18 +14,14 @@ const ViewExam = () => {
   const tableHeaders = ["Sr. no", "Question", "Options", "Correct Answer"];
 
   const fetchExamDetail = async () => {
-    try {
-      const response = await apiAction({
-        method: "get",
-        url: "dashboard/Teachers/examDetail",
-        setLoading,
-        token,
-        id,
-      });
-      setTableData(response.data.questions);
-    } catch (error) {
-      toast.error(error);
-    }
+    const response = await apiAction({
+      method: "get",
+      url: "dashboard/Teachers/examDetail",
+      setLoading,
+      token,
+      id,
+    });
+    setTableData(response.data.questions);
   };
   useEffect(() => {
     fetchExamDetail();

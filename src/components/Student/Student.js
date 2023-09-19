@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import Button from "../../reusable/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 const Student = () => {
   const totalExamQuestion = 7;
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
@@ -14,17 +14,13 @@ const Student = () => {
   const [data, setData] = useState(null);
 
   const fetchAllExams = async () => {
-    try {
-      const response = await apiAction({
-        method: "get",
-        url: "student/studentExam",
-        token: token,
-        setLoading,
-      });
-      setData(response.data);
-    } catch (error) {
-      toast.error("Error fetching data:");
-    }
+    const response = await apiAction({
+      method: "get",
+      url: "student/studentExam",
+      token: token,
+      setLoading,
+    });
+    setData(response.data);
   };
   useEffect(() => {
     fetchAllExams();

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "../../reusable/Button";
@@ -26,17 +26,13 @@ const GiveExam = () => {
     answer: selectedAnswers[questionId],
   }));
   const fetchExam = async () => {
-    try {
-      const response = await apiAction({
-        method: "get",
-        url: "student/examPaper",
-        id,
-        setLoading,
-      });
-      setData(response.data);
-    } catch (error) {
-      toast.error("Error fetching data:", error);
-    }
+    const response = await apiAction({
+      method: "get",
+      url: "student/examPaper",
+      id,
+      setLoading,
+    });
+    setData(response.data);
   };
   useEffect(() => {
     fetchExam();
@@ -79,19 +75,18 @@ const GiveExam = () => {
     setAnswerEdit(() => ({ [id]: true }));
   };
   const handleSubmitExam = () => {
-    try {
-      apiAction({
-        method: "post",
-        url: "student/giveExam",
-        id,
-        data: formData,
-        setLoading,
-      });
+    const response = apiAction({
+      method: "post",
+      url: "student/giveExam",
+      id,
+      data: formData,
+      setLoading,
+    });
+    if (response.statusCode === 200) {
       navigate("/student");
-    } catch (error) {
-      toast.error("Error fetching data:", error);
     }
   };
+
   if (loading) {
     return <Loader />;
   }

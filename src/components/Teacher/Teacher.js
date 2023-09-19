@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../App.css";
 import Button from "../../reusable/Button";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DialogBox from "../../reusable/DialogBox";
@@ -18,17 +18,13 @@ const Teacher = () => {
   const [viewExam, setViewExam] = useState([]);
   const [loading, setLoading] = useState(false);
   const fetchExamData = async () => {
-    try {
-      const response = await apiAction({
-        method: "get",
-        url: "dashboard/Teachers/viewExam",
-        setLoading,
-      });
+    const response = await apiAction({
+      method: "get",
+      url: "dashboard/Teachers/viewExam",
+      setLoading,
+    });
 
-      setViewExam(response.data);
-    } catch (error) {
-      toast.error("Error fetching data:");
-    }
+    setViewExam(response.data);
   };
   useEffect(() => {
     fetchExamData();
@@ -41,20 +37,16 @@ const Teacher = () => {
     navigate(`edit-exam?id=${id}`);
   };
   const handleDeleteExam = async (id) => {
-    try {
-      const reponse = await apiAction({
-        method: "delete",
-        url: "dashboard/Teachers/deleteExam",
-        id,
-        setLoading,
-      });
-      if (reponse.statusCode === 200) {
-        fetchExamData();
-      }
-      setLoading(true);
-    } catch (error) {
-      toast.error("Error fetching data:");
+    const reponse = await apiAction({
+      method: "delete",
+      url: "dashboard/Teachers/deleteExam",
+      id,
+      setLoading,
+    });
+    if (reponse.statusCode === 200) {
+      fetchExamData();
     }
+    setLoading(true);
     handleClose();
   };
   if (loading) {

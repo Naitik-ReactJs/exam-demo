@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Button from "../../reusable/Button";
 import { CreateExamInputForm } from "../../utils/Input";
 import { handleExamError } from "../../utils/Validation";
@@ -17,7 +17,7 @@ const CreateExam = () => {
   const initialQuestions = Array.from({ length: 15 }, () => ({
     question: "",
     answer: "",
-    options: ["", "", "", ""],
+    options: ["1", "2", "3", "4"],
   }));
   const [questions, setQuestions] = useState(initialQuestions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -52,8 +52,7 @@ const CreateExam = () => {
       questions,
       currentQuestionIndex,
       examData,
-      selectedAnswers,
-      addNotes
+      selectedAnswers
     );
     if (error) {
       if (currentQuestionIndex < 14) {
@@ -105,6 +104,7 @@ const CreateExam = () => {
     }));
   };
 
+  const filteredNotes = addNotes.filter((item) => item && item === notesText);
   const handleSubmit = async () => {
     const error = handleExamError(
       setFormErrors,
@@ -112,21 +112,38 @@ const CreateExam = () => {
       currentQuestionIndex,
       examData
     );
+    if (addNotes.length === 0) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        notesError: "notes is required",
+      }));
+      return false;
+    } else if (filteredNotes.length !== 0) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        notesError: "error notes same",
+      }));
 
+      return false;
+    } else if (notesText) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        notesError: "Add notes first",
+      }));
+
+      return false;
+    }
     if (error) {
       setLoading(true);
-      try {
-        const response = await apiAction({
-          method: "post",
-          url: "dashboard/Teachers/Exam",
-          data: formData,
-          setLoading,
-        });
-        if (response.statusCode === 200) {
-          navigate("/teacher");
-        }
-      } catch (error) {
-        toast.error(error.message);
+
+      const response = await apiAction({
+        method: "post",
+        url: "dashboard/Teachers/Exam",
+        data: formData,
+        setLoading,
+      });
+      if (response.statusCode === 200) {
+        navigate("/teacher");
       }
     }
   };
@@ -162,16 +179,12 @@ const CreateExam = () => {
     }));
   };
   const handleAddNotes = () => {
-    const filtered = addNotes.filter(
-      (item, index) => item && item === notesText
-    );
-    console.log(filtered);
-    if (notesText.trim() === "") {
+    if (addNotes && notesText.trim() === "") {
       setFormErrors((prevErrors) => ({
         ...prevErrors,
         notesError: "notes is required",
       }));
-    } else if (filtered.length !== 0) {
+    } else if (filteredNotes.length !== 0) {
       setFormErrors((prevErrors) => ({
         ...prevErrors,
         notesError: "error notes same",
@@ -181,6 +194,10 @@ const CreateExam = () => {
     } else {
       setAddNotes([...addNotes, notesText]);
       setNotesText("");
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        notesError: "",
+      }));
     }
   };
   const handleDeleteNotes = (index) => {
@@ -207,6 +224,7 @@ const CreateExam = () => {
             className="form-control"
             placeholder="Enter notes at last question"
             value={notesText}
+            disabled={currentQuestionIndex !== 14}
             name="notes"
             onChange={handleNotesChange}
           />
@@ -217,26 +235,27 @@ const CreateExam = () => {
           )}
           <Button
             className="btn btn-primary mt-2"
-            // disabled={currentQuestionIndex !== 14}
-            buttonText={"Add Another note"}
+            disabled={currentQuestionIndex !== 14}
+            buttonText={"Add note"}
             onClick={handleAddNotes}
           />
-          {addNotes.map((item, index) => {
-            return (
-              <li key={index}>
-                {item}{" "}
-                <span>
-                  {" "}
-                  <Button
-                    className="btn btn-sm mt-2 mx-5"
-                    // disabled={currentQuestionIndex !== 14}
-                    buttonText={"❌"}
-                    onClick={(index) => handleDeleteNotes(index)}
-                  />
-                </span>{" "}
-              </li>
-            );
-          })}
+          {addNotes &&
+            addNotes.map((item, index) => {
+              return (
+                <li key={index}>
+                  {item}{" "}
+                  <span>
+                    {" "}
+                    <Button
+                      className="btn btn-sm mt-2 mx-5"
+                      disabled={currentQuestionIndex !== 14}
+                      buttonText={"❌"}
+                      onClick={(index) => handleDeleteNotes(index)}
+                    />
+                  </span>{" "}
+                </li>
+              );
+            })}
         </div>
       </div>
 
@@ -262,7 +281,7 @@ const CreateExam = () => {
             buttonText={"Next"}
           />
         )}
-        <pre>{JSON.stringify(addNotes)}</pre>
+        <pre>{JSON.stringify(formData, null, 2)}</pre>
       </div>
       <ToastContainer autoClose={2000} theme="colored" />
     </div>

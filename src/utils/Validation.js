@@ -85,21 +85,21 @@ export const handleExamError = (
     }));
     return false;
   }
-  if (
-    !currentQuestion.options.map((item) => item).every((item) => item !== "")
-  ) {
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      optionError: "Options are required",
-    }));
-    return false;
-  }
-  if (!selectedAnswers[currentQuestionIndex]) {
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      selectedAnsError: "Answer is required",
-    }));
-    return false;
-  }
+  // if (
+  //   !currentQuestion.options.map((item) => item).every((item) => item !== "")
+  // ) {
+  //   setFormErrors((prevErrors) => ({
+  //     ...prevErrors,
+  //     optionError: "Options are required",
+  //   }));
+  //   return false;
+  // }
+  // if (!selectedAnswers[currentQuestionIndex]) {
+  //   setFormErrors((prevErrors) => ({
+  //     ...prevErrors,
+  //     selectedAnsError: "Answer is required",
+  //   }));
+  //   return false;
+  // }
   return true;
 };
