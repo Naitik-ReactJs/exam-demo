@@ -39,7 +39,6 @@ const Profile = () => {
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
-    console.log("value,name", value, name);
     setData((prevData) => ({
       ...prevData,
       [name]: value,

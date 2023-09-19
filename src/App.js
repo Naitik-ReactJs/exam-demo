@@ -47,7 +47,7 @@ function App() {
             element={
               <Navbar
                 navigateTo="teacher"
-                navBarProps={teacherSideBarProps}
+                navbarTitle={teacherSideBarProps}
                 component={<Teacher />}
               />
             }
@@ -57,7 +57,7 @@ function App() {
             element={
               <Navbar
                 navigateTo="teacher"
-                navBarProps={teacherSideBarProps}
+                navbarTitle={teacherSideBarProps}
                 component={<ViewStudents />}
               />
             }
@@ -67,7 +67,7 @@ function App() {
             element={
               <Navbar
                 navigateTo="teacher"
-                navBarProps={teacherSideBarProps}
+                navbarTitle={teacherSideBarProps}
                 component={<CreateExam />}
               />
             }
@@ -77,7 +77,7 @@ function App() {
             element={
               <Navbar
                 navigateTo="teacher"
-                navBarProps={teacherSideBarProps}
+                navbarTitle={teacherSideBarProps}
                 component={<ViewExam />}
               />
             }
@@ -87,7 +87,7 @@ function App() {
             element={
               <Navbar
                 navigateTo="teacher"
-                navBarProps={teacherSideBarProps}
+                navbarTitle={teacherSideBarProps}
                 component={<EditExam />}
               />
             }
@@ -97,7 +97,7 @@ function App() {
             element={
               <Navbar
                 navigateTo="teacher"
-                navBarProps={teacherSideBarProps}
+                navbarTitle={teacherSideBarProps}
                 component={<ViewStudentDetail />}
               />
             }
@@ -107,7 +107,7 @@ function App() {
             element={
               <Navbar
                 navigateTo="teacher"
-                navBarProps={teacherSideBarProps}
+                navbarTitle={teacherSideBarProps}
                 component={<UserResetPassword />}
               />
             }
@@ -128,7 +128,7 @@ function App() {
             element={
               <Navbar
                 navigateTo="student"
-                navBarProps={studentSideBarProps}
+                navbarTitle={studentSideBarProps}
                 component={<Student />}
               />
             }
@@ -138,7 +138,7 @@ function App() {
             element={
               <Navbar
                 navigateTo="student"
-                navBarProps={studentSideBarProps}
+                navbarTitle={studentSideBarProps}
                 component={<Profile />}
               />
             }
@@ -148,7 +148,7 @@ function App() {
             element={
               <Navbar
                 navigateTo="student"
-                navBarProps={studentSideBarProps}
+                navbarTitle={studentSideBarProps}
                 component={<GiveExam />}
               />
             }

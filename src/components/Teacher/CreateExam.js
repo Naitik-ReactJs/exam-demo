@@ -12,7 +12,7 @@ const CreateExam = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const initialQuestions = Array.from({ length: 15 }, () => ({
-    question: "demo",
+    question: "",
     answer: "",
     options: ["", "", "", ""],
   }));

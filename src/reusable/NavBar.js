@@ -5,7 +5,7 @@ import Button from "./Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DialogBox from "./DialogBox";
 
-const Navbar = ({ navBarProps, navigateTo, component }) => {
+const Navbar = ({ navbarTitle, navigateTo, component }) => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
 
@@ -49,7 +49,7 @@ const Navbar = ({ navBarProps, navigateTo, component }) => {
         >
           <ul className="navbar-nav m-auto">
             {" "}
-            {Object.entries(navBarProps).map(([key, value], index) => {
+            {Object.entries(navbarTitle).map(([key, value], index) => {
               return (
                 <Fragment key={index}>
                   <li className="nav-item mx-5 ms-3 " key={index}>
@@ -74,11 +74,11 @@ const Navbar = ({ navBarProps, navigateTo, component }) => {
           <Button
             className={"btn btn-danger mt-3 mb-4 me-5"}
             type="submit"
-            buttonText={"Log Out"}
+            buttonText={"Log Out "}
             onClick={handleShow}
           />
           <DialogBox
-            title={"Log out !!"}
+            title={"Log out ExamDemo!!"}
             body={"Woohoo, Are you sure you want to log out !"}
             show={show}
             handleClose={handleClose}

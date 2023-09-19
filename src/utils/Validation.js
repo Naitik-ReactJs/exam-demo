@@ -58,19 +58,35 @@ export const handleExamError = (
 ) => {
   const currentQuestion = questions[currentQuestionIndex];
 
+  const currentQue = questions?.[currentQuestionIndex]?.question;
+  const filtered = questions?.filter(
+    (item, index) =>
+      item?.question &&
+      item?.question === currentQue &&
+      index !== currentQuestionIndex
+  );
+
   if (!examData.subjectName) {
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       subjectError: "Subject is required",
     }));
     return false;
-  } else if (!currentQuestion.question) {
+  }
+  if (!currentQuestion.question) {
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       questionError: "Question is required",
     }));
     return false;
-  } else if (
+  } else if (filtered.length !== 0) {
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      questionError: "Unique question is required",
+    }));
+    return false;
+  }
+  if (
     !currentQuestion.options.map((item) => item).every((item) => item !== "")
   ) {
     setFormErrors((prevErrors) => ({
@@ -78,7 +94,8 @@ export const handleExamError = (
       optionError: "Options are required",
     }));
     return false;
-  } else if (!selectedAnswers[currentQuestionIndex]) {
+  }
+  if (!selectedAnswers[currentQuestionIndex]) {
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       selectedAnsError: "Answer is required",
