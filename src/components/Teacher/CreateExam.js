@@ -17,7 +17,7 @@ const CreateExam = () => {
   const initialQuestions = Array.from({ length: 15 }, () => ({
     question: "",
     answer: "",
-    options: ["1", "2", "3", "4"],
+    options: ["", "", "", ""],
   }));
   const [questions, setQuestions] = useState(initialQuestions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);

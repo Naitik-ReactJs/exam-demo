@@ -11,7 +11,6 @@ import DialogBox from "../../reusable/DialogBox";
 
 const Teacher = () => {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
@@ -57,7 +56,7 @@ const Teacher = () => {
     <>
       <div className="container mt-4 text-center">
         <div className="row">
-          {viewExam.map((item, index) => (
+          {viewExam.map((exam, index) => (
             <div key={index} className="col-lg-6  mb-5 w-50 exam-design">
               <div className="row me-1">
                 <div className="card card-hover-effect">
@@ -65,11 +64,11 @@ const Teacher = () => {
                     <div className="text-start fs-5 lead">
                       <p className="card-title p-1">
                         <i className="pe-2 mr-2 bi bi-book"></i>Subject:{" "}
-                        {item.subjectName}
+                        {exam.subjectName}
                       </p>
                       <p className="card-title p-1">
                         <i className="pe-2 mr-2 bi bi-envelope-at-fill"></i>
-                        Email: {item.email}
+                        Email: {exam.email}
                       </p>
 
                       <h6 className="card-title p-1">
@@ -77,7 +76,7 @@ const Teacher = () => {
                       </h6>
                     </div>
                     <ul className="list-group">
-                      {item.notes.map((note, noteIndex) => (
+                      {exam.notes.map((note, noteIndex) => (
                         <li key={noteIndex} className="list-group-item">
                           {note}
                         </li>
@@ -87,24 +86,34 @@ const Teacher = () => {
                       <Button
                         buttonText={"View Exam"}
                         className={"btn btn-dark m-auto mb-2"}
-                        onClick={() => handleViewExam(item._id)}
+                        onClick={() => handleViewExam(exam._id)}
                       />
                       <Button
                         buttonText={"Edit Exam"}
                         className={"btn btn-dark  m-auto mb-2 ms-2"}
-                        onClick={() => handleEditExam(item._id)}
+                        onClick={() => handleEditExam(exam._id)}
                       />
                       <Button
                         buttonText={"Delete Exam"}
                         className={"btn btn-dark  m-auto mb-2 ms-2"}
                         onClick={handleShow}
                       />
+                      {/* {ExamButtons.map((exam, index) => (
+                        <>
+                          {" "}
+                          <Button
+                            buttonText={exam.buttonText}
+                            className={exam.className}
+                            onClick={exam.onClick}
+                          />
+                        </>
+                      ))} */}
                       <DialogBox
                         title={"Delete Exam!!"}
                         body={"Woohoo, Are you sure you want to delete !"}
                         show={show}
                         handleClose={handleClose}
-                        action={() => handleDeleteExam(item._id)}
+                        action={() => handleDeleteExam(exam._id)}
                         buttonText1={"Yes ✅"}
                         buttonText2={"No ❌"}
                       />

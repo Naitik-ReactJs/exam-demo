@@ -116,6 +116,10 @@ input:checked+.slider:before {
   width: 40%;
 }
 
+.w-60 {
+  width: 60%;
+}
+
 .exam-card {
   min-width: 100%;
 }
@@ -128,5 +132,27 @@ input:checked+.slider:before {
 
   .exam-responsive {
     margin-left: 4.5rem !important;
+  }
+
+  .w-responsive {
+    width: 30%;
+  }
+
+  .w-60 {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .w-responsive {
+    width: 70%;
+    margin: 1rem !important;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .w-responsive {
+    width: 30%;
+    margin: 1rem !important;
   }
 }

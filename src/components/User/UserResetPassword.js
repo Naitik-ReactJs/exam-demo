@@ -70,12 +70,12 @@ const UserResetPassword = () => {
   return (
     <div className="container ">
       <div className="d-flex align-items-center justify-content-center user-resetpass">
-        <div className="p-5 box-shadow w-75">
-          <h2 className="text-center p-3">Reset Password</h2>
+        <div className="p-5 box-shadow w-60">
+          <h2 className="text-center pb-5">Reset Password</h2>
           <Form inputFields={input} />
           <div className="text-center">
             <Button
-              className={"btn btn-dark mt-2"}
+              className={"btn btn-success mt-2"}
               type="submit"
               buttonText={"Submit"}
               onClick={handleSubmit}

@@ -26,7 +26,11 @@ const Navbar = ({ navbarTitle, navigateTo, component }) => {
     <div>
       {" "}
       <nav className="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom p-3 fs-5">
-        <Link onClick={collapseNav} to="/" className="navbar-brand mx-5">
+        <Link
+          onClick={collapseNav}
+          to={`/${JSON.parse(sessionStorage.getItem("user-info"))?.role}`}
+          className="navbar-brand mx-5"
+        >
           <i className="fa-solid fa-book"></i> Exam-demo
         </Link>
         <button
