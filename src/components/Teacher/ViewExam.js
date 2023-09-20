@@ -21,7 +21,7 @@ const ViewExam = () => {
       token,
       id,
     });
-    setTableData(response.data.questions);
+    setTableData(response.data?.questions);
   };
   useEffect(() => {
     fetchExamDetail();

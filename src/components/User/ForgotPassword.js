@@ -43,13 +43,16 @@ const ForgotPassword = () => {
       toast.error("Please enter your details");
     } else {
       setLoading(true);
-      apiAction({
+      const response = await apiAction({
         method: "post",
         url: "users/ForgotPassword",
         data: formData,
         setLoading,
         navigate,
       });
+      if (response.statusCode === 200) {
+        toast.success(response.message);
+      }
     }
   };
   const input = InputForgotPassForm(email, handleInputChange);

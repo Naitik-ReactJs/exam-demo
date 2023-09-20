@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -51,6 +51,23 @@ const Teacher = () => {
   if (loading) {
     return <Loader />;
   }
+  const examActionButtons = [
+    {
+      buttonText: "View Exam",
+      className: "btn btn-dark m-auto mb-2",
+      onClick: (id) => handleViewExam(id),
+    },
+    {
+      buttonText: "Edit Exam",
+      className: "btn btn-dark m-auto mb-2",
+      onClick: (id) => handleEditExam(id),
+    },
+    {
+      buttonText: "Delete Exam",
+      className: "btn btn-dark m-auto mb-2",
+      onClick: handleShow,
+    },
+  ];
 
   return (
     <>
@@ -83,31 +100,16 @@ const Teacher = () => {
                       ))}
                     </ul>
                     <div className="mt-4 text-center">
-                      <Button
-                        buttonText={"View Exam"}
-                        className={"btn btn-dark m-auto mb-2"}
-                        onClick={() => handleViewExam(exam._id)}
-                      />
-                      <Button
-                        buttonText={"Edit Exam"}
-                        className={"btn btn-dark  m-auto mb-2 ms-2"}
-                        onClick={() => handleEditExam(exam._id)}
-                      />
-                      <Button
-                        buttonText={"Delete Exam"}
-                        className={"btn btn-dark  m-auto mb-2 ms-2"}
-                        onClick={handleShow}
-                      />
-                      {/* {ExamButtons.map((exam, index) => (
-                        <>
+                      {examActionButtons.map((button, index) => (
+                        <Fragment key={index}>
                           {" "}
                           <Button
-                            buttonText={exam.buttonText}
-                            className={exam.className}
-                            onClick={exam.onClick}
+                            buttonText={button.buttonText}
+                            className={button.className}
+                            onClick={() => button.onClick(exam._id)}
                           />
-                        </>
-                      ))} */}
+                        </Fragment>
+                      ))}
                       <DialogBox
                         title={"Delete Exam!!"}
                         body={"Woohoo, Are you sure you want to delete !"}

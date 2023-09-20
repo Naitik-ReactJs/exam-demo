@@ -9,7 +9,7 @@ import apiAction from "../../api/apiAction";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../reusable/Loader";
 import Form from "../../reusable/UserForm";
-
+import "../../App.css";
 const SignUp = () => {
   const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState("");
@@ -49,7 +49,9 @@ const SignUp = () => {
         navigate,
         setLoading,
       });
-      toast.success(response.message);
+      if (response.statusCode === 200) {
+        toast.success(response.message);
+      }
     }
     setSelectedRole("");
   };
@@ -87,8 +89,8 @@ const SignUp = () => {
     return <Loader />;
   }
   return (
-    <div className="d-flex align-items-center justify-content-center min-vh-100 ">
-      <div className="container p-5 w-50 mb-5 box-shadow">
+    <div className="d-flex align-items-center justify-content-center min-vh-100 m-3 m-md-0 ">
+      <div className=" p-5 w-40  box-shadow ">
         <Form
           handleRadioChange={handleRadioChange}
           inputFields={input}

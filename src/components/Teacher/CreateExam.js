@@ -17,7 +17,7 @@ const CreateExam = () => {
   const initialQuestions = Array.from({ length: 15 }, () => ({
     question: "",
     answer: "",
-    options: ["", "", "", ""],
+    options: ["1", "2", "3", "4"],
   }));
   const [questions, setQuestions] = useState(initialQuestions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -253,6 +253,7 @@ const CreateExam = () => {
                       onClick={(index) => handleDeleteNotes(index)}
                     />
                   </span>{" "}
+                  {index}
                 </li>
               );
             })}
@@ -281,7 +282,6 @@ const CreateExam = () => {
             buttonText={"Next"}
           />
         )}
-        <pre>{JSON.stringify(formData, null, 2)}</pre>
       </div>
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
