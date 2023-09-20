@@ -1,29 +1,22 @@
 import { useEffect, useState } from "react";
-import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import Button from "../../reusable/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import fetchAllExams from "../../redux/actions/AllExam";
 const Student = () => {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.allExamContainer);
+
   const totalExamQuestion = 7;
-  const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(null);
 
-  const fetchAllExams = async () => {
-    const response = await apiAction({
-      method: "get",
-      url: "student/studentExam",
-      token: token,
-      setLoading,
-    });
-    setData(response.data);
-  };
   useEffect(() => {
-    fetchAllExams();
+    dispatch(fetchAllExams(setLoading));
   }, []);
   if (loading) {
     return <Loader />;
