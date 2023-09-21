@@ -8,12 +8,12 @@ import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DialogBox from "../../reusable/DialogBox";
-import fetchTeacherExam from "../../redux/teacher/actions/TeacherExam";
+import fetchTeacherExam from "../../redux/teacher/actions/ViewTeacherExam";
 import { useDispatch, useSelector } from "react-redux";
 
 const Teacher = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.teacherExamContainer);
+  const exams = useSelector((state) => state.teacherExamContainer);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -69,8 +69,8 @@ const Teacher = () => {
     <>
       <div className="container mt-4 text-center">
         <div className="row">
-          {data &&
-            data.map((exam, index) => (
+          {exams &&
+            exams.map((exam, index) => (
               <div key={index} className="col-lg-6  mb-5 w-50 exam-design">
                 <div className="row me-1">
                   <div className="card card-hover-effect">

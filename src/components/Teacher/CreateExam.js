@@ -7,7 +7,9 @@ import { CreateExamInputForm } from "../../utils/Input";
 import { handleExamError } from "../../utils/Validation";
 import ExamForm from "../../reusable/ExamForm";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { questionIndexIncrement } from "../../redux/teacher/actions/IndexIncrement";
+import { questionIndexDecrement } from "../../redux/teacher/actions/IndexDecrement";
 const CreateExam = () => {
   const [notesText, setNotesText] = useState("");
   const [addNotes, setAddNotes] = useState([]);
@@ -19,8 +21,10 @@ const CreateExam = () => {
     answer: "",
     options: ["1", "2", "3", "4"],
   }));
+  const dispatch = useDispatch();
+  const currentQuestionIndex = useSelector((state) => state.value);
   const [questions, setQuestions] = useState(initialQuestions);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
   const [selectedAnswers, setSelectedAnswers] = useState(Array(15).fill(""));
   const [examData, setExamData] = useState({
     subjectName: "",
@@ -56,14 +60,14 @@ const CreateExam = () => {
     );
     if (error) {
       if (currentQuestionIndex < 14) {
-        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+        dispatch(questionIndexIncrement());
       }
     }
   };
 
   const handlePreviousClick = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+      dispatch(questionIndexDecrement());
     }
     setFormErrors("");
   };
@@ -200,9 +204,9 @@ const CreateExam = () => {
       }));
     }
   };
-  const handleDeleteNotes = (index) => {
+  const handleDeleteNotes = (currentQuestionIndex) => {
     const newNotes = [...addNotes];
-    newNotes.splice(index, 1);
+    newNotes.splice(currentQuestionIndex, 1);
     setAddNotes(newNotes);
   };
   return (
@@ -211,8 +215,8 @@ const CreateExam = () => {
       <div className="mb-4">
         <h3>Question {currentQuestionIndex + 1}</h3>
         <ExamForm
-          inputField={input}
           currentQuestionIndex={currentQuestionIndex}
+          inputField={input}
           questions={questions}
           setQuestions={setQuestions}
           setFormErrors={setFormErrors}
@@ -240,9 +244,9 @@ const CreateExam = () => {
             onClick={handleAddNotes}
           />
           {addNotes &&
-            addNotes.map((item, index) => {
+            addNotes.map((item, currentQuestionIndex) => {
               return (
-                <li key={index}>
+                <li key={currentQuestionIndex}>
                   {item}{" "}
                   <span>
                     {" "}
@@ -250,10 +254,12 @@ const CreateExam = () => {
                       className="btn btn-sm mt-2 mx-5"
                       disabled={currentQuestionIndex !== 14}
                       buttonText={"❌"}
-                      onClick={(index) => handleDeleteNotes(index)}
+                      onClick={(currentQuestionIndex) =>
+                        handleDeleteNotes(currentQuestionIndex)
+                      }
                     />
                   </span>{" "}
-                  {index}
+                  {currentQuestionIndex}
                 </li>
               );
             })}

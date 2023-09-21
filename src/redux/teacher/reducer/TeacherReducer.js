@@ -2,6 +2,8 @@ const initialState = {
   teacherExamContainer: [],
   examContainer: [],
   studentList: [],
+  value: 0,
+  studentDetails: [],
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -19,6 +21,22 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         studentList: action.payload,
+      };
+    case "INCREMENT_INDEX":
+      return {
+        ...state,
+        value: state.value + 1,
+      };
+    case "DECREMENT_INDEX":
+      return {
+        ...state,
+        value: state.value - 1,
+      };
+    case "FETCH_STUDENT_DETAILS":
+      console.log(action.payload);
+      return {
+        ...state,
+        studentDetails: action.payload,
       };
 
     default:

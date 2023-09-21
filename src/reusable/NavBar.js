@@ -17,10 +17,10 @@ const Navbar = ({ navbarTitle, navigateTo, component }) => {
   const navButton = useRef(null);
   const linksContainerRef = useRef(null);
 
-  function collapseNav() {
+  const collapseNav = () => {
     navButton.current.classList.add("collapsed");
     linksContainerRef.current.classList.remove("show");
-  }
+  };
   // navbar close automatically
   return (
     <div>

@@ -7,6 +7,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CreateExamInputForm } from "../../utils/Input";
 import { handleExamError } from "../../utils/Validation";
 import ExamForm from "../../reusable/ExamForm";
+import { questionIndexIncrement } from "../../redux/teacher/actions/IndexIncrement";
+import { questionIndexDecrement } from "../../redux/teacher/actions/IndexDecrement";
+import { useDispatch, useSelector } from "react-redux";
 const EditExam = () => {
   const navigate = useNavigate();
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
@@ -18,6 +21,8 @@ const EditExam = () => {
     answer: "",
     options: ["", "", "", ""],
   }));
+  const dispatch = useDispatch();
+  const currentQuestionIndex = useSelector((state) => state.value);
   const [examData, setExamData] = useState({
     notes: "",
     subjectName: "",
@@ -29,7 +34,7 @@ const EditExam = () => {
     optionError: "",
     selectedAnsError: "",
   });
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
   const fetchExamData = async () => {
     const response = await apiAction({
       method: "get",
@@ -82,14 +87,14 @@ const EditExam = () => {
     );
     if (error) {
       if (currentQuestionIndex < 14) {
-        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+        dispatch(questionIndexIncrement());
       }
     }
   };
 
   const handlePreviousClick = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+      dispatch(questionIndexDecrement());
       setFormErrors("");
     }
   };

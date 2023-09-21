@@ -6,7 +6,7 @@ import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStudentsData } from "../../redux/teacher/actions/ViewStudent";
+import { fetchStudentsData } from "../../redux/teacher/actions/StudentForExam";
 
 const ViewStudents = () => {
   const navigate = useNavigate();

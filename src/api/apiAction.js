@@ -22,9 +22,9 @@ const apiAction = async ({ method, url, data, setLoading, storageKey, id }) => {
       toast.error(response.data.message);
     }
     if (response.data.statusCode === 401) {
-      // toast.warning("ERROR");
-      // sessionStorage.clear();
-      <Navigate to="/" replace={true} />;
+      toast.warning("Please login again");
+      sessionStorage.clear();
+      <Navigate to="/" replace="true" />;
     }
     setLoading(false);
     if (storageKey) {

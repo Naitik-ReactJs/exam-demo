@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Loader from "../../reusable/Loader";
 import { ToastContainer } from "react-toastify";
 import { useLocation } from "react-router-dom";
-import { fetchExamData } from "../../redux/teacher/actions/ViewExam";
+import { fetchExamData } from "../../redux/teacher/actions/ExamDetail";
 import { useDispatch, useSelector } from "react-redux";
 const ViewExam = () => {
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;

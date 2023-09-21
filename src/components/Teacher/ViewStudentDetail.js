@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import apiAction from "../../api/apiAction";
+
 import Loader from "../../reusable/Loader";
 import { useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-
+import { fetchStudentDetails } from "../../redux/teacher/actions/StudentDetails";
+import { useDispatch, useSelector } from "react-redux";
 const ViewStudentDetail = () => {
-  const [loading, setLoading] = useState(false);
-  const [studentDetail, setStudentDetail] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
   const tableHeading = [
@@ -17,19 +18,11 @@ const ViewStudentDetail = () => {
     "Rank",
     "Result status",
   ];
-
+  const dispatch = useDispatch();
+  const studentDetail = useSelector((state) => state.studentDetails);
   useEffect(() => {
-    const showResult = async () => {
-      const response = await apiAction({
-        method: "get",
-        url: "dashboard/Teachers/viewStudentDetail",
-        setLoading,
-        id,
-      });
-      setStudentDetail(response.data);
-    };
-    showResult();
-  }, [id]);
+    dispatch(fetchStudentDetails(setLoading, id));
+  }, []);
   if (loading) {
     return <Loader />;
   }

@@ -10,6 +10,9 @@ import Exam from "./Exam";
 import ExamPaper from "../../redux/student/actions/ExamPaper";
 import { useDispatch, useSelector } from "react-redux";
 import { totalExamQuestion } from "../../utils/Constants";
+import { questionIndexIncrement } from "../../redux/teacher/actions/IndexIncrement";
+import { questionIndexDecrement } from "../../redux/teacher/actions/IndexDecrement";
+
 const GiveExam = () => {
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
@@ -19,7 +22,8 @@ const GiveExam = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [answerEdit, setAnswerEdit] = useState({});
   const [loading, setLoading] = useState(true);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+  const currentQuestionIndex = useSelector((state) => state.value);
 
   const [selectedAnswers, setSelectedAnswers] = useState(
     new Array(data.length).fill("")
@@ -39,7 +43,7 @@ const GiveExam = () => {
     const selectedAnswer = selectedAnswers[data[currentQuestionIndex]._id];
     if (selectedAnswer) {
       if (currentQuestionIndex < data.length - 1) {
-        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+        dispatch(questionIndexIncrement());
       }
     } else {
       toast.error("Please select an answer before proceeding.");
@@ -48,7 +52,7 @@ const GiveExam = () => {
 
   const handlePreviousClick = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+      dispatch(questionIndexDecrement());
     }
   };
 
