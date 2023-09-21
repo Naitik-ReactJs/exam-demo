@@ -1,16 +1,17 @@
 import apiAction from "../../../api/apiAction";
-const fetchTeacherExam = (setLoading) => {
+import { FETCH_PROFILE } from "../constants";
+const fetchProfile = (setLoading, id) => {
   return async (dispatch, getState) => {
     const response = await apiAction({
       method: "get",
-      url: "dashboard/Teachers/viewExam",
+      url: "student/getStudentDetail",
       setLoading,
     });
 
     dispatch({
-      type: "FETCH_TEACHER_EXAMS",
+      type: FETCH_PROFILE,
       payload: response.data,
     });
   };
 };
-export default fetchTeacherExam;
+export default fetchProfile;

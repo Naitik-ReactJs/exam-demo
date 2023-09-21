@@ -1,3 +1,4 @@
+import { Navigate } from "react-router-dom";
 import api from "./api";
 import { toast } from "react-toastify";
 
@@ -21,7 +22,9 @@ const apiAction = async ({ method, url, data, setLoading, storageKey, id }) => {
       toast.error(response.data.message);
     }
     if (response.data.statusCode === 401) {
-      toast.warning("error");
+      // toast.warning("ERROR");
+      // sessionStorage.clear();
+      <Navigate to="/" replace={true} />;
     }
     setLoading(false);
     if (storageKey) {
@@ -31,7 +34,7 @@ const apiAction = async ({ method, url, data, setLoading, storageKey, id }) => {
   } catch (error) {
     setLoading(false);
 
-    toast.error(error.message);
+    toast.warning(error.message);
   }
 };
 

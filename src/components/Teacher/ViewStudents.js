@@ -1,28 +1,22 @@
 import { useEffect, useState } from "react";
-import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../../reusable/Button";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudentsData } from "../../redux/teacher/actions/ViewStudent";
 
 const ViewStudents = () => {
   const navigate = useNavigate();
-  const [studentList, setStudentList] = useState([]);
 
+  const dispatch = useDispatch();
+  const studentList = useSelector((state) => state.studentList);
   const [loading, setLoading] = useState(false);
-  const fetchStudentData = async () => {
-    const response = await apiAction({
-      method: "get",
-      url: "dashboard/Teachers/StudentForExam",
-      setLoading,
-    });
 
-    setStudentList(response.data);
-  };
   useEffect(() => {
-    fetchStudentData();
+    dispatch(fetchStudentsData(setLoading));
   }, []);
   if (loading) {
     return <Loader />;

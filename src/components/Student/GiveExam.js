@@ -7,35 +7,32 @@ import apiAction from "../../api/apiAction";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../App.css";
 import Exam from "./Exam";
+import ExamPaper from "../../redux/student/actions/ExamPaper";
+import { useDispatch, useSelector } from "react-redux";
+import { totalExamQuestion } from "../../utils/Constants";
 const GiveExam = () => {
-  const [isEdit, setIsEdit] = useState(false);
-  const [answerEdit, setAnswerEdit] = useState({});
-  const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.examPaperContainer);
+  const [isEdit, setIsEdit] = useState(false);
+  const [answerEdit, setAnswerEdit] = useState({});
+  const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [data, setData] = useState([]);
+
   const [selectedAnswers, setSelectedAnswers] = useState(
     new Array(data.length).fill("")
   );
-  const totalQuestionCount = data.map((item) => item.question).length;
+
   const currentQuestion = data[currentQuestionIndex];
   const formData = Object.keys(selectedAnswers).map((questionId) => ({
     question: questionId,
     answer: selectedAnswers[questionId],
   }));
-  const fetchExam = async () => {
-    const response = await apiAction({
-      method: "get",
-      url: "student/examPaper",
-      id,
-      setLoading,
-    });
-    setData(response.data);
-  };
+
   useEffect(() => {
-    fetchExam();
+    dispatch(ExamPaper(setLoading, id));
   }, []);
 
   const handleNextClick = () => {
@@ -95,34 +92,35 @@ const GiveExam = () => {
     <>
       {isEdit ? (
         <div>
-          {data.map((item, questionIndex) => (
-            <Fragment key={questionIndex}>
-              <Exam
-                totalQuestionCount={totalQuestionCount}
-                key={questionIndex}
-                questionIndex={questionIndex}
-                question={item.question}
-                options={item.options}
-                selectedAnswer={selectedAnswers[item._id]}
-                onAnswerChange={(e) => {
-                  const questionId = data[questionIndex]._id;
-                  const updatedSelectedAnswers = {
-                    ...selectedAnswers,
-                  };
-                  updatedSelectedAnswers[questionId] = e.target.value;
-                  setSelectedAnswers(updatedSelectedAnswers);
-                }}
-                answerEdit={answerEdit[questionIndex]}
-              />
-              <div className="text-center w-40 exam-responsive">
-                <Button
-                  buttonText={"edit answer"}
-                  className={"btn btn-danger mb-3"}
-                  onClick={() => handleEditAnswer(questionIndex)}
+          {data &&
+            data.map((item, questionIndex) => (
+              <Fragment key={questionIndex}>
+                <Exam
+                  totalQuestionCount={totalExamQuestion}
+                  key={questionIndex}
+                  questionIndex={questionIndex}
+                  question={item.question}
+                  options={item.options}
+                  selectedAnswer={selectedAnswers[item._id]}
+                  onAnswerChange={(e) => {
+                    const questionId = data[questionIndex]._id;
+                    const updatedSelectedAnswers = {
+                      ...selectedAnswers,
+                    };
+                    updatedSelectedAnswers[questionId] = e.target.value;
+                    setSelectedAnswers(updatedSelectedAnswers);
+                  }}
+                  answerEdit={answerEdit[questionIndex]}
                 />
-              </div>
-            </Fragment>
-          ))}
+                <div className="text-center w-40 exam-responsive">
+                  <Button
+                    buttonText={"edit answer"}
+                    className={"btn btn-danger mb-3"}
+                    onClick={() => handleEditAnswer(questionIndex)}
+                  />
+                </div>
+              </Fragment>
+            ))}
           <div className="text-center w-75 mt-3 pt-3 mb-5">
             <Button
               buttonText={"Submit"}
@@ -142,7 +140,7 @@ const GiveExam = () => {
                 selectedAnswer={selectedAnswers[data[currentQuestionIndex]._id]}
                 onAnswerChange={handleAnswerChange}
                 answerEdit={true}
-                totalQuestionCount={totalQuestionCount}
+                totalQuestionCount={totalExamQuestion}
               />
               <div className="text-center w-50 exam-responsive">
                 <Button
@@ -168,7 +166,9 @@ const GiveExam = () => {
               </div>
             </>
           )}
-
+          <pre>
+            {JSON.stringify(data.map((item) => item.question).length, null, 2)}
+          </pre>
           <ToastContainer autoClose={2000} theme="colored" />
         </>
       )}

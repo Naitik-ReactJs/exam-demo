@@ -1,16 +1,15 @@
 import apiAction from "../../../api/apiAction";
-const fetchTeacherExam = (setLoading) => {
-  return async (dispatch, getState) => {
+export const fetchStudentsData = (setLoading) => {
+  return async (dispatch) => {
     const response = await apiAction({
       method: "get",
-      url: "dashboard/Teachers/viewExam",
+      url: "dashboard/Teachers/StudentForExam",
       setLoading,
     });
 
     dispatch({
-      type: "FETCH_TEACHER_EXAMS",
+      type: "FETCH_STUDENTS_LIST",
       payload: response.data,
     });
   };
 };
-export default fetchTeacherExam;

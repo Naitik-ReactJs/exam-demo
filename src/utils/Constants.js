@@ -5,3 +5,4 @@ export const teacherSideBarProps = {
   title4: "profile",
 };
 export const studentSideBarProps = { title1: "Exam", title2: "Profile" };
+export const totalExamQuestion = 7;

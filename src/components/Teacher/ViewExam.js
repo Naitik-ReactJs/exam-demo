@@ -1,30 +1,21 @@
 import { useEffect, useState } from "react";
-import apiAction from "../../api/apiAction";
+
 import Loader from "../../reusable/Loader";
 import { ToastContainer } from "react-toastify";
 import { useLocation } from "react-router-dom";
-
+import { fetchExamData } from "../../redux/teacher/actions/ViewExam";
+import { useDispatch, useSelector } from "react-redux";
 const ViewExam = () => {
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
-
-  const [tableData, setTableData] = useState([]);
+  const dispatch = useDispatch();
+  const tableData = useSelector((state) => state.examContainer?.questions);
   const tableHeaders = ["Sr. no", "Question", "Options", "Correct Answer"];
 
-  const fetchExamDetail = async () => {
-    const response = await apiAction({
-      method: "get",
-      url: "dashboard/Teachers/examDetail",
-      setLoading,
-      token,
-      id,
-    });
-    setTableData(response.data?.questions);
-  };
   useEffect(() => {
-    fetchExamDetail();
+    dispatch(fetchExamData(setLoading, id, token));
   }, []);
   if (loading) {
     return <Loader />;

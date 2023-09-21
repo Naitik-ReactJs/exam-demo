@@ -8,49 +8,39 @@ import { UserProfileInputForm } from "../../utils/Input";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
 import validateInput from "../../utils/Validation";
+import { useDispatch, useSelector } from "react-redux";
+import UserProfile from "../../redux/student/actions/UserProfile";
 const Profile = () => {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.profileContainer);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    role: "",
-  });
   const [formErrors, setFormErrors] = useState(data);
   const input = UserProfileInputForm();
   const [isNameModified, setIsNameModified] = useState(false);
 
-  const fetchStudentProfile = async () => {
-    const response = await apiAction({
-      method: "get",
-      url: "student/getStudentDetail",
-      setLoading,
-    });
-    setData(response.data);
-  };
-
   useEffect(() => {
-    fetchStudentProfile();
+    dispatch(UserProfile(setLoading));
   }, []);
 
-  const handleInputChange = (e) => {
-    const { value, name } = e.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  // const handleInputChange = (e) => {
+  //   const { value, name } = e.target;
+  //   setData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
 
-    let error = validateInput(name, value);
+  //   let error = validateInput(name, value);
 
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: error,
-    }));
-    if (name === "name" && value !== data.name) {
-      setIsNameModified(true);
-    } else {
-      setIsNameModified(false);
-    }
-  };
+  //   setFormErrors((prevErrors) => ({
+  //     ...prevErrors,
+  //     [name]: error,
+  //   }));
+  //   if (name === "name" && value !== data.name) {
+  //     setIsNameModified(true);
+  //   } else {
+  //     setIsNameModified(false);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     toast.success("Please wait...");
@@ -60,7 +50,7 @@ const Profile = () => {
       setLoading,
       data: { name: data.name },
     });
-    fetchStudentProfile();
+    dispatch(UserProfile(setLoading));
     setLoading(true);
   };
 
@@ -74,10 +64,14 @@ const Profile = () => {
         <div className="row">
           <div className="col-md-12 mt-5">
             <div>
-              <ul class="nav nav-tabs w-responsive" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
+              <ul
+                className="nav nav-tabs w-responsive"
+                id="myTab"
+                role="tablist"
+              >
+                <li className="nav-item" role="presentation">
                   <Button
-                    class="nav-link active"
+                    className="nav-link active"
                     id="home-tab"
                     data-bs-toggle="tab"
                     data-bs-target="#home-tab-pane"
@@ -88,9 +82,9 @@ const Profile = () => {
                     buttonText={"Profile"}
                   ></Button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li className="nav-item" role="presentation">
                   <Button
-                    class="nav-link"
+                    className="nav-link"
                     id="profile-tab"
                     data-bs-toggle="tab"
                     data-bs-target="#profile-tab-pane"
@@ -102,13 +96,13 @@ const Profile = () => {
                   ></Button>
                 </li>
               </ul>
-              <div class="tab-content" id="myTabContent">
+              <div className="tab-content" id="myTabContent">
                 <div
-                  class="tab-pane fade show active"
+                  className="tab-pane fade show active"
                   id="home-tab-pane"
                   role="tabpanel"
                   aria-labelledby="home-tab"
-                  tabindex="0"
+                  tabIndex="0"
                 >
                   <div className="d-flex align-items-center justify-content-center user-resetpass">
                     <div className="w-60 d-text-center pt-5 m-5 m-md-0 p-5 box-shadow">
@@ -123,7 +117,7 @@ const Profile = () => {
                                 className={field.className}
                                 value={data[field.key]}
                                 name={field.key}
-                                onChange={handleInputChange}
+                                // onChange={handleInputChange}
                                 readOnly={field.readOnly}
                                 placeholder="Enter your profile name"
                               />
@@ -141,18 +135,18 @@ const Profile = () => {
                       <Button
                         className="btn btn-primary mt-3"
                         onClick={handleSubmit}
-                        disabled={!isNameModified}
+                        // disabled={!isNameModified}
                         buttonText={"Change Name"}
                       ></Button>
                     </div>
                   </div>
                 </div>
                 <div
-                  class="tab-pane fade"
+                  className="tab-pane fade"
                   id="profile-tab-pane"
                   role="tabpanel"
                   aria-labelledby="profile-tab"
-                  tabindex="0"
+                  tabIndex="0"
                 >
                   <div className="col-md">
                     <UserResetPassword />

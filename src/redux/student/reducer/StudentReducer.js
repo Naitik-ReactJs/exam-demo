@@ -1,6 +1,8 @@
 const initialState = {
   allExamContainer: [],
-  teacherExamContainer: [],
+  examPaperContainer: [],
+  profileContainer: {},
+  questionIndex: 0,
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -8,6 +10,16 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         allExamContainer: [...action.payload],
+      };
+    case "FETCH_EXAM_PAPER":
+      return {
+        ...state,
+        examPaperContainer: [...action.payload],
+      };
+    case "FETCH_PROFILE":
+      return {
+        ...state,
+        profileContainer: action.payload,
       };
 
     default:

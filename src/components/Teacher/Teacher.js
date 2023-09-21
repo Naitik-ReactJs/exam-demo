@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DialogBox from "../../reusable/DialogBox";
-import fetchTeacherExam from "../../redux/actions/TeacherExam";
+import fetchTeacherExam from "../../redux/teacher/actions/TeacherExam";
 import { useDispatch, useSelector } from "react-redux";
 
 const Teacher = () => {
@@ -19,17 +19,8 @@ const Teacher = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
-  const [viewExam, setViewExam] = useState([]);
   const [loading, setLoading] = useState(false);
-  const fetchExamData = async () => {
-    const response = await apiAction({
-      method: "get",
-      url: "dashboard/Teachers/viewExam",
-      setLoading,
-    });
 
-    setViewExam(response.data);
-  };
   useEffect(() => {
     dispatch(fetchTeacherExam(setLoading));
   }, []);
@@ -48,7 +39,7 @@ const Teacher = () => {
       setLoading,
     });
     if (reponse.statusCode === 200) {
-      fetchExamData();
+      dispatch(fetchTeacherExam(setLoading));
     }
     setLoading(true);
     handleClose();
