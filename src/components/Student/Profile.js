@@ -10,37 +10,37 @@ import Button from "../../reusable/Button";
 import validateInput from "../../utils/Validation";
 import { useDispatch, useSelector } from "react-redux";
 import UserProfile from "../../redux/student/actions/UserProfile";
+import { setIsNameModified } from "../../redux/student/actions/UserProfile";
 const Profile = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.profileContainer);
   const [loading, setLoading] = useState(true);
   const [formErrors, setFormErrors] = useState(data);
   const input = UserProfileInputForm();
-  const [isNameModified, setIsNameModified] = useState(false);
-
+  const isNameModified = useSelector((state) => state.nameEdit);
   useEffect(() => {
     dispatch(UserProfile(setLoading));
   }, []);
 
-  // const handleInputChange = (e) => {
-  //   const { value, name } = e.target;
-  //   setData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
+  const handleInputChange = (e) => {
+    const { value, name } = e.target;
+    // setData((prevData) => ({
+    //   ...prevData,
+    //   [name]: value,
+    // }));
 
-  //   let error = validateInput(name, value);
+    let error = validateInput(name, value);
 
-  //   setFormErrors((prevErrors) => ({
-  //     ...prevErrors,
-  //     [name]: error,
-  //   }));
-  //   if (name === "name" && value !== data.name) {
-  //     setIsNameModified(true);
-  //   } else {
-  //     setIsNameModified(false);
-  //   }
-  // };
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+    if (name === "name" && value !== data.name) {
+      dispatch(setIsNameModified(true));
+    } else {
+      dispatch(setIsNameModified(false));
+    }
+  };
 
   const handleSubmit = async () => {
     toast.success("Please wait...");
@@ -57,7 +57,7 @@ const Profile = () => {
   if (loading) {
     return <Loader />;
   }
-
+  console.log(input);
   return (
     <>
       <div className="container profile">
@@ -116,8 +116,8 @@ const Profile = () => {
                                 type={field.type}
                                 className={field.className}
                                 value={data[field.key]}
-                                name={field.key}
-                                // onChange={handleInputChange}
+                                name={field.name}
+                                onChange={handleInputChange}
                                 readOnly={field.readOnly}
                                 placeholder="Enter your profile name"
                               />
@@ -135,7 +135,7 @@ const Profile = () => {
                       <Button
                         className="btn btn-primary mt-3"
                         onClick={handleSubmit}
-                        // disabled={!isNameModified}
+                        disabled={!isNameModified}
                         buttonText={"Change Name"}
                       ></Button>
                     </div>

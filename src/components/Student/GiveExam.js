@@ -10,25 +10,27 @@ import Exam from "./Exam";
 import ExamPaper from "../../redux/student/actions/ExamPaper";
 import { useDispatch, useSelector } from "react-redux";
 import { totalExamQuestion } from "../../utils/Constants";
-import { questionIndexIncrement } from "../../redux/teacher/actions/IndexIncrement";
-import { questionIndexDecrement } from "../../redux/teacher/actions/IndexDecrement";
+import {
+  questionIndexIncrement,
+  questionIndexDecrement,
+} from "../../redux/student/actions/QuestionIndex";
 
+import {
+  setSelectedAnswers,
+  setExamEdit,
+  setAnswerEdit,
+} from "../../redux/student/actions/GiveExam";
 const GiveExam = () => {
+  const [loading, setLoading] = useState(true);
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.examPaperContainer);
-  const [isEdit, setIsEdit] = useState(false);
-  const [answerEdit, setAnswerEdit] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  const currentQuestionIndex = useSelector((state) => state.value);
-
-  const [selectedAnswers, setSelectedAnswers] = useState(
-    new Array(data.length).fill("")
-  );
-
+  const currentQuestionIndex = useSelector((state) => state.questionIndex);
+  const selectedAnswers = useSelector((state) => state.selectedAnswers);
+  const isEdit = useSelector((state) => state.isEdit);
+  const answerEdit = useSelector((state) => state.answerEdit);
   const currentQuestion = data[currentQuestionIndex];
   const formData = Object.keys(selectedAnswers).map((questionId) => ({
     question: questionId,
@@ -60,21 +62,22 @@ const GiveExam = () => {
     const questionId = data[currentQuestionIndex]._id;
     const updatedSelectedAnswers = { ...selectedAnswers };
     updatedSelectedAnswers[questionId] = e.target.value;
-    setSelectedAnswers(updatedSelectedAnswers);
+    dispatch(setSelectedAnswers(updatedSelectedAnswers));
   };
 
   const handleReviewClick = () => {
     const selectedAnswer = selectedAnswers[data[currentQuestionIndex]._id];
     if (selectedAnswer) {
-      setIsEdit(true);
+      dispatch(setExamEdit(true));
     } else {
       toast.error("Please select an answer before proceeding.");
     }
   };
 
   const handleEditAnswer = (id) => {
-    setAnswerEdit(() => ({ [id]: true }));
+    dispatch(setAnswerEdit({ [id]: true }));
   };
+
   const handleSubmitExam = () => {
     const response = apiAction({
       method: "post",
@@ -112,7 +115,8 @@ const GiveExam = () => {
                       ...selectedAnswers,
                     };
                     updatedSelectedAnswers[questionId] = e.target.value;
-                    setSelectedAnswers(updatedSelectedAnswers);
+                    dispatch(setSelectedAnswers(updatedSelectedAnswers));
+                    handleEditAnswer();
                   }}
                   answerEdit={answerEdit[questionIndex]}
                 />
@@ -143,8 +147,8 @@ const GiveExam = () => {
                 options={currentQuestion.options}
                 selectedAnswer={selectedAnswers[data[currentQuestionIndex]._id]}
                 onAnswerChange={handleAnswerChange}
-                answerEdit={true}
                 totalQuestionCount={totalExamQuestion}
+                answerEdit={true}
               />
               <div className="text-center w-50 exam-responsive">
                 <Button
@@ -170,9 +174,7 @@ const GiveExam = () => {
               </div>
             </>
           )}
-          <pre>
-            {JSON.stringify(data.map((item) => item.question).length, null, 2)}
-          </pre>
+
           <ToastContainer autoClose={2000} theme="colored" />
         </>
       )}

@@ -33,7 +33,6 @@ const reducer = (state = initialState, action) => {
         value: state.value - 1,
       };
     case "FETCH_STUDENT_DETAILS":
-      console.log(action.payload);
       return {
         ...state,
         studentDetails: action.payload,

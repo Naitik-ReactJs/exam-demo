@@ -13,6 +13,7 @@ const ViewStudents = () => {
 
   const dispatch = useDispatch();
   const studentList = useSelector((state) => state.studentList);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -24,10 +25,29 @@ const ViewStudents = () => {
   const handleViewResultClick = async (id) => {
     navigate(`result?id=${id}`);
   };
+  // const filtered = studentList.filter((item) =>
+  //   item.name.includes(searchValue)
+  // );
   return (
     <>
       <div className="container mt-4 text-center">
         <div className="row">
+          {/* <div class="input-group mb-3 w-75 ">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="bi bi-search"></i>
+              </span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search your name here"
+              aria-label="Username"
+              oninput="searchTable()"
+              aria-describedby="basic-addon1"
+              id="searchInput"
+            />
+          </div> */}
           {studentList.map((item, index) => (
             <div key={index} className=" col-lg-5 mb-5 w-50 exam-design">
               <div className="row me-1">
