@@ -9,33 +9,33 @@ import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
 import validateInput from "../../utils/Validation";
 import { useDispatch, useSelector } from "react-redux";
-import UserProfile from "../../redux/student/actions/UserProfile";
+import fetchProfile from "../../redux/student/actions/UserProfile";
 import { setIsNameModified } from "../../redux/student/actions/UserProfile";
+import { setProfileName } from "../../redux/student/actions/UserProfile";
+
 const Profile = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.profileContainer);
+  const data = useSelector((state) => state.student.profileContainer);
   const [loading, setLoading] = useState(true);
   const [formErrors, setFormErrors] = useState(data);
   const input = UserProfileInputForm();
-  const isNameModified = useSelector((state) => state.nameEdit);
+  const isNameModified = useSelector((state) => state.student.nameEdit);
+  const profileName = useSelector((state) => state.student.profileName);
   useEffect(() => {
-    dispatch(UserProfile(setLoading));
+    dispatch(fetchProfile(setLoading));
   }, []);
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
-    // setData((prevData) => ({
-    //   ...prevData,
-    //   [name]: value,
-    // }));
 
+    dispatch(setProfileName(...data[name]));
     let error = validateInput(name, value);
 
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,
     }));
-    if (name === "name" && value !== data.name) {
+    if (value !== data.name) {
       dispatch(setIsNameModified(true));
     } else {
       dispatch(setIsNameModified(false));
@@ -50,14 +50,14 @@ const Profile = () => {
       setLoading,
       data: { name: data.name },
     });
-    dispatch(UserProfile(setLoading));
+    dispatch(fetchProfile(setLoading));
     setLoading(true);
   };
 
   if (loading) {
     return <Loader />;
   }
-  console.log(input);
+
   return (
     <>
       <div className="container profile">
@@ -116,7 +116,7 @@ const Profile = () => {
                                 type={field.type}
                                 className={field.className}
                                 value={data[field.key]}
-                                name={field.name}
+                                name={field.key}
                                 onChange={handleInputChange}
                                 readOnly={field.readOnly}
                                 placeholder="Enter your profile name"
@@ -155,6 +155,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
+
           <ToastContainer autoClose={2000} theme="colored" />
         </div>{" "}
       </div>

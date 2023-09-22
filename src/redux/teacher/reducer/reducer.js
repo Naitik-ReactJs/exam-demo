@@ -4,6 +4,11 @@ const initialState = {
   studentList: [],
   value: 0,
   studentDetails: [],
+  initialQuestions: Array.from({ length: 15 }, () => ({
+    question: "",
+    answer: "",
+    options: ["", "", "", ""],
+  })),
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -37,7 +42,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         studentDetails: action.payload,
       };
-
+    case "CREATE_EXAM":
+      return {
+        ...state,
+        initialQuestions: action.payload,
+      };
     default:
       return state;
   }

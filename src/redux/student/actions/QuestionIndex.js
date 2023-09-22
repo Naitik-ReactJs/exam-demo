@@ -1,16 +1,16 @@
-export const questionIndexDecrement = () => {
-  return async (dispatch, value) => {
+export const questionIndexDecrement = (value) => {
+  return async (dispatch) => {
     dispatch({
       type: "DECREMENT_INDEX",
-      payload: value,
+      payload: value - 1,
     });
   };
 };
-export const questionIndexIncrement = () => {
-  return async (dispatch, value) => {
+export const questionIndexIncrement = (value) => {
+  return async (dispatch) => {
     dispatch({
       type: "INCREMENT_INDEX",
-      payload: value,
+      payload: value + 1,
     });
   };
 };

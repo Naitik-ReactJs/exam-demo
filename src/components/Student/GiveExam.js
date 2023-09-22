@@ -26,12 +26,15 @@ const GiveExam = () => {
   const id = location.get("id");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.examPaperContainer);
-  const currentQuestionIndex = useSelector((state) => state.questionIndex);
-  const selectedAnswers = useSelector((state) => state.selectedAnswers);
-  const isEdit = useSelector((state) => state.isEdit);
-  const answerEdit = useSelector((state) => state.answerEdit);
-  const currentQuestion = data[currentQuestionIndex];
+  const data = useSelector((state) => state.student.examPaperContainer);
+
+  const currentQuestionIndex = useSelector(
+    (state) => state.student.questionIndex
+  );
+  const selectedAnswers = useSelector((state) => state.student.selectedAnswers);
+  const isEdit = useSelector((state) => state.student.isEdit);
+  const answerEdit = useSelector((state) => state.student.answerEdit);
+
   const formData = Object.keys(selectedAnswers).map((questionId) => ({
     question: questionId,
     answer: selectedAnswers[questionId],
@@ -45,7 +48,7 @@ const GiveExam = () => {
     const selectedAnswer = selectedAnswers[data[currentQuestionIndex]._id];
     if (selectedAnswer) {
       if (currentQuestionIndex < data.length - 1) {
-        dispatch(questionIndexIncrement());
+        dispatch(questionIndexIncrement(currentQuestionIndex));
       }
     } else {
       toast.error("Please select an answer before proceeding.");
@@ -54,7 +57,7 @@ const GiveExam = () => {
 
   const handlePreviousClick = () => {
     if (currentQuestionIndex > 0) {
-      dispatch(questionIndexDecrement());
+      dispatch(questionIndexDecrement(currentQuestionIndex));
     }
   };
 
@@ -78,8 +81,8 @@ const GiveExam = () => {
     dispatch(setAnswerEdit({ [id]: true }));
   };
 
-  const handleSubmitExam = () => {
-    const response = apiAction({
+  const handleSubmitExam = async () => {
+    const response = await apiAction({
       method: "post",
       url: "student/giveExam",
       id,
@@ -139,12 +142,12 @@ const GiveExam = () => {
         </div>
       ) : (
         <>
-          {currentQuestion && (
+          {data && data[currentQuestionIndex] && (
             <>
               <Exam
                 questionIndex={currentQuestionIndex}
-                question={currentQuestion.question}
-                options={currentQuestion.options}
+                question={data[currentQuestionIndex].question}
+                options={data[currentQuestionIndex].options}
                 selectedAnswer={selectedAnswers[data[currentQuestionIndex]._id]}
                 onAnswerChange={handleAnswerChange}
                 totalQuestionCount={totalExamQuestion}

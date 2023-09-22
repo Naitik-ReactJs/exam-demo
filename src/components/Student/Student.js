@@ -10,7 +10,7 @@ import fetchAllExams from "../../redux/student/actions/AllExam";
 import { totalExamQuestion } from "../../utils/Constants";
 const Student = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.allExamContainer);
+  const data = useSelector((state) => state.student.allExamContainer);
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -24,37 +24,7 @@ const Student = () => {
   const handleGiveExamClick = async (id) => {
     navigate(`exam?id=${id}`);
   };
-  const examHeading = [
-    {
-      label: "Subject",
-      name: "subjectName",
-    },
-    {
-      label: "Email",
-      name: "email",
-    },
-    {
-      label: "Notes",
-      name: "notes",
-    },
-    {
-      label: "Subject",
-      name: "subjectName",
-    },
-    {
-      label: "Subject",
-      name: "subjectName",
-    },
-    {
-      label: "Subject",
-      name: "subjectName",
-    },
-    {
-      label: "Subject",
-      name: "subjectName",
-    },
-  ];
-  // changes remaining
+
   return (
     <>
       <div className="container mt-4 text-center">

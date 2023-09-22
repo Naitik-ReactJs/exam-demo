@@ -12,6 +12,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "FETCH_ALL_EXAMS":
       return {
+        ...state,
         allExamContainer: [...action.payload],
       };
     case "FETCH_EXAM_PAPER":
@@ -27,12 +28,12 @@ const reducer = (state = initialState, action) => {
     case "INCREMENT_INDEX":
       return {
         ...state,
-        questionIndex: state.questionIndex + 1,
+        questionIndex: action.payload,
       };
     case "DECREMENT_INDEX":
       return {
         ...state,
-        questionIndex: state.questionIndex - 1,
+        questionIndex: action.payload,
       };
     case "SET_SELECTED_ANSWERS":
       return {
@@ -53,6 +54,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         nameEdit: action.payload,
+      };
+    case "SET_PROFILE_NAME":
+      return {
+        ...state,
+        profileName: [...action.payload],
       };
     default:
       return state;

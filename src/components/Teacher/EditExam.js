@@ -7,8 +7,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CreateExamInputForm } from "../../utils/Input";
 import { handleExamError } from "../../utils/Validation";
 import ExamForm from "../../reusable/ExamForm";
-import { questionIndexIncrement } from "../../redux/teacher/actions/IndexIncrement";
-import { questionIndexDecrement } from "../../redux/teacher/actions/IndexDecrement";
+import {
+  questionIndexIncrement,
+  questionIndexDecrement,
+} from "../../redux/student/actions/QuestionIndex";
 import { useDispatch, useSelector } from "react-redux";
 const EditExam = () => {
   const navigate = useNavigate();
@@ -22,7 +24,7 @@ const EditExam = () => {
     options: ["", "", "", ""],
   }));
   const dispatch = useDispatch();
-  const currentQuestionIndex = useSelector((state) => state.value);
+  const currentQuestionIndex = useSelector((state) => state.teacher.value);
   const [examData, setExamData] = useState({
     notes: "",
     subjectName: "",
@@ -87,14 +89,14 @@ const EditExam = () => {
     );
     if (error) {
       if (currentQuestionIndex < 14) {
-        dispatch(questionIndexIncrement());
+        dispatch(questionIndexIncrement(currentQuestionIndex));
       }
     }
   };
 
   const handlePreviousClick = () => {
     if (currentQuestionIndex > 0) {
-      dispatch(questionIndexDecrement());
+      dispatch(questionIndexDecrement(currentQuestionIndex));
       setFormErrors("");
     }
   };

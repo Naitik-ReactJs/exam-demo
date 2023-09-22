@@ -8,8 +8,11 @@ import { handleExamError } from "../../utils/Validation";
 import ExamForm from "../../reusable/ExamForm";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { questionIndexIncrement } from "../../redux/teacher/actions/IndexIncrement";
-import { questionIndexDecrement } from "../../redux/teacher/actions/IndexDecrement";
+import {
+  questionIndexIncrement,
+  questionIndexDecrement,
+} from "../../redux/student/actions/QuestionIndex";
+import { createExam } from "../../redux/teacher/actions/CreateExam";
 const CreateExam = () => {
   const [notesText, setNotesText] = useState("");
   const [addNotes, setAddNotes] = useState([]);
@@ -22,8 +25,11 @@ const CreateExam = () => {
     options: ["1", "2", "3", "4"],
   }));
   const dispatch = useDispatch();
-  const currentQuestionIndex = useSelector((state) => state.value);
-  const [questions, setQuestions] = useState(initialQuestions);
+  const currentQuestionIndex = useSelector((state) => state.teacher.value);
+  const currentQuestion = useSelector(
+    (state) => state.teacher.initialQuestions
+  );
+  const questions = useSelector((state) => state.teacher.initialQuestions);
 
   const [selectedAnswers, setSelectedAnswers] = useState(Array(15).fill(""));
   const [examData, setExamData] = useState({
@@ -60,14 +66,14 @@ const CreateExam = () => {
     );
     if (error) {
       if (currentQuestionIndex < 14) {
-        dispatch(questionIndexIncrement());
+        dispatch(questionIndexIncrement(currentQuestionIndex));
       }
     }
   };
 
   const handlePreviousClick = () => {
     if (currentQuestionIndex > 0) {
-      dispatch(questionIndexDecrement());
+      dispatch(questionIndexDecrement(currentQuestionIndex));
     }
     setFormErrors("");
   };
@@ -75,7 +81,7 @@ const CreateExam = () => {
   const handleAnswerChange = (e) => {
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex].answer = e.target.value;
-    setQuestions(updatedQuestions);
+    dispatch(createExam(questions[currentQuestionIndex]));
 
     const updatedSelectedAnswers = [...selectedAnswers];
     updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
@@ -90,7 +96,7 @@ const CreateExam = () => {
   const handleQuestionChange = (e) => {
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex].question = e.target.value;
-    setQuestions(updatedQuestions);
+    dispatch(createExam(questions[currentQuestionIndex]));
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       questionError: "",
@@ -218,7 +224,7 @@ const CreateExam = () => {
           currentQuestionIndex={currentQuestionIndex}
           inputField={input}
           questions={questions}
-          setQuestions={setQuestions}
+          setQuestions={questions}
           setFormErrors={setFormErrors}
         />
         <div>
@@ -289,6 +295,7 @@ const CreateExam = () => {
           />
         )}
       </div>
+
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );

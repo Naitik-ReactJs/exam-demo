@@ -4,10 +4,14 @@ import {
   compose,
 } from "redux";
 // import reducer from "./teacher/reducer/TeacherReducer";
-import reducer from "./student/reducer/StudentReducer";
+// import reducer from "./student/reducer/StudentReducer"
+import rootReducer from "./rootReducer";
 import thunk from "redux-thunk";
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(thunk))
+);
 
 export default store;

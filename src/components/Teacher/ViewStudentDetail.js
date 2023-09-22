@@ -19,7 +19,7 @@ const ViewStudentDetail = () => {
     "Result status",
   ];
   const dispatch = useDispatch();
-  const studentDetail = useSelector((state) => state.studentDetails);
+  const studentDetail = useSelector((state) => state.teacher.studentDetails);
   useEffect(() => {
     dispatch(fetchStudentDetails(setLoading, id));
   }, []);

@@ -11,7 +11,9 @@ const ViewExam = () => {
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
   const dispatch = useDispatch();
-  const tableData = useSelector((state) => state.examContainer?.questions);
+  const tableData = useSelector(
+    (state) => state.teacher.examContainer?.questions
+  );
   const tableHeaders = ["Sr. no", "Question", "Options", "Correct Answer"];
 
   useEffect(() => {

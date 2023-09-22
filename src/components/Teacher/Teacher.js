@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Teacher = () => {
   const dispatch = useDispatch();
-  const exams = useSelector((state) => state.teacherExamContainer);
+  const exams = useSelector((state) => state.teacher.teacherExamContainer);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);

@@ -12,7 +12,7 @@ const ViewStudents = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const studentList = useSelector((state) => state.studentList);
+  const studentList = useSelector((state) => state.teacher.studentList);
 
   const [loading, setLoading] = useState(false);
 
