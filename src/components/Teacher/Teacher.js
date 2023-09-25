@@ -70,58 +70,64 @@ const Teacher = () => {
       <div className="container mt-4 text-center">
         <div className="row">
           {exams &&
-            exams.map((exam, index) => (
-              <div key={index} className="col-lg-6  mb-5 w-50 exam-design">
-                <div className="row me-1">
-                  <div className="card card-hover-effect">
-                    <div className="card-body">
-                      <div className="text-start fs-5 lead">
-                        <p className="card-title p-1">
-                          <i className="pe-2 mr-2 bi bi-book"></i>Subject:{" "}
-                          {exam.subjectName}
-                        </p>
-                        <p className="card-title p-1">
-                          <i className="pe-2 mr-2 bi bi-envelope-at-fill"></i>
-                          Email: {exam.email}
-                        </p>
+            exams.map((exam, index) => {
+              const { subjectName, email, notes } = exam;
+              return (
+                <div key={index} className="col-lg-6  mb-5 w-50 exam-design">
+                  <div className="row me-1">
+                    <div className="card card-hover-effect">
+                      <div className="card-body">
+                        <div className="text-start fs-5 lead">
+                          <p className="card-title p-1">
+                            <i className="pe-2 mr-2 bi bi-book"></i>Subject:{" "}
+                            {subjectName}
+                          </p>
+                          <p className="card-title p-1">
+                            <i className="pe-2 mr-2 bi bi-envelope-at-fill"></i>
+                            Email: {email}
+                          </p>
 
-                        <h6 className="card-title p-1">
-                          <i className="pe-2 mr-2 bi bi-card-list"></i>Notes:
-                        </h6>
-                      </div>
-                      <ul className="list-group">
-                        {exam.notes.map((note, noteIndex) => (
-                          <li key={noteIndex} className="list-group-item">
-                            {note}
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="mt-4 text-center">
-                        {examActionButtons.map((button, index) => (
-                          <Fragment key={index}>
-                            {" "}
-                            <Button
-                              buttonText={button.buttonText}
-                              className={button.className}
-                              onClick={() => button.onClick(exam._id)}
-                            />
-                          </Fragment>
-                        ))}
-                        <DialogBox
-                          title={"Delete Exam!!"}
-                          body={"Woohoo, Are you sure you want to delete !"}
-                          show={show}
-                          handleClose={handleClose}
-                          action={() => handleDeleteExam(exam._id)}
-                          buttonText1={"Yes ✅"}
-                          buttonText2={"No ❌"}
-                        />
+                          <h6 className="card-title p-1">
+                            <i className="pe-2 mr-2 bi bi-card-list"></i>Notes:
+                          </h6>
+                        </div>
+                        <ul className="list-group">
+                          {notes.map((note, noteIndex) => (
+                            <li key={noteIndex} className="list-group-item">
+                              {note}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="mt-4 text-center">
+                          {examActionButtons.map((button, index) => {
+                            const { buttonText, className, onClick } = button;
+                            return (
+                              <Fragment key={index}>
+                                {" "}
+                                <Button
+                                  buttonText={buttonText}
+                                  className={className}
+                                  onClick={() => onClick(exam._id)}
+                                />
+                              </Fragment>
+                            );
+                          })}
+                          <DialogBox
+                            title={"Delete Exam!!"}
+                            body={"Woohoo, Are you sure you want to delete !"}
+                            show={show}
+                            handleClose={handleClose}
+                            action={() => handleDeleteExam(exam._id)}
+                            buttonText1={"Yes ✅"}
+                            buttonText2={"No ❌"}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
         </div>
       </div>
       <ToastContainer autoClose={2000} theme="colored" />

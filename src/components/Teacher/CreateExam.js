@@ -83,7 +83,6 @@ const CreateExam = () => {
     ) {
       dispatch(setCurrentQuestionIndex(currentQuestionIndex + 1));
     }
-    console.log(Object.keys(formErrors).length === 0);
   };
 
   const handlePreviousClick = () => {

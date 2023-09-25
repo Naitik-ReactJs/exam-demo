@@ -264,16 +264,19 @@ const EditExam = () => {
         handleNotesChange={handleNotesChange}
       />
       <div className="m-3">
-        {examActionButtons.map((button, index) => (
-          <Fragment key={index}>
-            {" "}
-            <Button
-              buttonText={button.buttonText}
-              className={button.className}
-              onClick={button.onClick}
-            />
-          </Fragment>
-        ))}
+        {examActionButtons.map((button, index) => {
+          const { buttonText, className, onClick } = button;
+          return (
+            <Fragment key={index}>
+              {" "}
+              <Button
+                buttonText={buttonText}
+                className={className}
+                onClick={onClick}
+              />
+            </Fragment>
+          );
+        })}
       </div>
       <ToastContainer autoClose={2000} theme="colored" />
     </div>

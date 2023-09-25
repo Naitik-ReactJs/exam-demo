@@ -113,20 +113,24 @@ const Profile = () => {
                       <h2 className="text-center mb-3">Profile</h2>
                       <div>
                         {input &&
-                          input.map((field) => (
-                            <div className="form-group" key={field.key}>
-                              <label>{field.label}:</label>
-                              <input
-                                type={field.type}
-                                className={field.className}
-                                value={data[field.key]}
-                                name={field.key}
-                                onChange={handleInputChange}
-                                readOnly={field.readOnly}
-                                placeholder="Enter your profile name"
-                              />
-                            </div>
-                          ))}
+                          input.map((field) => {
+                            const { label, type, className, key, readOnly } =
+                              field;
+                            return (
+                              <div className="form-group" key={field.key}>
+                                <label>{label}:</label>
+                                <input
+                                  type={type}
+                                  className={className}
+                                  value={data[key]}
+                                  name={field.key}
+                                  onChange={handleInputChange}
+                                  readOnly={readOnly}
+                                  placeholder="Enter your profile name"
+                                />
+                              </div>
+                            );
+                          })}
                       </div>
                       <Button
                         className="btn btn-primary mt-3"

@@ -3,8 +3,7 @@ import {
   applyMiddleware,
   compose,
 } from "redux";
-// import reducer from "./teacher/reducer/TeacherReducer";
-// import reducer from "./student/reducer/StudentReducer"
+
 import rootReducer from "./rootReducer";
 import thunk from "redux-thunk";
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

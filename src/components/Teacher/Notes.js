@@ -1,4 +1,3 @@
-// Notes.js
 import React from "react";
 import Button from "../../reusable/Button";
 
@@ -9,10 +8,8 @@ const Notes = ({
   notesText,
   notesError,
   currentQuestionIndex,
-  handleNotesChange
+  handleNotesChange,
 }) => {
-
-
   return (
     <div>
       <label>Notes:</label>
