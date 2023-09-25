@@ -83,6 +83,7 @@ const CreateExam = () => {
     ) {
       dispatch(setCurrentQuestionIndex(currentQuestionIndex + 1));
     }
+    console.log(Object.keys(formErrors).length === 0);
   };
 
   const handlePreviousClick = () => {
@@ -94,30 +95,6 @@ const CreateExam = () => {
     });
   };
 
-  // const handleInputChange = (e, field, index) => {
-  //   const updatedQuestions = [...questions];
-  //   updatedQuestions[currentQuestionIndex][field] = e.target.value;
-
-  //   if (field === "answer") {
-  //     const updatedSelectedAnswers = [...selectedAnswers];
-  //     updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
-  //     dispatch(setSelectedAnswers(updatedSelectedAnswers));
-  //     updateFormErrors({
-  //       selectedAnsError: "",
-  //     });
-  //   } else if (field === "question") {
-  //     updateFormErrors({
-  //       questionError: "",
-  //     });
-  //   } else if (field === "subjectName") {
-  //     dispatch(setSubjectName(e.target.value));
-  //     updateFormErrors({
-  //       subjectError: "",
-  //     });
-  //   }
-
-  //   dispatch(setQuestions(updatedQuestions));
-  // };
   const handleAnswerChange = (e) => {
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex].answer = e.target.value;
@@ -172,28 +149,15 @@ const CreateExam = () => {
   };
 
   const handleSubmit = async () => {
-    const formErrors = handleExamError({
-      questions,
-      currentQuestionIndex,
-      examData,
-      selectedAnswers,
-      addNotes,
-      notesText,
+    const response = await apiAction({
+      method: "post",
+      url: "dashboard/Teachers/Exam",
+      data: formData,
+      setLoading,
     });
 
-    if (!formErrors) {
-      dispatch(setLoading(true));
-
-      const response = await apiAction({
-        method: "post",
-        url: "dashboard/Teachers/Exam",
-        data: formData,
-        setLoading,
-      });
-
-      if (response.statusCode === 200) {
-        navigate("/teacher");
-      }
+    if (response.statusCode === 200) {
+      navigate("/teacher");
     }
   };
 
@@ -261,7 +225,17 @@ const CreateExam = () => {
           />
         )}
       </div>
-      <pre>{JSON.stringify(formData, null, 2)}</pre>
+      <pre>
+        {JSON.stringify(
+          questions[currentQuestionIndex].options.filter(
+            (item) =>
+              item.options ===
+              questions[currentQuestionIndex].options.map((option) => option)
+          ),
+          null,
+          2
+        )}
+      </pre>
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );

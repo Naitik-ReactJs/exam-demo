@@ -48,11 +48,11 @@ export default function validateInput(name, value, passwordValue) {
   return error;
 }
 export const isRequired = (value) => {
-  if (typeof value === 'string') {
-    return value.trim() !== '';
+  if (typeof value === "string") {
+    return value.trim() !== "";
   }
 
-  return !!value; 
+  return !!value;
 };
 
 export const isUnique = (value, array) => {
@@ -68,14 +68,15 @@ export const handleExamError = ({
   notesText,
 }) => {
   const errors = {};
+  const currentQuestion = questions[currentQuestionIndex];
+  const currentOptions = currentQuestion.options.map((option) => option);
 
   if (!isRequired(examData.subjectName)) {
-    errors.subjectError = 'Subject is required';
+    errors.subjectError = "Subject is required";
   }
 
-  const currentQuestion = questions[currentQuestionIndex];
   if (!isRequired(currentQuestion.question)) {
-    errors.questionError = 'Question is required';
+    errors.questionError = "Question is required";
   } else {
     const currentQue = currentQuestion?.question;
     const filtered = questions?.filter(
@@ -83,25 +84,25 @@ export const handleExamError = ({
         item?.question === currentQue && index !== currentQuestionIndex
     );
     if (filtered.length !== 0) {
-      errors.questionError = 'Unique question is required';
+      errors.questionError = "Unique question is required";
     }
   }
   if (
     !currentQuestion.options.map((item) => item).every((item) => item !== "")
   ) {
-    errors.optionError= "Options are required"
-
+    errors.optionError = "Options are required";
   }
+
   if (!isRequired(selectedAnswers[currentQuestionIndex])) {
-    errors.selectedAnsError = 'Answer is required';
+    errors.selectedAnsError = "Answer is required";
   }
 
-  if ( currentQuestionIndex === 14 && !isRequired(notesText)) {
-    errors.notesError = 'Notes cannot be empty';
-  } else if(currentQuestionIndex === 14 ) {
+  if (currentQuestionIndex === 14 && !isRequired(notesText)) {
+    errors.notesError = "Notes cannot be empty";
+  } else if (currentQuestionIndex === 14) {
     const duplicateNotes = addNotes.includes(notesText);
-    if (duplicateNotes ) {
-      errors.notesError = 'Duplicate notes are not allowed';
+    if (duplicateNotes) {
+      errors.notesError = "Duplicate notes are not allowed";
     }
   }
 

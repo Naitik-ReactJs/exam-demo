@@ -7,7 +7,7 @@ import Loader from "../../reusable/Loader";
 import { UserProfileInputForm } from "../../utils/Input";
 import { ToastContainer, toast } from "react-toastify";
 import Button from "../../reusable/Button";
-import validateInput from "../../utils/Validation";
+
 import { useDispatch, useSelector } from "react-redux";
 import fetchProfile from "../../redux/student/actions/UserProfile";
 import { setIsNameModified } from "../../redux/student/actions/UserProfile";
@@ -20,11 +20,11 @@ const Profile = () => {
   const data = useSelector((state) => state.student.profileContainer);
   const [loading, setLoading] = useState(true);
   const isNameModified = useSelector((state) => state.student.nameEdit);
-  const [formErrors, setFormErrors] = useState(data);
+
   const input = UserProfileInputForm();
- const formdata = {
-  name : profileData?.name
- }
+  const formdata = {
+    name: profileData?.name,
+  };
   useEffect(() => {
     dispatch(fetchProfile(setLoading));
   }, []);
@@ -33,32 +33,30 @@ const Profile = () => {
     const { value, name } = e.target;
 
     dispatch(setProfileData({ [name]: value }));
-    // let error = validateInput(name, value);
-    // dispatch(setFormErrors({ [name]: error }));
 
-    if ( value !== profileData.name) {
+    if (value !== profileData.name) {
       dispatch(setIsNameModified(true));
-    } 
+    }
   };
 
   const handleSubmit = async () => {
-    toast.success('Please wait...');
+    if (data.name.length === 0) {
+      toast.warning("Name cannot be empty");
+      return false;
+    }
+    toast.success("Please wait...");
 
     const response = await apiAction({
-      method: 'put',
-      url: 'student/studentProfile',
+      method: "put",
+      url: "student/studentProfile",
       setLoading,
-      data: formdata ,
+      data: formdata,
     });
-if(response){
-
-  dispatch(fetchProfile(setLoading))
-}
+    if (response) {
+      dispatch(fetchProfile(setLoading));
+    }
     setLoading(true);
   };
-
-  // ...
-
 
   if (loading) {
     return <Loader />;
@@ -129,14 +127,6 @@ if(response){
                               />
                             </div>
                           ))}
-                        {formErrors.name && (
-                          <div
-                            className="alert alert-danger m-3 border text-center p-2"
-                            role="alert"
-                          >
-                            {formErrors.name}
-                          </div>
-                        )}
                       </div>
                       <Button
                         className="btn btn-primary mt-3"
