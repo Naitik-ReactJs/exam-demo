@@ -1,7 +1,7 @@
 import apiAction from "../../../api/apiAction";
 import { FETCH_STUDENT_DETAILS } from "../constants";
 export const fetchStudentDetails = (setLoading, id) => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     const response = await apiAction({
       method: "get",
       url: "dashboard/Teachers/viewStudentDetail",

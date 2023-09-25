@@ -1,7 +1,7 @@
 import apiAction from "../../../api/apiAction";
 import { FETCH_EXAM_PAPER } from "../constants";
 const fetchAllExams = (setLoading, id) => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     const response = await apiAction({
       method: "get",
       url: "student/examPaper",

@@ -8,34 +8,55 @@ import { CreateExamInputForm } from "../../utils/Input";
 import { handleExamError } from "../../utils/Validation";
 import ExamForm from "../../reusable/ExamForm";
 import {
-  questionIndexIncrement,
-  questionIndexDecrement,
-} from "../../redux/student/actions/QuestionIndex";
+  setSubjectName,
+  setQuestions,
+  setCurrentQuestionIndex,
+  setSelectedAnswers,
+  setNotesText,
+  setAddNotes,
+  setFormErrors,
+} from "../../redux/teacher/actions/CreateExam";
 import { useDispatch, useSelector } from "react-redux";
+import Notes from "./Notes";
+
 const EditExam = () => {
+  const QUESTION_COUNT = 15;
+  const examData = useSelector((state) => state.teacher.exam);
+  const dispatch = useDispatch();
+
+  const {
+    subjectName,
+    questions,
+    currentQuestionIndex,
+    selectedAnswers,
+    notesText,
+    addNotes,
+  } = examData;
+
+  const [loading, setLoading] = useState(false);
+
+  const formData = {
+    subjectName: subjectName,
+    questions: questions,
+    notes: [...addNotes],
+  };
+
+  const formErrors = useSelector((state) => state.teacher.errors);
+  const {
+    subjectError,
+    questionError,
+    optionError,
+    selectedAnsError,
+    notesError,
+  } = formErrors;
+  const updateFormErrors = (newErrors) => {
+    dispatch(setFormErrors(newErrors));
+  };
   const navigate = useNavigate();
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
-  const [loading, setLoading] = useState(true);
+
   const location = new URLSearchParams(useLocation().search);
   const id = location.get("id");
-  const initialQuestions = Array.from({ length: 15 }, () => ({
-    question: "",
-    answer: "",
-    options: ["", "", "", ""],
-  }));
-  const dispatch = useDispatch();
-  const currentQuestionIndex = useSelector((state) => state.teacher.value);
-  const [examData, setExamData] = useState({
-    notes: "",
-    subjectName: "",
-  });
-  const { subjectName, notes } = examData;
-  const [formErrors, setFormErrors] = useState({
-    subjectError: "",
-    questionError: "",
-    optionError: "",
-    selectedAnsError: "",
-  });
 
   const fetchExamData = async () => {
     const response = await apiAction({
@@ -51,7 +72,10 @@ const EditExam = () => {
     examData.notes = response.data
       .filter((item) => item._id === id)[0]
       ?.notes.join();
+    dispatch(setAddNotes([examData.notes]));
+    dispatch(setSubjectName(examData.subjectName));
   };
+  console.log(examData.notes);
   const fetchExamDetail = async () => {
     const response = await apiAction({
       method: "get",
@@ -61,8 +85,10 @@ const EditExam = () => {
       token,
       id,
     });
-    setQuestions(response.data.questions);
-    setSelectedAnswers(response.data.questions.map((item) => item.answer));
+    dispatch(setQuestions(response.data.questions));
+    dispatch(
+      setSelectedAnswers(response.data.questions.map((item) => item.answer))
+    );
   };
 
   useEffect(() => {
@@ -70,67 +96,89 @@ const EditExam = () => {
     fetchExamDetail();
   }, []);
 
-  const [questions, setQuestions] = useState(initialQuestions);
-  const [selectedAnswers, setSelectedAnswers] = useState(Array(15).fill(""));
-
-  const formData = {
-    subjectName: subjectName,
-    questions: questions,
-    notes: [notes],
-  };
-
   const handleNextClick = () => {
-    const error = handleExamError(
-      setFormErrors,
+    const formErrors = handleExamError({
       questions,
       currentQuestionIndex,
       examData,
-      selectedAnswers
-    );
-    if (error) {
-      if (currentQuestionIndex < 14) {
-        dispatch(questionIndexIncrement(currentQuestionIndex));
-      }
+      selectedAnswers,
+      addNotes,
+      notesText,
+    });
+    updateFormErrors(formErrors);
+
+    if (
+      Object.keys(formErrors).length === 0 &&
+      currentQuestionIndex < QUESTION_COUNT - 1
+    ) {
+      dispatch(setCurrentQuestionIndex(currentQuestionIndex + 1));
     }
   };
 
   const handlePreviousClick = () => {
     if (currentQuestionIndex > 0) {
-      dispatch(questionIndexDecrement(currentQuestionIndex));
-      setFormErrors("");
+      dispatch(setCurrentQuestionIndex(currentQuestionIndex - 1));
     }
+    updateFormErrors({
+      questionError: "",
+    });
   };
 
-  const handleAnswerChange = (e) => {
+  const handleInputChange = (e, field, index) => {
     const updatedQuestions = [...questions];
-    updatedQuestions[currentQuestionIndex].answer = e.target.value;
-    setQuestions(updatedQuestions);
+    updatedQuestions[currentQuestionIndex][field] = e.target.value;
 
-    const updatedSelectedAnswers = [...selectedAnswers];
-    updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
-    setSelectedAnswers(updatedSelectedAnswers);
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      selectedAnsError: "",
-    }));
+    if (field === "answer") {
+      const updatedSelectedAnswers = [...selectedAnswers];
+      updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
+      dispatch(setSelectedAnswers(updatedSelectedAnswers));
+      updateFormErrors({
+        selectedAnsError: "",
+      });
+    } else if (field === "question") {
+      updateFormErrors({
+        questionError: "",
+      });
+    } else if (field === "subjectName") {
+      dispatch(setSubjectName(e.target.value));
+      updateFormErrors({
+        subjectError: "",
+      });
+    }
+
+    dispatch(setQuestions(updatedQuestions));
   };
 
   const handleNotesChange = (e) => {
-    setExamData({
-      ...examData,
-      notes: e.target.value,
+    const value = e.target.value;
+    dispatch(setNotesText(value));
+
+    updateFormErrors({
+      notesError: "",
     });
   };
-
-  const handleSubjectNameChange = (e) => {
-    setExamData({
-      ...examData,
-      subjectName: e.target.value,
+  const handleAddNotes = () => {
+    const formErrors = handleExamError({
+      questions,
+      currentQuestionIndex,
+      examData,
+      selectedAnswers,
+      addNotes,
+      notesText,
     });
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      subjectError: "",
-    }));
+
+    updateFormErrors(formErrors);
+
+    if (!formErrors.notesError) {
+      const updatedNotes = [...addNotes, notesText];
+      dispatch(setAddNotes(updatedNotes));
+      dispatch(setNotesText(""));
+    }
+  };
+  const handleDeleteNotes = (index) => {
+    const newNotes = [...addNotes];
+    newNotes.splice(index, 1);
+    dispatch(setAddNotes(newNotes));
   };
 
   const handleEditExam = async () => {
@@ -158,28 +206,21 @@ const EditExam = () => {
   if (loading) {
     return <Loader />;
   }
-  const handleQuestionChange = (e) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[currentQuestionIndex].question = e.target.value;
-    setQuestions(updatedQuestions);
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      questionError: "",
-    }));
-  };
+
   const input = CreateExamInputForm(
     examData,
-    handleSubjectNameChange,
+    (e) => handleInputChange(e, "subjectName"),
     currentQuestionIndex,
     questions,
-    handleQuestionChange,
-    handleAnswerChange,
+    (e) => handleInputChange(e, "question"),
+    (e) => handleInputChange(e, "answer"),
     selectedAnswers,
-    formErrors.subjectError,
-    formErrors.questionError,
-    formErrors.optionError,
-    formErrors.selectedAnsError
+    subjectError,
+    questionError,
+    optionError,
+    selectedAnsError
   );
+
   return (
     <div className="container mt-5">
       <h2 className="mb-4"> Edit Exam</h2>
@@ -192,38 +233,35 @@ const EditExam = () => {
           setQuestions={setQuestions}
           setFormErrors={setFormErrors}
         />
-      </div>
-      <div className="mb-3">
+      </div>{" "}
+      <Notes
+        addNotes={addNotes}
+        handleAddNotes={handleAddNotes}
+        handleDeleteNotes={handleDeleteNotes}
+        notesText={notesText}
+        notesError={notesError}
+        currentQuestionIndex={currentQuestionIndex}
+        handleNotesChange={handleNotesChange}
+      />
+      <div className="m-3">
         <Button
           className="btn btn-primary me-2"
           onClick={handlePreviousClick}
           disabled={currentQuestionIndex === 0}
           buttonText={"    Previous"}
         ></Button>
-        {currentQuestionIndex === 14 ? (
-          <>
-            <label className="mb-2 d-block mt-4">Notes:</label>
-            <textarea
-              className="form-control mb-3"
-              placeholder="Notes for this Exam..."
-              onChange={handleNotesChange}
-              value={notes}
-            />
-            <Button
-              className="btn btn-success"
-              onClick={handleEditExam}
-              buttonText={"Save"}
-            ></Button>
-          </>
-        ) : (
-          <Button
-            className="btn btn-primary"
-            onClick={handleNextClick}
-            buttonText={"Next"}
-          ></Button>
-        )}
-      </div>
 
+        <Button
+          className="btn btn-primary"
+          onClick={handleNextClick}
+          buttonText={"Next"}
+        ></Button>
+      </div>
+      <Button
+        className="btn btn-success d-block m-3"
+        onClick={handleEditExam}
+        buttonText={"Save"}
+      ></Button>
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );

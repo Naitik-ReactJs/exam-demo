@@ -10,10 +10,7 @@ import Exam from "./Exam";
 import ExamPaper from "../../redux/student/actions/ExamPaper";
 import { useDispatch, useSelector } from "react-redux";
 import { totalExamQuestion } from "../../utils/Constants";
-import {
-  questionIndexIncrement,
-  questionIndexDecrement,
-} from "../../redux/student/actions/QuestionIndex";
+import { setCurrentQuestionIndex } from "../../redux/student/actions/QuestionIndex";
 
 import {
   setSelectedAnswers,
@@ -29,7 +26,7 @@ const GiveExam = () => {
   const data = useSelector((state) => state.student.examPaperContainer);
 
   const currentQuestionIndex = useSelector(
-    (state) => state.student.questionIndex
+    (state) => state.student.currentQuestionIndex
   );
   const selectedAnswers = useSelector((state) => state.student.selectedAnswers);
   const isEdit = useSelector((state) => state.student.isEdit);
@@ -48,7 +45,7 @@ const GiveExam = () => {
     const selectedAnswer = selectedAnswers[data[currentQuestionIndex]._id];
     if (selectedAnswer) {
       if (currentQuestionIndex < data.length - 1) {
-        dispatch(questionIndexIncrement(currentQuestionIndex));
+        dispatch(setCurrentQuestionIndex(currentQuestionIndex + 1));
       }
     } else {
       toast.error("Please select an answer before proceeding.");
@@ -57,7 +54,7 @@ const GiveExam = () => {
 
   const handlePreviousClick = () => {
     if (currentQuestionIndex > 0) {
-      dispatch(questionIndexDecrement(currentQuestionIndex));
+      dispatch(setCurrentQuestionIndex(currentQuestionIndex - 1));
     }
   };
 

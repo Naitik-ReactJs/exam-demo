@@ -1,7 +1,7 @@
 import { FETCH_EXAM_DATA } from "../constants";
 import apiAction from "../../../api/apiAction";
 export const fetchExamData = (setLoading, id, token) => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     const response = await apiAction({
       method: "get",
       url: "dashboard/Teachers/examDetail",

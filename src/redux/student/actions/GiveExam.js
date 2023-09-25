@@ -1,7 +1,8 @@
-const SET_SELECTED_ANSWERS = "SET_SELECTED_ANSWERS";
-const SET_REVIEW_STATUS = "SET_REVIEW_STATUS";
-const SET_ANSWER_EDIT = "SET_ANSWER_EDIT";
-
+import {
+  SET_SELECTED_ANSWERS,
+  SET_REVIEW_STATUS,
+  SET_ANSWER_EDIT,
+} from "../constants";
 export const setSelectedAnswers = (answers) => ({
   type: SET_SELECTED_ANSWERS,
   payload: answers,
