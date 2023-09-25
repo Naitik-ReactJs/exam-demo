@@ -1,4 +1,3 @@
-import { SET_FORM_ERRORS } from "../actions/CreateExam";
 import {
   FETCH_EXAM_DATA,
   FETCH_STUDENTS_LIST,
@@ -10,6 +9,7 @@ import {
   SET_QUESTIONS,
   SET_SELECTED_ANSWERS,
   SET_SUBJECT_NAME,
+  SET_FORM_ERRORS,
 } from "../constants";
 
 const initialState = {

@@ -1,6 +1,7 @@
 import {
   SET_ADD_NOTES,
   SET_CURRENT_QUESTION_INDEX,
+  SET_FORM_ERRORS,
   SET_NOTES_TEXT,
   SET_QUESTIONS,
   SET_SELECTED_ANSWERS,
@@ -36,8 +37,6 @@ export const setAddNotes = (notes) => ({
   type: SET_ADD_NOTES,
   payload: notes,
 });
-
-export const SET_FORM_ERRORS = "SET_FORM_ERRORS";
 
 export const setFormErrors = (errors) => ({
   type: SET_FORM_ERRORS,

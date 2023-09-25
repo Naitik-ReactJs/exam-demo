@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { ToastContainer } from "react-toastify";
@@ -32,7 +32,6 @@ const EditExam = () => {
     notesText,
     addNotes,
   } = examData;
-
   const [loading, setLoading] = useState(false);
 
   const formData = {
@@ -66,16 +65,17 @@ const EditExam = () => {
       setLoading,
     });
 
-    examData.subjectName = response.data.filter(
-      (item) => item._id === id
-    )[0]?.subjectName;
     examData.notes = response.data
       .filter((item) => item._id === id)[0]
       ?.notes.join();
     dispatch(setAddNotes([examData.notes]));
-    dispatch(setSubjectName(examData.subjectName));
+    dispatch(
+      setSubjectName(
+        response.data.filter((item) => item._id === id)[0]?.subjectName
+      )
+    );
   };
-  console.log(examData.notes);
+
   const fetchExamDetail = async () => {
     const response = await apiAction({
       method: "get",
@@ -85,6 +85,7 @@ const EditExam = () => {
       token,
       id,
     });
+
     dispatch(setQuestions(response.data.questions));
     dispatch(
       setSelectedAnswers(response.data.questions.map((item) => item.answer))
@@ -123,30 +124,24 @@ const EditExam = () => {
       questionError: "",
     });
   };
-
-  const handleInputChange = (e, field, index) => {
+  const handleAnswerChange = (e) => {
     const updatedQuestions = [...questions];
-    updatedQuestions[currentQuestionIndex][field] = e.target.value;
+    updatedQuestions[currentQuestionIndex].answer = e.target.value;
+    setQuestions(updatedQuestions);
 
-    if (field === "answer") {
-      const updatedSelectedAnswers = [...selectedAnswers];
-      updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
-      dispatch(setSelectedAnswers(updatedSelectedAnswers));
-      updateFormErrors({
-        selectedAnsError: "",
-      });
-    } else if (field === "question") {
-      updateFormErrors({
-        questionError: "",
-      });
-    } else if (field === "subjectName") {
-      dispatch(setSubjectName(e.target.value));
-      updateFormErrors({
-        subjectError: "",
-      });
-    }
+    const updatedSelectedAnswers = [...selectedAnswers];
+    updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
+    dispatch(setSelectedAnswers(updatedSelectedAnswers));
+  };
 
+  const handleQuestionChange = (e) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[currentQuestionIndex].question = e.target.value;
     dispatch(setQuestions(updatedQuestions));
+  };
+
+  const handleSubjectNameChange = (e) => {
+    dispatch(setSubjectName(e.target.value));
   };
 
   const handleNotesChange = (e) => {
@@ -182,14 +177,18 @@ const EditExam = () => {
   };
 
   const handleEditExam = async () => {
-    const error = handleExamError(
-      setFormErrors,
+    const formErrors = handleExamError({
       questions,
       currentQuestionIndex,
       examData,
-      selectedAnswers
-    );
-    if (error) {
+      selectedAnswers,
+      addNotes,
+      notesText,
+    });
+
+    updateFormErrors(formErrors);
+
+    if (Object.keys(formErrors).length === 0) {
       const response = await apiAction({
         method: "put",
         url: "dashboard/Teachers/editExam",
@@ -198,7 +197,8 @@ const EditExam = () => {
         token,
         id,
       });
-      if (response.statusCode === 200) {
+
+      if (response && response.statusCode === 200) {
         navigate("/teacher");
       }
     }
@@ -207,19 +207,39 @@ const EditExam = () => {
     return <Loader />;
   }
 
-  const input = CreateExamInputForm(
+  const input = CreateExamInputForm({
     examData,
-    (e) => handleInputChange(e, "subjectName"),
     currentQuestionIndex,
     questions,
-    (e) => handleInputChange(e, "question"),
-    (e) => handleInputChange(e, "answer"),
+    handleAnswerChange,
+    handleSubjectNameChange,
+    handleQuestionChange,
     selectedAnswers,
     subjectError,
     questionError,
     optionError,
-    selectedAnsError
-  );
+    selectedAnsError,
+  });
+
+  const examActionButtons = [
+    {
+      buttonText: "Previous",
+      className: "btn btn-primary me-2",
+      onClick: handlePreviousClick,
+      disabled: currentQuestionIndex === 0,
+    },
+    {
+      buttonText: "Next",
+      className: "btn btn-primary ",
+      onClick: handleNextClick,
+    },
+    {
+      buttonText: "Save",
+      className: "btn btn-success d-block mt-3",
+      onClick: handleEditExam,
+      disabled: currentQuestionIndex !== 14,
+    },
+  ];
 
   return (
     <div className="container mt-5">
@@ -244,24 +264,17 @@ const EditExam = () => {
         handleNotesChange={handleNotesChange}
       />
       <div className="m-3">
-        <Button
-          className="btn btn-primary me-2"
-          onClick={handlePreviousClick}
-          disabled={currentQuestionIndex === 0}
-          buttonText={"    Previous"}
-        ></Button>
-
-        <Button
-          className="btn btn-primary"
-          onClick={handleNextClick}
-          buttonText={"Next"}
-        ></Button>
+        {examActionButtons.map((button, index) => (
+          <Fragment key={index}>
+            {" "}
+            <Button
+              buttonText={button.buttonText}
+              className={button.className}
+              onClick={button.onClick}
+            />
+          </Fragment>
+        ))}
       </div>
-      <Button
-        className="btn btn-success d-block m-3"
-        onClick={handleEditExam}
-        buttonText={"Save"}
-      ></Button>
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );

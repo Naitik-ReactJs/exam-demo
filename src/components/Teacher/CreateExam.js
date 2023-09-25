@@ -94,31 +94,49 @@ const CreateExam = () => {
     });
   };
 
-  const handleInputChange = (e, field, index) => {
+  // const handleInputChange = (e, field, index) => {
+  //   const updatedQuestions = [...questions];
+  //   updatedQuestions[currentQuestionIndex][field] = e.target.value;
+
+  //   if (field === "answer") {
+  //     const updatedSelectedAnswers = [...selectedAnswers];
+  //     updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
+  //     dispatch(setSelectedAnswers(updatedSelectedAnswers));
+  //     updateFormErrors({
+  //       selectedAnsError: "",
+  //     });
+  //   } else if (field === "question") {
+  //     updateFormErrors({
+  //       questionError: "",
+  //     });
+  //   } else if (field === "subjectName") {
+  //     dispatch(setSubjectName(e.target.value));
+  //     updateFormErrors({
+  //       subjectError: "",
+  //     });
+  //   }
+
+  //   dispatch(setQuestions(updatedQuestions));
+  // };
+  const handleAnswerChange = (e) => {
     const updatedQuestions = [...questions];
-    updatedQuestions[currentQuestionIndex][field] = e.target.value;
+    updatedQuestions[currentQuestionIndex].answer = e.target.value;
+    setQuestions(updatedQuestions);
 
-    if (field === "answer") {
-      const updatedSelectedAnswers = [...selectedAnswers];
-      updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
-      dispatch(setSelectedAnswers(updatedSelectedAnswers));
-      updateFormErrors({
-        selectedAnsError: "",
-      });
-    } else if (field === "question") {
-      updateFormErrors({
-        questionError: "",
-      });
-    } else if (field === "subjectName") {
-      dispatch(setSubjectName(e.target.value));
-      updateFormErrors({
-        subjectError: "",
-      });
-    }
+    const updatedSelectedAnswers = [...selectedAnswers];
+    updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
+    dispatch(setSelectedAnswers(updatedSelectedAnswers));
+  };
 
+  const handleQuestionChange = (e) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[currentQuestionIndex].question = e.target.value;
     dispatch(setQuestions(updatedQuestions));
   };
 
+  const handleSubjectNameChange = (e) => {
+    dispatch(setSubjectName(e.target.value));
+  };
   const handleNotesChange = (e) => {
     const value = e.target.value;
     dispatch(setNotesText(value));
@@ -183,19 +201,19 @@ const CreateExam = () => {
     return <Loader />;
   }
 
-  const input = CreateExamInputForm(
+  const input = CreateExamInputForm({
     examData,
-    (e) => handleInputChange(e, "subjectName"),
     currentQuestionIndex,
     questions,
-    (e) => handleInputChange(e, "question"),
-    (e) => handleInputChange(e, "answer"),
+    handleAnswerChange,
+    handleSubjectNameChange,
+    handleQuestionChange,
     selectedAnswers,
     subjectError,
     questionError,
     optionError,
-    selectedAnsError
-  );
+    selectedAnsError,
+  });
 
   return (
     <div className="container mt-5">
@@ -243,6 +261,7 @@ const CreateExam = () => {
           />
         )}
       </div>
+      <pre>{JSON.stringify(formData, null, 2)}</pre>
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );

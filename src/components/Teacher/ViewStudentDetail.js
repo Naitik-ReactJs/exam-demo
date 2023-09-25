@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import Loader from "../../reusable/Loader";
 import { useLocation } from "react-router-dom";
@@ -9,14 +9,36 @@ const ViewStudentDetail = () => {
   const [loading, setLoading] = useState(true);
 
   const location = new URLSearchParams(useLocation().search);
+  const title = "Student Results";
   const id = location.get("id");
+
+  const studentInfo = [
+    {
+      label: "Name",
+      name: "name",
+    },
+    {
+      label: "E-mail",
+      name: "email",
+    },
+  ];
   const tableHeading = [
-    "Name",
-    "Email",
-    "Subject",
-    "Score",
-    "Rank",
-    "Result status",
+    {
+      label: "Subject",
+      name: "subjectName",
+    },
+    {
+      label: "Score",
+      name: "score",
+    },
+    {
+      label: "Rank",
+      name: "rank",
+    },
+    {
+      label: "Result status",
+      name: "resultStatus",
+    },
   ];
   const dispatch = useDispatch();
   const studentDetail = useSelector((state) => state.teacher.studentDetails);
@@ -33,14 +55,30 @@ const ViewStudentDetail = () => {
         <Loader />
       ) : (
         <div className="container">
-          <h1 className="my-4">Student Results</h1>
+          <h1 className="my-4">{title}</h1>
           <div className="table-responsive-md">
+            {studentDetail.map((item, index) => {
+              return (
+                <Fragment key={index}>
+                  <ul className="list-group mb-4">
+                    {studentInfo.map((data, index) => {
+                      return (
+                        <li className="list-group-item" key={index}>
+                          <span className="fw-bold"> {data.label}</span>:{" "}
+                          {item[data.name]}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </Fragment>
+              );
+            })}
             <table className="table table-bordered table-hover p-2">
               <thead className="thead-dark">
                 <tr>
                   {tableHeading.map((heading, index) => (
                     <th scope="col" key={index}>
-                      {heading}
+                      {heading.label}
                     </th>
                   ))}
                 </tr>
@@ -59,12 +97,9 @@ const ViewStudentDetail = () => {
                   studentDetail.map((student) =>
                     student.Result.map((result) => (
                       <tr key={result._id}>
-                        <td>{student.name}</td>
-                        <td>{student.email}</td>
-                        <td>{result.subjectName}</td>
-                        <td>{result.score}</td>
-                        <td>{result.rank}</td>
-                        <td>{result.resultStatus}</td>
+                        {tableHeading.map((heading, index) => {
+                          return <td key={index}>{result[heading.name]}</td>;
+                        })}
                       </tr>
                     ))
                   )

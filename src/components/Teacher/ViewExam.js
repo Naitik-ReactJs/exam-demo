@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import Loader from "../../reusable/Loader";
 import { ToastContainer } from "react-toastify";
@@ -14,7 +14,20 @@ const ViewExam = () => {
   const tableData = useSelector(
     (state) => state.teacher.examContainer?.questions
   );
-  const tableHeaders = ["Sr. no", "Question", "Options", "Correct Answer"];
+  const tableHeaders = [
+    {
+      label: "Question",
+      name: "question",
+    },
+    {
+      label: "Options",
+      name: "options",
+    },
+    {
+      label: "Correct Answer",
+      name: "answer",
+    },
+  ];
 
   useEffect(() => {
     dispatch(fetchExamData(setLoading, id, token));
@@ -30,26 +43,39 @@ const ViewExam = () => {
             <thead>
               <tr>
                 {tableHeaders.map((header, index) => (
-                  <th key={index}>{header}</th>
+                  <th key={index}> {header.label}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {tableData &&
-                tableData.map((question, index) => (
+                tableData.map((tableData, index) => (
                   <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{question.question}</td>
-                    <td>
-                      <ul className="list-group">
-                        {question.options.map((option, optionIndex) => (
-                          <li className="list-group-item" key={optionIndex}>
-                            {option}
-                          </li>
-                        ))}
-                      </ul>
-                    </td>
-                    <td>{question.answer}</td>
+                    {tableHeaders.map((header, index) => (
+                      <td key={index}>
+                        {Array.isArray(tableData[header?.name]) ? (
+                          <Fragment key={index}>
+                            {" "}
+                            <ul className="list-group">
+                              {tableData[header?.name].map(
+                                (option, optionIndex) => (
+                                  <li
+                                    className="list-group-item"
+                                    key={optionIndex}
+                                  >
+                                    {option}
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          </Fragment>
+                        ) : (
+                          <>
+                            <td key={index}> {tableData[header?.name]}</td>
+                          </>
+                        )}
+                      </td>
+                    ))}
                   </tr>
                 ))}
             </tbody>

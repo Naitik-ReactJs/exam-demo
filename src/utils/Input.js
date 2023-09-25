@@ -162,7 +162,7 @@ export const UserProfileInputForm = () => {
   ];
 };
 
-export const CreateExamInputForm = (
+export const CreateExamInputForm = ({
   examData,
   handleSubjectNameChange,
   currentQuestionIndex,
@@ -173,14 +173,14 @@ export const CreateExamInputForm = (
   subjectError,
   questionError,
   optionError,
-  selectedAnsError
-) => {
+  selectedAnsError,
+}) => {
   return [
     {
       label: "Subject Name:",
       type: "text",
       placeholder: "Enter Subject Name here",
-      value: examData.subjectName,
+      value: examData?.subjectName,
       onChange: handleSubjectNameChange,
       disabled: currentQuestionIndex !== 0,
       error: subjectError,
@@ -200,7 +200,6 @@ export const CreateExamInputForm = (
       onChange: handleAnswerChange,
       error: optionError,
       answer: questions[currentQuestionIndex]?.answer,
-      name :"options"
     },
     {
       label: "Selected answer:",
