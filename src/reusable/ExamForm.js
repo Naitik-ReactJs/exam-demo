@@ -1,3 +1,5 @@
+import { useDispatch } from "react-redux";
+
 const ExamForm = ({
   inputField,
   currentQuestionIndex,
@@ -5,6 +7,7 @@ const ExamForm = ({
   setQuestions,
   setFormErrors,
 }) => {
+  const dispatch = useDispatch()
   return (
     <div>
       {" "}
@@ -36,7 +39,7 @@ const ExamForm = ({
                         updatedQuestions[currentQuestionIndex].options[
                           optionIndex
                         ] = e.target.value;
-                        setQuestions(updatedQuestions);
+                        dispatch(setQuestions(updatedQuestions));
 
                         setFormErrors((prevErrors) => ({
                           ...prevErrors,
@@ -62,7 +65,7 @@ const ExamForm = ({
             )}
             {field.error && (
               <div
-                className="alert alert-danger m-3 border text-center p-2"
+                className="alert alert-danger m-3 border text-center p-2 w-50"
                 role="alert"
               >
                 {field.error}

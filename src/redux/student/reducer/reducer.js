@@ -1,7 +1,11 @@
 const initialState = {
   allExamContainer: [],
   examPaperContainer: [],
-  profileContainer: {},
+  profileContainer: {
+    name: '',
+    email: '',
+    role: '',
+  },
   questionIndex: 0,
   selectedAnswers: {},
   isEdit: false,
@@ -55,10 +59,13 @@ const reducer = (state = initialState, action) => {
         ...state,
         nameEdit: action.payload,
       };
-    case "SET_PROFILE_NAME":
+      case 'SET_PROFILE_DATA':
       return {
         ...state,
-        profileName: [...action.payload],
+        profileContainer: {
+          ...state.profileContainer,
+          ...action.payload,
+        },
       };
     default:
       return state;

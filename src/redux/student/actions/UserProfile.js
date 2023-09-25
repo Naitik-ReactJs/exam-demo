@@ -4,9 +4,9 @@ export const setIsNameModified = (editStatus) => ({
   type: "SET_NAME_MODIFIED",
   payload: editStatus,
 });
-export const setProfileName = (name) => ({
-  type: "SET_PROFILE_NAME",
-  payload: name,
+export const setProfileData = (data) => ({
+  type: 'SET_PROFILE_DATA',
+  payload: data,
 });
 const fetchProfile = (setLoading, id) => {
   return async (dispatch, getState) => {

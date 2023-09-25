@@ -11,16 +11,20 @@ import validateInput from "../../utils/Validation";
 import { useDispatch, useSelector } from "react-redux";
 import fetchProfile from "../../redux/student/actions/UserProfile";
 import { setIsNameModified } from "../../redux/student/actions/UserProfile";
-import { setProfileName } from "../../redux/student/actions/UserProfile";
+import { setProfileData } from "../../redux/student/actions/UserProfile";
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const profileData = useSelector((state) => state.student.profileContainer);
+
   const data = useSelector((state) => state.student.profileContainer);
   const [loading, setLoading] = useState(true);
+  const isNameModified = useSelector((state) => state.student.nameEdit);
   const [formErrors, setFormErrors] = useState(data);
   const input = UserProfileInputForm();
-  const isNameModified = useSelector((state) => state.student.nameEdit);
-  const profileName = useSelector((state) => state.student.profileName);
+ const formdata = {
+  name : profileData?.name
+ }
   useEffect(() => {
     dispatch(fetchProfile(setLoading));
   }, []);
@@ -28,31 +32,33 @@ const Profile = () => {
   const handleInputChange = (e) => {
     const { value, name } = e.target;
 
-    dispatch(setProfileName(...data[name]));
-    let error = validateInput(name, value);
+    dispatch(setProfileData({ [name]: value }));
+    // let error = validateInput(name, value);
+    // dispatch(setFormErrors({ [name]: error }));
 
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: error,
-    }));
-    if (value !== data.name) {
+    if ( value !== profileData.name) {
       dispatch(setIsNameModified(true));
-    } else {
-      dispatch(setIsNameModified(false));
-    }
+    } 
   };
 
   const handleSubmit = async () => {
-    toast.success("Please wait...");
-    await apiAction({
-      method: "put",
-      url: "student/studentProfile",
+    toast.success('Please wait...');
+
+    const response = await apiAction({
+      method: 'put',
+      url: 'student/studentProfile',
       setLoading,
-      data: { name: data.name },
+      data: formdata ,
     });
-    dispatch(fetchProfile(setLoading));
+if(response){
+
+  dispatch(fetchProfile(setLoading))
+}
     setLoading(true);
   };
+
+  // ...
+
 
   if (loading) {
     return <Loader />;

@@ -47,59 +47,63 @@ export default function validateInput(name, value, passwordValue) {
 
   return error;
 }
+export const isRequired = (value) => {
+  if (typeof value === 'string') {
+    return value.trim() !== '';
+  }
 
-export const handleExamError = (
-  setFormErrors,
+  return !!value; 
+};
+
+export const isUnique = (value, array) => {
+  return array.indexOf(value) === -1;
+};
+
+export const handleExamError = ({
   questions,
   currentQuestionIndex,
   examData,
-  selectedAnswers
-) => {
-  const currentQuestion = questions[currentQuestionIndex];
+  selectedAnswers,
+  addNotes,
+  notesText,
+}) => {
+  const errors = {};
 
-  const currentQue = questions?.[currentQuestionIndex]?.question;
-  const filtered = questions?.filter(
-    (item, index) =>
-      item?.question &&
-      item?.question === currentQue &&
-      index !== currentQuestionIndex
-  );
-
-  if (!examData.subjectName) {
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      subjectError: "Subject is required",
-    }));
-    return false;
+  if (!isRequired(examData.subjectName)) {
+    errors.subjectError = 'Subject is required';
   }
-  if (!currentQuestion.question) {
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      questionError: "Question is required",
-    }));
-    return false;
-  } else if (filtered.length !== 0) {
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      questionError: "Unique question is required",
-    }));
-    return false;
+
+  const currentQuestion = questions[currentQuestionIndex];
+  if (!isRequired(currentQuestion.question)) {
+    errors.questionError = 'Question is required';
+  } else {
+    const currentQue = currentQuestion?.question;
+    const filtered = questions?.filter(
+      (item, index) =>
+        item?.question === currentQue && index !== currentQuestionIndex
+    );
+    if (filtered.length !== 0) {
+      errors.questionError = 'Unique question is required';
+    }
   }
   if (
-    !currentQuestion?.options.map((item) => item).every((item) => item !== "")
+    !currentQuestion.options.map((item) => item).every((item) => item !== "")
   ) {
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      optionError: "Options are required",
-    }));
-    return false;
+    errors.optionError= "Options are required"
+
   }
-  if (selectedAnswers && !selectedAnswers[currentQuestionIndex]) {
-    setFormErrors((prevErrors) => ({
-      ...prevErrors,
-      selectedAnsError: "Answer is required",
-    }));
-    return false;
+  if (!isRequired(selectedAnswers[currentQuestionIndex])) {
+    errors.selectedAnsError = 'Answer is required';
   }
-  return true;
+
+  if ( currentQuestionIndex === 14 && !isRequired(notesText)) {
+    errors.notesError = 'Notes cannot be empty';
+  } else if(currentQuestionIndex === 14 ) {
+    const duplicateNotes = addNotes.includes(notesText);
+    if (duplicateNotes ) {
+      errors.notesError = 'Duplicate notes are not allowed';
+    }
+  }
+
+  return errors;
 };

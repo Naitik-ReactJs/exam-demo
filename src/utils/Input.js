@@ -200,6 +200,7 @@ export const CreateExamInputForm = (
       onChange: handleAnswerChange,
       error: optionError,
       answer: questions[currentQuestionIndex]?.answer,
+      name :"options"
     },
     {
       label: "Selected answer:",
