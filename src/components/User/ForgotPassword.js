@@ -9,6 +9,7 @@ import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import { useNavigate } from "react-router-dom";
 import Form from "../../reusable/UserForm";
+import { SEO } from "../../Helmet";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -61,6 +62,7 @@ const ForgotPassword = () => {
   }
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100">
+      <SEO title="Forgot password" />
       <div className="container p-5 w-50 mb-5 box-shadow">
         <Form inputFields={input} />
         <div className="text-center mt-4">

@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { useLocation } from "react-router-dom";
 import { fetchExamData } from "../../redux/teacher/actions/ExamDetail";
 import { useDispatch, useSelector } from "react-redux";
+import { SEO } from "../../Helmet";
 const ViewExam = () => {
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const [loading, setLoading] = useState(true);
@@ -37,6 +38,7 @@ const ViewExam = () => {
   }
   return (
     <div className="container p-3 ">
+      <SEO title="View Exam" />
       <div className="row">
         <div className="col-lg-10">
           <table className="table table-bordered table-hover">

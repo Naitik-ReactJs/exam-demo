@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentsData } from "../../redux/teacher/actions/StudentForExam";
+import { SEO } from "../../Helmet";
 
 const ViewStudents = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const ViewStudents = () => {
   return (
     <>
       <div className="container mt-4 text-center">
+        <SEO title="Student Lists" />
         <div className="row">
           {studentList.map((item, index) => {
             const { name, email, status } = item;

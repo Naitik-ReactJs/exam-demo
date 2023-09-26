@@ -11,7 +11,7 @@ import ExamPaper from "../../redux/student/actions/ExamPaper";
 import { useDispatch, useSelector } from "react-redux";
 import { totalExamQuestion } from "../../utils/Constants";
 import { setCurrentQuestionIndex } from "../../redux/student/actions/QuestionIndex";
-
+import { SEO } from "../../Helmet";
 import {
   setSelectedAnswers,
   setExamEdit,
@@ -97,6 +97,7 @@ const GiveExam = () => {
 
   return (
     <>
+      <SEO title="Exam" />
       {isEdit ? (
         <div>
           {data &&

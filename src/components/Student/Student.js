@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import fetchAllExams from "../../redux/student/actions/AllExam";
 import { totalExamQuestion } from "../../utils/Constants";
+import { SEO } from "../../Helmet";
 const Student = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.student.allExamContainer);
@@ -27,6 +28,7 @@ const Student = () => {
 
   return (
     <>
+      <SEO title="Student dashboard" />
       <div className="container mt-4 text-center">
         <div className="row">
           {data &&

@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { fetchStudentDetails } from "../../redux/teacher/actions/StudentDetails";
 import { useDispatch, useSelector } from "react-redux";
+import { SEO } from "../../Helmet";
 const ViewStudentDetail = () => {
   const [loading, setLoading] = useState(true);
 
@@ -51,6 +52,7 @@ const ViewStudentDetail = () => {
 
   return (
     <div className="container">
+      <SEO title="Student results" />
       {studentDetail.length === 0 ? (
         <Loader />
       ) : (

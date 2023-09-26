@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../../reusable/Loader";
 import Form from "../../reusable/UserForm";
 import "../../App.css";
+import { SEO } from "../../Helmet";
 const SignUp = () => {
   const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState("");
@@ -90,6 +91,8 @@ const SignUp = () => {
   }
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 m-3 m-md-0 ">
+      {" "}
+      <SEO title="User Sign-Up" />
       <div className=" p-5 w-40  box-shadow ">
         <Form
           handleRadioChange={handleRadioChange}

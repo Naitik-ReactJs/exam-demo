@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import DialogBox from "../../reusable/DialogBox";
 import fetchTeacherExam from "../../redux/teacher/actions/ViewTeacherExam";
 import { useDispatch, useSelector } from "react-redux";
+import { SEO } from "../../Helmet";
 
 const Teacher = () => {
   const dispatch = useDispatch();
@@ -67,6 +68,7 @@ const Teacher = () => {
 
   return (
     <>
+      <SEO title="Teacher dashboard" />
       <div className="container mt-4 text-center">
         <div className="row">
           {exams &&

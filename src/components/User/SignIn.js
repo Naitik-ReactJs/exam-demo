@@ -9,6 +9,7 @@ import validateInput from "../../utils/Validation";
 import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import Form from "../../reusable/UserForm";
+import { SEO } from "../../Helmet";
 
 const SignIn = () => {
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
@@ -71,6 +72,7 @@ const SignIn = () => {
 
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 ">
+      <SEO title="Exam Demo" />
       <div className="container p-5 w-50 mb-5 box-shadow">
         <Form inputFields={input} />
         <div className="text-center mt-4">

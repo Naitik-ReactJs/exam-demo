@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import fetchProfile from "../../redux/student/actions/UserProfile";
 import { setIsNameModified } from "../../redux/student/actions/UserProfile";
 import { setProfileData } from "../../redux/student/actions/UserProfile";
+import { SEO } from "../../Helmet";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -64,6 +65,7 @@ const Profile = () => {
 
   return (
     <>
+      <SEO title="Student profile" />
       <div className="container profile">
         <div className="row">
           <div className="col-md-12 mt-5">

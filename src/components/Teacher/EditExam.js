@@ -19,6 +19,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Notes from "./Notes";
 import { QUESTION_COUNT } from "../../utils/Constants";
+import { SEO } from "../../Helmet";
 
 const EditExam = () => {
   const examData = useSelector((state) => state.teacher.exam);
@@ -243,6 +244,7 @@ const EditExam = () => {
 
   return (
     <div className="container mt-5">
+      <SEO title="Edit Exam" />
       <h2 className="mb-4"> Edit Exam</h2>
       <div className="mb-4">
         <h3>Question {currentQuestionIndex + 1}</h3>

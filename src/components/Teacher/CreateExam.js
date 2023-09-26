@@ -19,6 +19,7 @@ import {
 } from "../../redux/teacher/actions/CreateExam";
 import { useDispatch, useSelector } from "react-redux";
 import { QUESTION_COUNT } from "../../utils/Constants";
+import { SEO } from "../../Helmet";
 
 const CreateExam = () => {
   const examData = useSelector((state) => state.teacher.exam);
@@ -195,6 +196,7 @@ const CreateExam = () => {
 
   return (
     <div className="container mt-5">
+      <SEO title="Create Exam" />
       <h2 className="mb-4">Create Exam</h2>
       <div className="mb-4">
         <h3>Question {currentQuestionIndex + 1}</h3>
@@ -239,17 +241,7 @@ const CreateExam = () => {
           />
         )}
       </div>
-      <pre>
-        {JSON.stringify(
-          questions[currentQuestionIndex].options.filter(
-            (item) =>
-              item.options ===
-              questions[currentQuestionIndex].options.map((option) => option)
-          ),
-          null,
-          2
-        )}
-      </pre>
+
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );
