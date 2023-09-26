@@ -6,3 +6,4 @@ export const teacherSideBarProps = {
 };
 export const studentSideBarProps = { title1: "Exam", title2: "Profile" };
 export const totalExamQuestion = 7;
+export const QUESTION_COUNT = 15;

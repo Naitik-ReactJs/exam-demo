@@ -18,9 +18,9 @@ import {
   setFormErrors,
 } from "../../redux/teacher/actions/CreateExam";
 import { useDispatch, useSelector } from "react-redux";
+import { QUESTION_COUNT } from "../../utils/Constants";
 
 const CreateExam = () => {
-  const QUESTION_COUNT = 15;
   const examData = useSelector((state) => state.teacher.exam);
   const dispatch = useDispatch();
   const {
@@ -89,9 +89,8 @@ const CreateExam = () => {
     if (currentQuestionIndex > 0) {
       dispatch(setCurrentQuestionIndex(currentQuestionIndex - 1));
     }
-    updateFormErrors({
-      questionError: "",
-    });
+
+    updateFormErrors("");
   };
 
   const handleAnswerChange = (e) => {
@@ -102,24 +101,40 @@ const CreateExam = () => {
     const updatedSelectedAnswers = [...selectedAnswers];
     updatedSelectedAnswers[currentQuestionIndex] = e.target.value;
     dispatch(setSelectedAnswers(updatedSelectedAnswers));
+
+    updateFormErrors((prevErrors) => ({
+      ...prevErrors,
+      selectedAnsError: "",
+    }));
   };
 
   const handleQuestionChange = (e) => {
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex].question = e.target.value;
     dispatch(setQuestions(updatedQuestions));
+
+    updateFormErrors((prevErrors) => ({
+      ...prevErrors,
+      questionError: "",
+    }));
   };
 
   const handleSubjectNameChange = (e) => {
     dispatch(setSubjectName(e.target.value));
+
+    updateFormErrors((prevErrors) => ({
+      ...prevErrors,
+      subjectError: "",
+    }));
   };
   const handleNotesChange = (e) => {
     const value = e.target.value;
     dispatch(setNotesText(value));
 
-    updateFormErrors({
+    updateFormErrors((prevErrors) => ({
+      ...prevErrors,
       notesError: "",
-    });
+    }));
   };
 
   const handleAddNotes = () => {

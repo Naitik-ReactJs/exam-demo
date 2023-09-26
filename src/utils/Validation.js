@@ -70,7 +70,7 @@ export const handleExamError = ({
   const errors = {};
   const currentQuestion = questions[currentQuestionIndex];
   const currentOptions = currentQuestion.options.map((option) => option);
-
+  const optionSet = new Set(currentOptions);
   if (!isRequired(examData.subjectName)) {
     errors.subjectError = "Subject is required";
   }
@@ -91,6 +91,8 @@ export const handleExamError = ({
     !currentQuestion.options.map((item) => item).every((item) => item !== "")
   ) {
     errors.optionError = "Options are required";
+  } else if (optionSet.size !== currentOptions.length) {
+    errors.optionError = "Options must be unique";
   }
 
   if (!isRequired(selectedAnswers[currentQuestionIndex])) {

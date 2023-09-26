@@ -18,9 +18,9 @@ import {
 } from "../../redux/teacher/actions/CreateExam";
 import { useDispatch, useSelector } from "react-redux";
 import Notes from "./Notes";
+import { QUESTION_COUNT } from "../../utils/Constants";
 
 const EditExam = () => {
-  const QUESTION_COUNT = 15;
   const examData = useSelector((state) => state.teacher.exam);
   const dispatch = useDispatch();
 

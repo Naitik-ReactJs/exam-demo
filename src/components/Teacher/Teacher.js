@@ -99,19 +99,16 @@ const Teacher = () => {
                           ))}
                         </ul>
                         <div className="mt-4 text-center">
-                          {examActionButtons.map((button, index) => {
-                            const { buttonText, className, onClick } = button;
-                            return (
-                              <Fragment key={index}>
-                                {" "}
-                                <Button
-                                  buttonText={buttonText}
-                                  className={className}
-                                  onClick={() => onClick(exam._id)}
-                                />
-                              </Fragment>
-                            );
-                          })}
+                          {examActionButtons.map((button, index) => (
+                            <Fragment key={index}>
+                              {" "}
+                              <Button
+                                buttonText={button.buttonText}
+                                className={button.className}
+                                onClick={() => button.onClick(exam._id)}
+                              />
+                            </Fragment>
+                          ))}
                           <DialogBox
                             title={"Delete Exam!!"}
                             body={"Woohoo, Are you sure you want to delete !"}
