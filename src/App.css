@@ -145,6 +145,11 @@ input:checked+.slider:before {
   .w-40 {
     width: 100%;
   }
+
+  .landing-page {
+    width: 100%;
+    margin: 2rem;
+  }
 }
 
 @media only screen and (max-width: 992px) {
@@ -152,11 +157,24 @@ input:checked+.slider:before {
     width: 70%;
     margin: 1rem !important;
   }
+
+  .landing-page {
+    width: 60%;
+    margin: 3rem;
+  }
+
+  .w-40 {
+    width: 80%;
+  }
 }
 
 @media only screen and (min-width: 992px) {
   .w-responsive {
     width: 30%;
     margin: 1rem !important;
+  }
+
+  .landing-page {
+    width: 45%;
   }
 }

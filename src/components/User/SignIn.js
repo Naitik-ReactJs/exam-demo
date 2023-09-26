@@ -10,7 +10,7 @@ import apiAction from "../../api/apiAction";
 import Loader from "../../reusable/Loader";
 import Form from "../../reusable/UserForm";
 import { SEO } from "../../Helmet";
-
+import "../../App.css";
 const SignIn = () => {
   const token = JSON.parse(sessionStorage.getItem("user-info"))?.token;
   const role = JSON.parse(sessionStorage.getItem("user-info"))?.role;
@@ -73,7 +73,7 @@ const SignIn = () => {
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 ">
       <SEO title="Exam Demo" />
-      <div className="container p-5 w-50 mb-5 box-shadow">
+      <div className=" p-5 mb-5 box-shadow landing-page">
         <Form inputFields={input} />
         <div className="text-center mt-4">
           <Link className="forgotpass_link" to="/forgotpassword">

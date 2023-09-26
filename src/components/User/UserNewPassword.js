@@ -63,7 +63,7 @@ const UserNewPassword = () => {
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100">
       <SEO title="User new password" />
-      <div className="container p-5 w-50 mb-5 box-shadow">
+      <div className=" p-5 landing-page mb-5 box-shadow">
         <h2 className="text-center p-2">New password</h2>
         <Form inputFields={input} />
         <div className="text-center mt-4">
