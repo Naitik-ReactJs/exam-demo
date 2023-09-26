@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DialogBox from "./DialogBox";
+import { PropTypes } from "prop-types";
 
 const Navbar = ({ navbarTitle, navigateTo, component }) => {
   const navigate = useNavigate();
@@ -95,5 +96,9 @@ const Navbar = ({ navbarTitle, navigateTo, component }) => {
     </div>
   );
 };
-
+Navbar.propTypes = {
+  navbarTitle: PropTypes.object,
+  navigateTo: PropTypes.string.isRequired,
+  component: PropTypes.element.isRequired,
+};
 export default Navbar;
